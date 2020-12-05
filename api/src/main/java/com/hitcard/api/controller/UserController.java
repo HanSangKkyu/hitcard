@@ -37,7 +37,40 @@ public class UserController {
 	private UserMapper userMapper;
 	
 	@RequestMapping(value = "/user", method = RequestMethod.GET)
-	public void user(HttpServletRequest req, HttpServletResponse res, Locale locale) throws IOException, SQLException {
+	public void userGet(HttpServletRequest req, HttpServletResponse res, Locale locale) throws IOException, SQLException {
+		// userMapper.insert("han","han123","hello");
+		List<User> userList = userMapper.get();
+		for (int i = 0; i < userList.size(); i++) {
+			System.out.println(userList.get(i).getId());
+		}
+		System.out.println();
+        reponse_jobs(res, "hello1212331");
+	}
+
+	@RequestMapping(value = "/user", method = RequestMethod.POST)
+	public void userPost(HttpServletRequest req, HttpServletResponse res, Locale locale) throws IOException, SQLException {
+		// userMapper.insert("han","han123","hello");
+		List<User> userList = userMapper.get();
+		for (int i = 0; i < userList.size(); i++) {
+			System.out.println(userList.get(i).getId());
+		}
+		System.out.println();
+        reponse_jobs(res, "hello1212331");
+    }
+
+	@RequestMapping(value = "/user/", method = RequestMethod.PUT)
+	public void userPut(HttpServletRequest req, HttpServletResponse res, Locale locale) throws IOException, SQLException {
+		// userMapper.insert("han","han123","hello");
+		List<User> userList = userMapper.get();
+		for (int i = 0; i < userList.size(); i++) {
+			System.out.println(userList.get(i).getId());
+		}
+		System.out.println();
+        reponse_jobs(res, "hello1212331");
+    }
+
+	@RequestMapping(value = "/user/", method = RequestMethod.DELETE)
+	public void userDelete(HttpServletRequest req, HttpServletResponse res, Locale locale) throws IOException, SQLException {
 		// userMapper.insert("han","han123","hello");
 		List<User> userList = userMapper.get();
 		for (int i = 0; i < userList.size(); i++) {
