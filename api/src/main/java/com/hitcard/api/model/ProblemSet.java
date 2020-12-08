@@ -9,8 +9,7 @@ public class ProblemSet {
     private String created_data;
     private String modified_data;
 
-    public ProblemSet(String sN, String name, String owner, String tag, String hit, String created_data,
-            String modified_data) {
+    public ProblemSet(String sN, String name, String owner, String tag, String hit, String created_data, String modified_data) {
         setSN(sN);
         this.setName(name);
         this.setOwner(owner);

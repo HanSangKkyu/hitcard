@@ -17,11 +17,14 @@ public interface UserMapper {
     @Select("select * from USER;")
     List<User> get();
 
+    @Select("select * from USER;")
+    User getOne(@Param("SN") String SN);
+
     @Insert("INSERT INTO USER( id, pw, introduction ) VALUES (#{id}, #{pw}, #{introduction} );")
     int insert(@Param("id") String id, @Param("pw") String pw, @Param("introduction") String introduction);
 
     @Update("UPDATE USER SET id = #{id}, pw = #{pw}, introduction = #{introduction} WHERE SN = #{SN}")
-    int update(@Param("id") String id, @Param("pw") String pw, @Param("introduction") String introduction);
+    int update(@Param("SN") String SN, @Param("id") String id, @Param("pw") String pw, @Param("introduction") String introduction);
 
     @Delete("DELETE FROM USER WHERE SN = #{SN}")
     int delete(@Param("SN") String SN);

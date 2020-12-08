@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -40,11 +41,18 @@ public class UserController {
 	public void userGet(HttpServletRequest req, HttpServletResponse res, Locale locale) throws IOException, SQLException {
 		// userMapper.insert("han","han123","hello");
 		List<User> userList = userMapper.get();
+
+		String json = "";
 		for (int i = 0; i < userList.size(); i++) {
-			System.out.println(userList.get(i).getId());
+			json+=userList.get(i).getId();
 		}
-		System.out.println();
-        reponse_jobs(res, "hello1212331");
+        reponse_jobs(res, json);
+	}
+
+	@RequestMapping(value = "/user/{SN}", method = RequestMethod.GET)
+	public void userGetOne(HttpServletRequest req, HttpServletResponse res, Locale locale, @PathVariable("SN") String _SN) throws IOException, SQLException {
+		User user = userMapper.getOne(_SN);
+        reponse_jobs(res, user.getId());
 	}
 
 	@RequestMapping(value = "/user", method = RequestMethod.POST)
@@ -56,7 +64,9 @@ public class UserController {
 		}
 		System.out.println();
         reponse_jobs(res, "hello1212331");
-    }
+	}
+	
+
 
 	@RequestMapping(value = "/user/", method = RequestMethod.PUT)
 	public void userPut(HttpServletRequest req, HttpServletResponse res, Locale locale) throws IOException, SQLException {
