@@ -82,11 +82,4 @@ public class UserController {
 		System.out.println("========== " + req.getRequestURL() + " " + req.getMethod() + " ==========");
 		Util.reponse_jobs(res,  userMapper.delete(_SN)+"");
     }
-
-	@RequestMapping(value = "/", method = RequestMethod.GET)
-	public void index(HttpServletRequest req, HttpServletResponse res, Locale locale) throws IOException, SQLException {
-		System.out.println("========== " + req.getRequestURL() + " " + req.getMethod() + " ==========");
-        Util.reponse_jobs(res, "this is index");
-    }
-
 }
