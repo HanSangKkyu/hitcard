@@ -1,12 +1,19 @@
 package com.hitcard.api.common;
 
+import com.hitcard.api.common.Info;
+
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 import javax.servlet.http.HttpServletResponse;
-
 public class Util{
 
     public static String getTime() {
@@ -25,5 +32,36 @@ public class Util{
 		writer.close(); // 데이터 삭제
 		
 		return;
-    }
+	}
+	
+	private String sendHTTP(String PATH, String VERB, String PARAMETERS, Locale locale) throws IOException {
+		// *eg) PATH = "/server", PARAMETERS = "id=sys&pw=sys1234"
+		URL url = new URL(Info.apiURL + PATH);
+		HttpURLConnection con = (HttpURLConnection) url.openConnection();
+
+		con.setRequestMethod(VERB); // optional default is GET
+		if (VERB == "POST" || VERB == "PUT") {
+			con.setDoOutput(true); // POST 파라미터 전달을 위한 설정
+			// Send post request
+			DataOutputStream wr = new DataOutputStream(con.getOutputStream());
+			wr.writeBytes(PARAMETERS);
+			wr.flush();
+			wr.close();
+		}
+
+		int responseCode = con.getResponseCode();
+		BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream(), "UTF-8"));
+		String inputLine;
+		StringBuffer response = new StringBuffer();
+
+		while ((inputLine = in.readLine()) != null) {
+			response.append(inputLine + "\n"); // 개행까지 포함하기 위해 "\n"을 붙임
+		}
+		in.close();
+
+		// print result
+		System.out.println("HTTP 상태코드 : " + responseCode);
+
+		return response.toString();
+	}
 }
