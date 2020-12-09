@@ -75,4 +75,17 @@ public class ProblemSet {
         this.modified_data = modified_data;
     }
 
+    public String toString(){
+        String res = "{ "+
+			"\"SN\" : \"" + SN + "\", " +
+			"\"name\" : \"" + name + "\", " +
+			"\"owner\" : \"" + owner + "\", " +
+			"\"tag\" : \"" + tag + "\", " +
+			"\"hit\" : \"" + hit + "\", " +
+			"\"created_data\" : \"" + created_data + "\", " +
+			"\"modified_data\" : \"" + modified_data + "\"" +
+		" }";
+		return res;
+	}
+
 }

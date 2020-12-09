@@ -55,5 +55,15 @@ public class Problem {
         this.hit = hit;
     }
 
+    public String toString(){
+        String res = "{ "+
+			"\"SN\" : \"" + SN + "\", " +
+			"\"question\" : \"" + question + "\", " +
+			"\"answer\" : \"" + answer + "\", " +
+			"\"category\" : \"" + category + "\", " +
+			"\"hit\" : \"" + hit + "\"" +
+		" }";
+		return res;
+    }
 
 }

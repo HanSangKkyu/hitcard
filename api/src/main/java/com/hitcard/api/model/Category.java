@@ -35,6 +35,13 @@ public class Category {
         this.problemSet = problemSet;
     }
 
-
+    public String toString(){
+        String res = "{ "+
+			"\"SN\" : \"" + SN + "\", " +
+			"\"name\" : \"" + name + "\", " +
+			"\"problemSet\" : \"" + problemSet + "\"" +
+		" }";
+		return res;
+    }
 
 }

@@ -7,7 +7,6 @@ public class User {
     private String introduction;
     
 	public User(String sN, String id, String pw, String introduction) {
-		super();
 		SN = sN;
 		this.id = id;
 		this.pw = pw;
@@ -45,6 +44,15 @@ public class User {
 	public void setIntroduction(String introduction) {
 		this.introduction = introduction;
 	}
-    
+	
+	public String toString(){
+		String res = "{ "+
+			"\"SN\" : \"" + SN + "\", " +
+			"\"id\" : \"" + id + "\", " +
+			"\"pw\" : \"" + pw + "\", " +
+			"\"introduction\" : \"" + introduction + "\"" +
+		" }";
+		return res;
+	}
     
 }
