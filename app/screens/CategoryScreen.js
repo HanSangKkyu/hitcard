@@ -4,10 +4,10 @@ import { Ionicons, Feather, MaterialCommunityIcons, Octicons, AntDesign, FontAwe
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import MyProblemSetScreenRow from '../rows/MyProblemSetScreenRow';
+import CategoryScreenRow from '../rows/CategoryScreenRow';
 import { ScrollView } from 'react-native-gesture-handler';
 
-export default function MyProblemSetScreen({ navigation }) {
+export default function CategoryScreen({ navigation }) {
   const [DATA, setDATA] = React.useState('?'); // 서버로 부터 받은 데이터를 저장하는 변수
   const [isSearch, setIsSearch] = React.useState(false);
 
@@ -16,7 +16,7 @@ export default function MyProblemSetScreen({ navigation }) {
       // The screen is focused
       // Call any action
       getDATA();
-      console.log('MyProblemSetScreen focused!');
+      console.log('CategoryScreen focused!');
     });
     return unsubscribe;
   }, [navigation, DATA]);
@@ -37,63 +37,39 @@ export default function MyProblemSetScreen({ navigation }) {
     setDATA([
       {
         id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
-        title: 'First Item',
+        title: '모든 문제',
       },
       {
         id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
-        title: 'Second Item',
+        title: '신라',
       },
       {
         id: '58694a0f-3da1-471f-bd9-145571e29d72',
-        title: 'Third Item',
+        title: '고려',
       },
       {
         id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28a',
-        title: 'First Item',
+        title: '삼국시대',
       },
       {
         id: '3ac68afc-c605-48d3-a4f8-fbd91a97f63',
-        title: 'Second Item',
+        title: '일제강점기',
       },
       {
         id: '58694a0f-3da1-471f-bd96-14557129d72',
-        title: 'Third Item',
+        title: '1hit',
       },
       {
         id: 'bd7acbea-c1b1-46c2-aed5-ad53abb28ba',
-        title: 'First Item',
+        title: '2hit',
       },
       {
         id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f3',
-        title: 'Second Item',
+        title: '3hit',
       },
       {
         id: '58694a0f-3da1-471f-bd96-145571e29d72',
-        title: 'Third Item',
-      },
-      {
-        id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f3',
-        title: 'Second Item',
-      },
-      {
-        id: '58694a0f-3da1-471f-bd96-145571e29d72',
-        title: 'Third Item',
-      },
-      {
-        id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f3',
-        title: 'Second Item',
-      },
-      {
-        id: '58694a0f-3da1-471f-bd96-145571e29d72',
-        title: 'Third Item',
-      },
-      {
-        id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f3',
-        title: 'Second Item',
-      },
-      {
-        id: '58694a0f-3da1-471f-bd96-145571e29d72',
-        title: 'Third Item',
+        title: '4hit',
       },
     ]);
   }
@@ -105,7 +81,7 @@ export default function MyProblemSetScreen({ navigation }) {
           <AntDesign name="arrowleft" size={24} color="black" />
         </TouchableOpacity>
           {isSearch ? <TextInput style={{ flex: 1, alignSelf: 'center', borderWidth: isSearch ? 1 : 0, borderRadius: 100, height: 26, paddingLeft: 10, paddingRight: 10 }} autoFocus ></TextInput> : null}
-          {isSearch ? null : <Text style={{ flex: 1, fontSize: 22, alignSelf: 'center' }}>내 문제 SET</Text>}
+          {isSearch ? null : <Text style={{ flex: 1, fontSize: 22, alignSelf: 'center' }}>~의 카테고리</Text>}
         <TouchableOpacity style={{ alignSelf: 'flex-end', alignSelf: 'center', marginLeft: 20 }} onPress={() => setIsSearch(!isSearch)}>
           {isSearch ? <Feather name="x" size={24} color="black" /> : <Octicons name="search" size={24} color="black" />}
         </TouchableOpacity>
@@ -114,7 +90,7 @@ export default function MyProblemSetScreen({ navigation }) {
       <KeyboardAwareScrollView>
         <ScrollView style={{}}>
           <FlatList data={DATA}
-            renderItem={({ item }) => <MyProblemSetScreenRow
+            renderItem={({ item }) => <CategoryScreenRow
               navigation={navigation}
               title={item.title}
             />}

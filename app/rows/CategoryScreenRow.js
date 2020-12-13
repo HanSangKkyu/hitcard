@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
     },
 });
 
-export default function MyProblemSetScreenRow({ navigation, title }) {
+export default function CategoryScreeRow({ navigation, title }) {
     return(
         <TouchableOpacity onPress={() => navigation.navigate('CategoryScreen')}>
             <View style={styles.container}>
