@@ -6,11 +6,11 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import MyProblemSetScreenRow from '../rows/MyProblemSetScreenRow';
 import { ScrollView } from 'react-native-gesture-handler';
-import { WINDOW_HEIGHT } from '../rows/Common';
+import { WINDOW_HEIGHT, WINDOW_WIDTH } from '../Common';
 
 export default function SolveScreen({ navigation }) {
   const [DATA, setDATA] = React.useState('?'); // 서버로 부터 받은 데이터를 저장하는 변수
-  const [isSearch, setIsSearch] = React.useState(false);
+  const [isMenu, setIsMenu] = React.useState(false);
   const [modalVisible, setModalVisible] = React.useState(false);
 
   React.useEffect(() => {
@@ -106,15 +106,16 @@ export default function SolveScreen({ navigation }) {
         <TouchableOpacity style={{ marginRight: 20, alignSelf: 'center' }} onPress={() => navigation.goBack()} >
           <AntDesign name="arrowleft" size={24} color="black" />
         </TouchableOpacity>
-          {isSearch ? <TextInput style={{ flex: 1, alignSelf: 'center', borderWidth: isSearch ? 1 : 0, borderRadius: 100, height: 26, paddingLeft: 10, paddingRight: 10 }} autoFocus ></TextInput> : null}
-          {isSearch ? null : <Text style={{ flex: 1, fontSize: 22, alignSelf: 'center' }}>문제이름 - 카테고리</Text>}
+        <Text style={{ flex: 1, fontSize: 22, alignSelf: 'center' }}>문제이름 - 카테고리</Text>
       </View>
+
+      {isMenu ?
       <View style={{flex:1, flexDirection:'column'}}>
         <View style={{    flex: 3, alignItems: 'center', justifyContent: 'center',}}>
           <Text>신라시대의 왕은?</Text>
         </View>
         <View style={{flex:0.5}}>
-          <TouchableOpacity style={{alignSelf:'flex-end'}} onPress={()=>{setModalVisible(!modalVisible)}}>
+          <TouchableOpacity style={{alignSelf:'flex-end'}} onPress={()=>{setIsMenu(!isMenu)}}>
             <Feather name="more-vertical" size={24} color="black" />
           </TouchableOpacity>
         </View>
@@ -146,6 +147,19 @@ export default function SolveScreen({ navigation }) {
           </TouchableOpacity>
         </View>
       </View>
+      :
+      <View style={{flexDirection:'column', backgroundColor:'gray', height: WINDOW_HEIGHT, borderWidth:1, borderRadius:30, margin: -20, marginTop:100, padding:10}}>
+        <View style={{flex:2}}>
+
+        </View>
+        <TouchableOpacity style={{flex:1}} onPress={()=>{setIsMenu(!isMenu)}}>
+          <View style={{flexDirection:'row', alignContent:'center'}}>
+            <AntDesign name="close" size={24} color="black" />
+            <Text style={{alignSelf:'center', fontSize:18}}>닫기</Text>
+          </View>
+        </TouchableOpacity>
+      </View>
+      }
     </SafeAreaView>
   );
 }
