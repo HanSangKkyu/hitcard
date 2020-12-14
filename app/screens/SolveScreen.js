@@ -1,21 +1,24 @@
-import * as React from 'react';
-import { StyleSheet, Text, View, StatusBar, TextInput, TouchableOpacity, SafeAreaView, FlatList, ScrollView } from 'react-native';
+import React from 'react';
+import { StyleSheet, Text, View, StatusBar, TextInput, TouchableOpacity, SafeAreaView, FlatList, Modal } from 'react-native';
 import { Ionicons, Feather, MaterialCommunityIcons, Octicons, AntDesign, FontAwesome, SimpleLineIcons } from '@expo/vector-icons';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import MyProblemSetScreenRow from '../rows/MyProblemSetScreenRow';
+import { ScrollView } from 'react-native-gesture-handler';
+import { WINDOW_HEIGHT } from '../rows/Common';
 
-export default function MyProblemSetScreen({ navigation }) {
+export default function SolveScreen({ navigation }) {
   const [DATA, setDATA] = React.useState('?'); // 서버로 부터 받은 데이터를 저장하는 변수
   const [isSearch, setIsSearch] = React.useState(false);
+  const [modalVisible, setModalVisible] = React.useState(false);
 
   React.useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       // The screen is focused
       // Call any action
       getDATA();
-      console.log('MyProblemSetScreen focused!');
+      console.log('SolveScreen focused!');
     });
     return unsubscribe;
   }, [navigation, DATA]);
@@ -98,43 +101,51 @@ export default function MyProblemSetScreen({ navigation }) {
   }
 
   return (
-    <SafeAreaView style={{ margin: 20 }}>
+    <SafeAreaView style={{ flexDirection:'column',margin: 20, height: WINDOW_HEIGHT }}>
       <View style={{ borderBottomWidth: 1, flexDirection: 'row', paddingBottom: 10, }}>
         <TouchableOpacity style={{ marginRight: 20, alignSelf: 'center' }} onPress={() => navigation.goBack()} >
           <AntDesign name="arrowleft" size={24} color="black" />
         </TouchableOpacity>
           {isSearch ? <TextInput style={{ flex: 1, alignSelf: 'center', borderWidth: isSearch ? 1 : 0, borderRadius: 100, height: 26, paddingLeft: 10, paddingRight: 10 }} autoFocus ></TextInput> : null}
-          {isSearch ? null : <Text style={{ flex: 1, fontSize: 22, alignSelf: 'center' }}>내 문제 SET</Text>}
-        <TouchableOpacity style={{ alignSelf: 'flex-end', alignSelf: 'center', marginLeft: 20 }} onPress={() => setIsSearch(!isSearch)}>
-          {isSearch ? <Feather name="x" size={24} color="black" /> : <Octicons name="search" size={24} color="black" />}
-        </TouchableOpacity>
+          {isSearch ? null : <Text style={{ flex: 1, fontSize: 22, alignSelf: 'center' }}>문제이름 - 카테고리</Text>}
       </View>
-
-      <KeyboardAwareScrollView>
-        <ScrollView style={{}}>
-          <FlatList data={DATA}
-            renderItem={({ item }) => <MyProblemSetScreenRow
-              navigation={navigation}
-              title={item.title}
-            />}
-            keyExtractor={item => item.id}
-          />
-        </ScrollView>
-      </KeyboardAwareScrollView>
-      <View>
-
+      <View style={{flex:1, flexDirection:'column'}}>
+        <View style={{    flex: 3, alignItems: 'center', justifyContent: 'center',}}>
+          <Text>신라시대의 왕은?</Text>
+        </View>
+        <View style={{flex:0.5}}>
+          <TouchableOpacity style={{alignSelf:'flex-end'}} onPress={()=>{setModalVisible(!modalVisible)}}>
+            <Feather name="more-vertical" size={24} color="black" />
+          </TouchableOpacity>
+        </View>
+        <View style={{flex:0.5}}>
+          <Text style={{alignSelf:'center', fontSize:30}}>31번 문제</Text>
+        </View>
+        <View style={{flex:1, flexDirection:'row', alignContent:'center', justifyContent:'center'}}>
+          <TouchableOpacity style={{marginTop:10, alignContent:'center', justifyContent:'flex-start'}}>
+            <AntDesign name="caretup" size={24} color="gray" />
+          </TouchableOpacity>
+          <View style={{flexDirection:'column', marginLeft:10, marginRight:10, alignContent:'center', justifyContent:'flex-start' }}>
+            <Text>
+              H!T
+            </Text>
+            <Text style={{alignSelf:'center'}}>
+              2
+            </Text>
+          </View>
+          <TouchableOpacity style={{marginTop:10, alignContent:'center', justifyContent:'flex-start'}}>
+            <AntDesign name="caretdown" size={24} color="gray" />
+          </TouchableOpacity>
+        </View>
+        <View style={{flex:2, flexDirection:'row'}}>
+          <TouchableOpacity style={{flex:1,}}>
+            <AntDesign name="caretleft" size={40} color="gray" style={{alignSelf:'center', justifyContent:'center'}}  />
+          </TouchableOpacity>
+          <TouchableOpacity style={{flex:1,}}>
+            <AntDesign name="caretright" size={40} color="gray" style={{alignSelf:'center', justifyContent:'center'}} />
+          </TouchableOpacity>
+        </View>
       </View>
     </SafeAreaView>
   );
 }
-
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginTop: 200,
-    marginBottom: 100
-  },
-});

@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
 
 export default function CategoryScreeRow({ navigation, title }) {
     return(
-        <TouchableOpacity onPress={() => navigation.navigate('CategoryScreen')}>
+        <TouchableOpacity onPress={() => navigation.navigate('SolveScreen')}>
             <View style={styles.container}>
                 <View style={styles.photo}>
                     <SimpleLineIcons name="doc" size={30} color="black" />
