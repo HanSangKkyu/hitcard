@@ -7,6 +7,8 @@ import MyProblemSetScreen from './screens/MyProblemSetScreen';
 import CategoryScreen from './screens/CategoryScreen';
 import SolveScreen from './screens/SolveScreen';
 import MakeScreen from './screens/MakeScreen';
+import ProblemScreen from './screens/ProblemScreen';
+import EditProblemScreen from './screens/EditProblemScreen';
 
 const Stack = createStackNavigator();
 
@@ -14,11 +16,13 @@ function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="ProblemScreen" component={ProblemScreen} />
         <Stack.Screen name="CategoryScreen" component={CategoryScreen} />
         <Stack.Screen name="MakeScreen" component={MakeScreen} />
         <Stack.Screen name="SolveScreen" component={SolveScreen} />
         <Stack.Screen name="LoginScreen" component={LoginScreen} />
         <Stack.Screen name="MyProblemSetScreen" component={MyProblemSetScreen} />
+        <Stack.Screen name="EditProblemScreen" component={EditProblemScreen} />
         
       </Stack.Navigator>
     </NavigationContainer>
