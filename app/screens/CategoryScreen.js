@@ -89,8 +89,9 @@ export default function CategoryScreen({ navigation }) {
 
       <KeyboardAwareScrollView>
         <ScrollView style={{}}>
-          <FlatList data={DATA}
-            renderItem={({ item }) => <CategoryScreenRow
+          <FlatList 
+              data={DATA}
+              renderItem={({ item }) => <CategoryScreenRow
               navigation={navigation}
               title={item.title}
             />}
@@ -99,7 +100,9 @@ export default function CategoryScreen({ navigation }) {
         </ScrollView>
       </KeyboardAwareScrollView>
       <View>
-
+        <TouchableOpacity onPress={()=>{navigation.navigate('SolveScreen')}} disabled={false}>
+          <Text style={{alignSelf:'center', fontSize:30}}>문제풀기</Text>
+        </TouchableOpacity>
       </View>
     </SafeAreaView>
   );

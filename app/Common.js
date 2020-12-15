@@ -12,4 +12,7 @@ export let WINDOW_WIDTH = Dimensions.get('window').width; //full width
 export let WINDOW_HEIGHT = Dimensions.get('window').height; //full height
 
 
+export let CATEGORY_SELECTED = []; //full height
+
+
 // export { APIVO, PATH, RPATH, jsonEscape, WINDOW_HEIGHT, WINDOW_WIDTH };
