@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, View, StatusBar, TextInput, TouchableOpacity, SafeAreaView, FlatList, Modal } from 'react-native';
-import { Ionicons, Feather, MaterialCommunityIcons, Octicons, AntDesign, FontAwesome, SimpleLineIcons } from '@expo/vector-icons';
+import { Ionicons, Feather, MaterialCommunityIcons, Octicons, AntDesign, FontAwesome, SimpleLineIcons, MaterialIcons, FontAwesome5, Foundation } from '@expo/vector-icons';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -10,7 +10,7 @@ import { WINDOW_HEIGHT, WINDOW_WIDTH } from '../Common';
 
 export default function SolveScreen({ navigation }) {
   const [DATA, setDATA] = React.useState('?'); // 서버로 부터 받은 데이터를 저장하는 변수
-  const [isMenu, setIsMenu] = React.useState(false);
+  const [isMenu, setIsMenu] = React.useState(true);
   const [modalVisible, setModalVisible] = React.useState(false);
 
   React.useEffect(() => {
@@ -150,12 +150,24 @@ export default function SolveScreen({ navigation }) {
       :
       <View style={{flexDirection:'column', backgroundColor:'gray', height: WINDOW_HEIGHT, borderWidth:1, borderRadius:30, margin: -20, marginTop:100, padding:10}}>
         <View style={{flex:2}}>
-
+          <TouchableOpacity style={{marginTop:10}} onPress={()=>{setIsMenu(!isMenu)}}>
+            <View style={{flexDirection:'row', alignContent:'center'}}>
+              <FontAwesome5 name="file-import" size={24} color="black" />
+              {/* <Image style={styles.tinyLogo} source={require('../assets/folder-move.svg')}/> */}
+              <Text style={{marginLeft:10,alignSelf:'center', fontSize:18}}>다른 카테고리로 이동</Text>
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity style={{marginTop:20}} onPress={()=>{setIsMenu(!isMenu)}}>
+            <View style={{flexDirection:'row', alignContent:'center'}}>
+              <Foundation name="page-remove" size={24} color="black" />
+              <Text style={{marginLeft:10,alignSelf:'center', fontSize:18}}>이 문제 삭제</Text>
+            </View>
+          </TouchableOpacity>
         </View>
         <TouchableOpacity style={{flex:1}} onPress={()=>{setIsMenu(!isMenu)}}>
           <View style={{flexDirection:'row', alignContent:'center'}}>
             <AntDesign name="close" size={24} color="black" />
-            <Text style={{alignSelf:'center', fontSize:18}}>닫기</Text>
+            <Text style={{marginLeft:10,alignSelf:'center', fontSize:18}}>닫기</Text>
           </View>
         </TouchableOpacity>
       </View>
