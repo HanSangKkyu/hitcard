@@ -1,10 +1,11 @@
 import * as React from 'react';
-import { StyleSheet, Text, View, StatusBar, TextInput, TouchableOpacity, SafeAreaView, FlatList, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, StatusBar, TextInput, TouchableOpacity, SafeAreaView, FlatList, ScrollView, Platform } from 'react-native';
 import { Ionicons, Feather, MaterialCommunityIcons, Octicons, AntDesign, FontAwesome, SimpleLineIcons } from '@expo/vector-icons';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import MyProblemSetScreenRow from '../rows/MyProblemSetScreenRow';
+import { WINDOW_WIDTH } from "../Common";
 
 export default function MyProblemSetScreen({ navigation }) {
   const [DATA, setDATA] = React.useState('?'); // 서버로 부터 받은 데이터를 저장하는 변수
@@ -98,8 +99,8 @@ export default function MyProblemSetScreen({ navigation }) {
   }
 
   return (
-    <SafeAreaView style={{ margin: 20 }}>
-      <View style={{ borderBottomWidth: 1, flexDirection: 'row', paddingBottom: 10, }}>
+    <SafeAreaView style={{ }}>
+      <View style={{ margin: 20, marginBottom:0, borderBottomWidth: 1, flexDirection: 'row', paddingBottom: 10, }}>
         <TouchableOpacity style={{ marginRight: 20, alignSelf: 'center' }} onPress={() => navigation.goBack()} >
           <AntDesign name="arrowleft" size={24} color="black" />
         </TouchableOpacity>
@@ -109,7 +110,11 @@ export default function MyProblemSetScreen({ navigation }) {
           {isSearch ? <Feather name="x" size={24} color="black" /> : <Octicons name="search" size={24} color="black" />}
         </TouchableOpacity>
       </View>
-
+      <View style={{flexDirection:'row', borderBottomWidth:1, marginLeft:20, marginRight:20, alignContent:'center', justifyContent:'center'}}>
+        <TouchableOpacity onPress={()=>{navigation.navigate('SolveScreen')}}>
+          <Text style={{alignSelf:'center', fontSize:Platform.OS === 'ios' || Platform.OS === 'android'? 20 : 25}}>문제 SET 추가</Text>
+        </TouchableOpacity>
+      </View>
       <KeyboardAwareScrollView>
         <ScrollView style={{}}>
           <FlatList data={DATA}

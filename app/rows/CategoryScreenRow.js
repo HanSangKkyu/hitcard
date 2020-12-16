@@ -80,12 +80,22 @@ export default function CategoryScreeRow({ navigation, title }) {
                 </View>
                 <View style={{ alignContent: 'center', justifyContent: 'center' }}>
                     <Checkbox
+                        onPress={() => {
+                            setIsSelected(!isSelected);
+                            if (isSelected == true) {
+                                const idx = CATEGORY_SELECTED.indexOf(title)
+                                if (idx > -1) CATEGORY_SELECTED.splice(idx, 1)
+                            } else {
+                                CATEGORY_SELECTED.push(title);
+                            }
+                            console.log(CATEGORY_SELECTED);
+                        }}
                         style={{ borderWidth: 1, borderBottomColor: 'black', backgroundColor: 'black' }}
                         status={isSelected ? 'checked' : 'unchecked'}
 
                     />
                 </View>
-                <TouchableOpacity style={{ alignContent: 'center', justifyContent: 'center' }}>
+                <TouchableOpacity style={{ alignContent: 'center', justifyContent: 'center' }} onPress={()=>{navigation.navigate('ProblemScreen')}}>
                     <Feather name="edit" size={24} color="black" />
                 </TouchableOpacity>
             </View>

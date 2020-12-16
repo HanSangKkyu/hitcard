@@ -82,6 +82,16 @@ export default function ProblemScreenRow({ navigation, title }) {
                     <Checkbox
                         style={{ borderWidth: 1, borderBottomColor: 'black', backgroundColor: 'black' }}
                         status={isSelected ? 'checked' : 'unchecked'}
+                        onPress={() => {
+                            setIsSelected(!isSelected);
+                            if (isSelected == true) {
+                                const idx = PROBLEM_SELECTED.indexOf(title)
+                                if (idx > -1) PROBLEM_SELECTED.splice(idx, 1)
+                            } else {
+                                PROBLEM_SELECTED.push(title);
+                            }
+                            console.log(PROBLEM_SELECTED);
+                        }}
                     />
                 </View>
                 <TouchableOpacity style={{ alignContent: 'center', justifyContent: 'center' }} onPress={()=>{navigation.navigate('EditProblemScreen')}}>
