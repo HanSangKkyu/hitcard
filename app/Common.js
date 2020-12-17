@@ -12,6 +12,7 @@ export let WINDOW_WIDTH = Dimensions.get('window').width; //full width
 export let WINDOW_HEIGHT = Dimensions.get('window').height; //full height
 
 
+export let PROBLEMSET_SELECTED = [];
 export let CATEGORY_SELECTED = [];
 export let PROBLEM_SELECTED = [];
 

@@ -16,10 +16,10 @@ function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="LoginScreen" component={LoginScreen} />
         <Stack.Screen name="SolveScreen" component={SolveScreen} />
         <Stack.Screen name="CategoryScreen" component={CategoryScreen} />
         <Stack.Screen name="MyProblemSetScreen" component={MyProblemSetScreen} />
-        <Stack.Screen name="LoginScreen" component={LoginScreen} />
         <Stack.Screen name="ProblemScreen" component={ProblemScreen} />
         <Stack.Screen name="MakeScreen" component={MakeScreen} />
         <Stack.Screen name="EditProblemScreen" component={EditProblemScreen} />

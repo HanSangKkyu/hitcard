@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { StyleSheet, Text, View, StatusBar, TextInput, TouchableOpacity, SafeAreaView, FlatList, ScrollView, Platform } from 'react-native';
-import { Ionicons, Feather, MaterialCommunityIcons, Octicons, AntDesign, FontAwesome, SimpleLineIcons } from '@expo/vector-icons';
+import { Ionicons, Feather, MaterialCommunityIcons, Octicons, AntDesign, FontAwesome, SimpleLineIcons, MaterialIcons, Entypo } from '@expo/vector-icons';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -104,16 +104,47 @@ export default function MyProblemSetScreen({ navigation }) {
         <TouchableOpacity style={{ marginRight: 20, alignSelf: 'center' }} onPress={() => navigation.goBack()} >
           <AntDesign name="arrowleft" size={24} color="black" />
         </TouchableOpacity>
-          {isSearch ? <TextInput style={{ flex: 1, alignSelf: 'center', borderWidth: isSearch ? 1 : 0, borderRadius: 100, height: 26, paddingLeft: 10, paddingRight: 10 }} autoFocus ></TextInput> : null}
-          {isSearch ? null : <Text style={{ flex: 1, fontSize: 22, alignSelf: 'center' }}>내 문제 SET</Text>}
+          {isSearch ? <TextInput style={{ flex: 1, alignSelf: 'center', borderWidth: isSearch ? 1 : 0, borderRadius: 100, height: 26, paddingLeft: 10, paddingRight: 10 }} autoFocus ></TextInput> : <Text style={{ flex: 1, fontSize: 22, alignSelf: 'center' }}>내 문제 SET</Text>}
         <TouchableOpacity style={{ alignSelf: 'flex-end', alignSelf: 'center', marginLeft: 20 }} onPress={() => setIsSearch(!isSearch)}>
           {isSearch ? <Feather name="x" size={24} color="black" /> : <Octicons name="search" size={24} color="black" />}
         </TouchableOpacity>
       </View>
       <View style={{flexDirection:'row', borderBottomWidth:1, marginLeft:20, marginRight:20, alignContent:'center', justifyContent:'center'}}>
-        <TouchableOpacity onPress={()=>{navigation.navigate('SolveScreen')}}>
-          <Text style={{alignSelf:'center', fontSize:Platform.OS === 'ios' || Platform.OS === 'android'? 20 : 25}}>문제 SET 추가</Text>
+        <TouchableOpacity onPress={()=>{navigation.navigate('SolveScreen')}} style={{ flex:1, alignSelf: 'center', }} >
+          <Text style={{alignSelf:'center', fontSize:Platform.OS === 'ios' || Platform.OS === 'android'? 20 : 25}}>추가</Text>
+          {/* <AntDesign style={{alignSelf:'center'}} name="addfile" size={24} color="black" /> */}
         </TouchableOpacity>
+        {Platform.OS === 'ios' || Platform.OS === 'android' ?
+        <TouchableOpacity style={{ flex:1, alignSelf: 'center', }} 
+          onPress={() => {
+              Alert.alert(
+                "카테고리 삭제",
+                "선택한 카테고리를 삭제하시겠습니까?",
+                [
+                  {
+                    text: "Cancel",
+                    onPress: () => console.log("Cancel Pressed"),
+                    style: "cancel"
+                  },
+                  { text: "OK", onPress: () => console.log("OK Pressed") }
+                ],
+                { cancelable: false }
+              );
+          }}>
+          <Entypo style={{alignSelf:'center'}} name="trash" size={24} color="black" />
+        </TouchableOpacity>    
+        :
+        <TouchableOpacity style={{ flex:1, alignSelf: 'center', }} 
+          onPress={() => {
+            if (confirm("선택한 카테고리를 삭제하시겠습니까?")) {
+              // 확인 버튼 클릭 시 동작
+            } else {
+              // 취소 버튼 클릭 시 동작
+            }
+          }}>
+          <Entypo style={{alignSelf:'center'}} name="trash" size={24} color="black" />
+        </TouchableOpacity>   
+        }
       </View>
       <KeyboardAwareScrollView>
         <ScrollView style={{}}>

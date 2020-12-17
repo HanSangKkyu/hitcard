@@ -199,6 +199,10 @@ export default function ProblemScreen({ navigation }) {
         <TouchableOpacity onPress={() => { navigation.navigate('SolveScreen') }} style={{ flex: 1, alignSelf: 'flex-start' }}>
           <Text style={{ alignSelf: 'center', fontSize: Platform.OS === 'ios' || Platform.OS === 'android' ? 20 : 25 }}>이동</Text>
         </TouchableOpacity>
+        <TouchableOpacity onPress={() => { navigation.navigate('SolveScreen') }} style={{ flex: 1, alignSelf: 'flex-start' }}>
+          {/* <Text style={{ alignSelf: 'center', fontSize: Platform.OS === 'ios' || Platform.OS === 'android' ? 20 : 25 }}>문제 추가</Text> */}
+          <Ionicons style={{ alignSelf: 'center'}} name="add" size={24} color="black" />
+        </TouchableOpacity>        
         {Platform.OS === 'ios' || Platform.OS === 'android' ?
         <TouchableOpacity style={{ flex:1, alignSelf: 'center', }} 
           onPress={() => {

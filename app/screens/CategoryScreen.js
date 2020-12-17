@@ -100,6 +100,9 @@ export default function CategoryScreen({ navigation }) {
         <TouchableOpacity onPress={() => { navigation.navigate('SolveScreen') }} style={{flex:1, alignSelf: 'center', }}>
           <Text style={{alignSelf:'center', fontSize: Platform.OS === 'ios' || Platform.OS === 'android' ? 20 : 25 }}>문제풀기</Text>
         </TouchableOpacity>
+        <TouchableOpacity onPress={() => { navigation.navigate('SolveScreen') }} style={{flex:1, alignSelf: 'center', }}>
+          <Text style={{alignSelf:'center', fontSize: Platform.OS === 'ios' || Platform.OS === 'android' ? 20 : 25 }}>카테고리 추가</Text>
+        </TouchableOpacity>        
         {Platform.OS === 'ios' || Platform.OS === 'android' ?
         <TouchableOpacity style={{ flex:1, alignSelf: 'center', }} 
           onPress={() => {
