@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyleSheet, Text, View, StatusBar, TextInput, TouchableOpacity, SafeAreaView, FlatList, Platform } from 'react-native';
+import { StyleSheet, Text, View, StatusBar, TextInput, TouchableOpacity, SafeAreaView, FlatList, Platform, Alert } from 'react-native';
 import { Ionicons, Feather, MaterialCommunityIcons, Octicons, AntDesign, FontAwesome, SimpleLineIcons, MaterialIcons, Entypo } from '@expo/vector-icons';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { NavigationContainer } from '@react-navigation/native';
@@ -199,12 +199,40 @@ export default function ProblemScreen({ navigation }) {
         <TouchableOpacity onPress={() => { navigation.navigate('SolveScreen') }} style={{ flex: 1, alignSelf: 'flex-start' }}>
           <Text style={{ alignSelf: 'center', fontSize: Platform.OS === 'ios' || Platform.OS === 'android' ? 20 : 25 }}>이동</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => { navigation.navigate('SolveScreen') }} style={{ flex: 1, alignSelf: 'flex-end' }}>
-          <Text style={{ alignSelf: 'center', fontSize: Platform.OS === 'ios' || Platform.OS === 'android' ? 20 : 25 }}>삭제</Text>
-        </TouchableOpacity>
+        {Platform.OS === 'ios' || Platform.OS === 'android' ?
+        <TouchableOpacity style={{ flex:1, alignSelf: 'center', }} 
+          onPress={() => {
+              Alert.alert(
+                "카테고리 삭제",
+                "선택한 카테고리를 삭제하시겠습니까?",
+                [
+                  {
+                    text: "Cancel",
+                    onPress: () => console.log("Cancel Pressed"),
+                    style: "cancel"
+                  },
+                  { text: "OK", onPress: () => console.log("OK Pressed") }
+                ],
+                { cancelable: false }
+              );
+          }}>
+          <Entypo style={{alignSelf:'center'}} name="trash" size={24} color="black" />
+        </TouchableOpacity>    
+        :
+        <TouchableOpacity style={{ flex:1, alignSelf: 'center', }} 
+          onPress={() => {
+            if (confirm("선택한 카테고리를 삭제하시겠습니까?")) {
+              // 확인 버튼 클릭 시 동작
+            } else {
+              // 취소 버튼 클릭 시 동작
+            }
+          }}>
+          <Entypo style={{alignSelf:'center'}} name="trash" size={24} color="black" />
+        </TouchableOpacity>   
+        }
       </View>
       <KeyboardAwareScrollView>
-        <ScrollView style={{ height: WINDOW_HEIGHT - 100 }}>
+        <ScrollView style={{}}>
           <FlatList
             data={DATA}
             renderItem={({ item }) => <ProblemScreenRow
