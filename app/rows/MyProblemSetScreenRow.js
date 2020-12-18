@@ -65,7 +65,8 @@ export default function MyProblemSetScreenRow({ navigation, title }) {
             }}>
             <View style={styles.container}>
                 <View style={styles.photo}>
-                    <SimpleLineIcons name="doc" size={30} color="black" />
+                    {/* <SimpleLineIcons name="doc" size={30} color="black" /> */}
+                    <AntDesign name="inbox" size={30} color="black" />
                 </View>
                 <View style={styles.container_text}>
                     <View style={{ flex: 1, flexDirection: 'column' }}>

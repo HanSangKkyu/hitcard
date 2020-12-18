@@ -9,7 +9,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { WINDOW_HEIGHT, WINDOW_WIDTH } from '../Common';
 import { Picker } from '@react-native-community/picker';
 
-export default function MakeScreen({ navigation }) {
+export default function AddProblemScreen({ navigation }) {
   const [DATA, setDATA] = React.useState('?'); // 서버로 부터 받은 데이터를 저장하는 변수
   const [question, setQuestion] = React.useState("");
   const [answer, setAnswer] = React.useState("");
@@ -20,7 +20,7 @@ export default function MakeScreen({ navigation }) {
       // The screen is focused
       // Call any action
       getDATA();
-      console.log('MakeScreen focused!');
+      console.log('AddProblemScreen focused!');
     });
     return unsubscribe;
   }, [navigation, DATA]);
@@ -108,7 +108,7 @@ export default function MakeScreen({ navigation }) {
         <TouchableOpacity style={{ marginRight: 20, alignSelf: 'center' }} onPress={() => navigation.goBack()} >
           <AntDesign name="arrowleft" size={24} color="black" />
         </TouchableOpacity>
-        <Text style={{ flex: 1, fontSize: 22, alignSelf: 'center' }}>문제 수정하기</Text>
+        <Text style={{ flex: 1, fontSize: 22, alignSelf: 'center' }}>문제 추가하기</Text>
       </View>
       <KeyboardAwareScrollView style={{}}>
         <View style={{flexDirection:'column', height:WINDOW_HEIGHT-100}}>
@@ -148,7 +148,7 @@ export default function MakeScreen({ navigation }) {
             </TouchableOpacity>
           </View>
           <TouchableOpacity style={{flex:1, justifyContent:'center', alignContent:'center', backgroundColor:'white',borderWidth:1}}>
-            <Text style={{alignSelf:'center'}}>완료</Text>
+            <Text style={{alignSelf:'center'}}>만들기</Text>
           </TouchableOpacity>
         </View>
       </KeyboardAwareScrollView>

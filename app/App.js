@@ -20,6 +20,7 @@ function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="MyProblemSetScreen" component={MyProblemSetScreen} />
         <Stack.Screen name="LoginScreen" component={LoginScreen} />
         <Stack.Screen name="SearchCategoryScreen" component={SearchCategoryScreen} />
         <Stack.Screen name="SearchScreen" component={SearchScreen} />
@@ -28,7 +29,6 @@ function App() {
         <Stack.Screen name="AddProblemScreen" component={AddProblemScreen} />
         <Stack.Screen name="SolveScreen" component={SolveScreen} />
         <Stack.Screen name="CategoryScreen" component={CategoryScreen} />
-        <Stack.Screen name="MyProblemSetScreen" component={MyProblemSetScreen} />
         <Stack.Screen name="MakeScreen" component={MakeScreen} />
         <Stack.Screen name="EditProblemScreen" component={EditProblemScreen} />
         

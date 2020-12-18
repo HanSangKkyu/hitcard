@@ -66,7 +66,8 @@ export default function CategoryScreeRow({ navigation, title }) {
             }}>
             <View style={styles.container}>
                 <View style={styles.photo}>
-                    <SimpleLineIcons name="doc" size={30} color="black" />
+                    {/* <SimpleLineIcons name="doc" size={30} color="black" /> */}
+                    <Feather name="folder" size={30} color="black" />
                 </View>
                 <View style={styles.container_text}>
                     <View style={{ flex: 1, flexDirection: 'column' }}>

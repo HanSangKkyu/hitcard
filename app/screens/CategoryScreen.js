@@ -98,10 +98,12 @@ export default function CategoryScreen({ navigation }) {
       </View>
       <View style={{ flexDirection: 'row', borderBottomWidth: 1, marginLeft: 20, marginRight: 20, alignContent: 'center', justifyContent: 'center' }}>
         <TouchableOpacity onPress={() => { navigation.navigate('SolveScreen') }} style={{flex:1, alignSelf: 'center', }}>
-          <Text style={{alignSelf:'center', fontSize: Platform.OS === 'ios' || Platform.OS === 'android' ? 20 : 25 }}>문제풀기</Text>
+          {/* <Text style={{alignSelf:'center', fontSize: Platform.OS === 'ios' || Platform.OS === 'android' ? 20 : 25 }}>문제풀기</Text> */}
+          <MaterialCommunityIcons style={{ alignSelf: 'center'}} name="play-outline" size={24} color="black" />
         </TouchableOpacity>
         <TouchableOpacity onPress={() => { navigation.navigate('SolveScreen') }} style={{flex:1, alignSelf: 'center', }}>
-          <Text style={{alignSelf:'center', fontSize: Platform.OS === 'ios' || Platform.OS === 'android' ? 20 : 25 }}>카테고리 추가</Text>
+          {/* <Text style={{alignSelf:'center', fontSize: Platform.OS === 'ios' || Platform.OS === 'android' ? 20 : 25 }}>카테고리 추가</Text> */}
+          <Ionicons style={{ alignSelf: 'center'}} name="add" size={24} color="black" />
         </TouchableOpacity>        
         {Platform.OS === 'ios' || Platform.OS === 'android' ?
         <TouchableOpacity style={{ flex:1, alignSelf: 'center', }} 
