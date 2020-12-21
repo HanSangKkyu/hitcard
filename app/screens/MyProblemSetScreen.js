@@ -97,6 +97,66 @@ export default function MyProblemSetScreen({ navigation }) {
         id: '58694a0f-3da1-471f-bd96-145571e29d72',
         title: 'Third Item',
       },
+      {
+        id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
+        title: 'First Item',
+      },
+      {
+        id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
+        title: 'Second Item',
+      },
+      {
+        id: '58694a0f-3da1-471f-bd9-145571e29d72',
+        title: 'Third Item',
+      },
+      {
+        id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28a',
+        title: 'First Item',
+      },
+      {
+        id: '3ac68afc-c605-48d3-a4f8-fbd91a97f63',
+        title: 'Second Item',
+      },
+      {
+        id: '58694a0f-3da1-471f-bd96-14557129d72',
+        title: 'Third Item',
+      },
+      {
+        id: 'bd7acbea-c1b1-46c2-aed5-ad53abb28ba',
+        title: 'First Item',
+      },
+      {
+        id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f3',
+        title: 'Second Item',
+      },
+      {
+        id: '58694a0f-3da1-471f-bd96-145571e29d72',
+        title: 'Third Item',
+      },
+      {
+        id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f3',
+        title: 'Second Item',
+      },
+      {
+        id: '58694a0f-3da1-471f-bd96-145571e29d72',
+        title: 'Third Item',
+      },
+      {
+        id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f3',
+        title: 'Second Item',
+      },
+      {
+        id: '58694a0f-3da1-471f-bd96-145571e29d72',
+        title: 'Third Item',
+      },
+      {
+        id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f3',
+        title: 'Second Item',
+      },
+      {
+        id: '58694a0f-3da1-471f-bd96-145571e29d72',
+        title: 'Third Item',
+      },
     ]);
   }
 
@@ -104,15 +164,23 @@ export default function MyProblemSetScreen({ navigation }) {
     <Provider>
       <SafeAreaView style={{}}>
         <Portal>
-          <Modal visible={modalVisible} contentContainerStyle={{ backgroundColor: 'white', padding: 20, margin: 20, flexDirection: 'column' }}>
-            <Text style={{fontSize: 18,fontWeight:'bold'}}>새 문제 SET 만들기</Text>
-            <TextInput></TextInput>
-            <TouchableOpacity style={{ marginTop: 60 }} onPress={() => { setModalVisible(!modalVisible) }}>
-              <View style={{ flexDirection: 'row', alignContent: 'center' }}>
-                <AntDesign name="close" size={24} color="black" />
-                <Text style={{ marginLeft: 10, alignSelf: 'center', fontSize: 18 }}>닫기</Text>
-              </View>
-            </TouchableOpacity>
+          <Modal visible={modalVisible} contentContainerStyle={{ backgroundColor: 'white', padding: 20, margin: 20, flexDirection: 'column', marginBottom:100 }}>
+            <Text style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 10 }}>새 문제 SET 만들기</Text>
+            <TextInput style={{ borderWidth: 1, height: 30, fontSize: 20, paddingBottom: 5, paddingLeft: 5 }} autoFocus></TextInput>
+            <View style={{ marginTop: 10, flexDirection: 'row' }}>
+              <TouchableOpacity style={{ flex: 1 }} onPress={() => { setModalVisible(!modalVisible) }}>
+                <View style={{ flexDirection: 'row', alignContent: 'center' }}>
+                  <AntDesign name="close" size={24} color="black" />
+                  <Text style={{ marginLeft: 10, alignSelf: 'center', fontSize: 18 }}>취소</Text>
+                </View>
+              </TouchableOpacity>
+              <TouchableOpacity style={{ flex: 1 }} onPress={() => { setModalVisible(!modalVisible) }}>
+                <View style={{ flexDirection: 'row', alignContent: 'center' }}>
+                  <Entypo name="check" size={24} color="black" />
+                  <Text style={{ marginLeft: 10, alignSelf: 'center', fontSize: 18 }}>생성</Text>
+                </View>
+              </TouchableOpacity>
+            </View>
           </Modal>
         </Portal>
         <View style={{ margin: 20, marginBottom: 0, borderBottomWidth: 1, flexDirection: 'row', paddingBottom: 10, }}>
@@ -167,7 +235,7 @@ export default function MyProblemSetScreen({ navigation }) {
           }
         </View>
         <KeyboardAwareScrollView>
-          <ScrollView style={{height:WINDOW_HEIGHT-100}}>
+          <ScrollView style={{ height: WINDOW_HEIGHT - 100 }}>
             <FlatList data={DATA}
               renderItem={({ item }) => <MyProblemSetScreenRow
                 navigation={navigation}

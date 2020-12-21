@@ -7,12 +7,14 @@ import { createStackNavigator } from '@react-navigation/stack';
 import CategoryScreenRow from '../rows/CategoryScreenRow';
 import { ScrollView } from 'react-native-gesture-handler';
 import { WINDOW_WIDTH } from "../Common";
+import { Modal, Portal, Provider } from "react-native-paper";
 
 export default function CategoryScreen({ navigation }) {
   const [DATA, setDATA] = React.useState('?'); // 서버로 부터 받은 데이터를 저장하는 변수
   const [isSearch, setIsSearch] = React.useState(false);
   const [isEdit, setIsEdit] = React.useState(false);
   const [name, setName] = React.useState("~의 카테고리");
+  const [modalVisible, setModalVisible] = React.useState(false);
 
 
   React.useEffect(() => {
@@ -79,77 +81,99 @@ export default function CategoryScreen({ navigation }) {
   }
 
   return (
-    <SafeAreaView style={{}}>
-      <View style={{ margin: 20, marginBottom: 0, borderBottomWidth: 1, flexDirection: 'row', paddingBottom: 10, }}>
-        <TouchableOpacity style={{ marginRight: 20, alignSelf: 'center' }} onPress={() => navigation.goBack()} >
-          <AntDesign name="arrowleft" size={24} color="black" />
-        </TouchableOpacity>
-        {isSearch ? <TextInput style={{ flex: 1, alignSelf: 'center', borderWidth: isSearch ? 1 : 0, borderRadius: 100, height: 26, paddingLeft: 10, paddingRight: 10 }} autoFocus ></TextInput> :
-          <View style={{ flex: 1, flexDirection: 'row', alignContent: 'center' }}>
-            {isEdit ? <TextInput style={{ fontSize: 22, alignSelf: 'center' }} value={name} onChangeText={(text)=>{setName(text)}} autoFocus></TextInput> : <Text style={{ fontSize: 22, alignSelf: 'center' }}>{name}</Text>}
-            <TouchableOpacity style={{ marginLeft: 10, alignContent: 'center', justifyContent: 'center' }} onPress={()=>{setIsEdit(!isEdit)}}>
-              {isEdit ? <Entypo name="check" size={24} color="black" /> : <MaterialIcons name="edit" size={24} color="black" />  }
+    <Provider>
+      <SafeAreaView style={{}}>
+        <Portal>
+          <Modal visible={modalVisible} contentContainerStyle={{ backgroundColor: 'white', padding: 20, margin: 20, flexDirection: 'column', marginBottom: 100 }}>
+            <Text style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 10 }}>새 카테고리 만들기</Text>
+            <TextInput style={{ borderWidth: 1, height: 30, fontSize: 20, paddingBottom: 5, paddingLeft: 5 }} autoFocus></TextInput>
+            <View style={{ marginTop: 10, flexDirection: 'row' }}>
+              <TouchableOpacity style={{ flex: 1 }} onPress={() => { setModalVisible(!modalVisible) }}>
+                <View style={{ flexDirection: 'row', alignContent: 'center' }}>
+                  <AntDesign name="close" size={24} color="black" />
+                  <Text style={{ marginLeft: 10, alignSelf: 'center', fontSize: 18 }}>취소</Text>
+                </View>
+              </TouchableOpacity>
+              <TouchableOpacity style={{ flex: 1 }} onPress={() => { setModalVisible(!modalVisible) }}>
+                <View style={{ flexDirection: 'row', alignContent: 'center' }}>
+                  <Entypo name="check" size={24} color="black" />
+                  <Text style={{ marginLeft: 10, alignSelf: 'center', fontSize: 18 }}>생성</Text>
+                </View>
+              </TouchableOpacity>
+            </View>
+          </Modal>
+        </Portal>
+        <View style={{ margin: 20, marginBottom: 0, borderBottomWidth: 1, flexDirection: 'row', paddingBottom: 10, }}>
+          <TouchableOpacity style={{ marginRight: 20, alignSelf: 'center' }} onPress={() => navigation.goBack()} >
+            <AntDesign name="arrowleft" size={24} color="black" />
+          </TouchableOpacity>
+          {isSearch ? <TextInput style={{ flex: 1, alignSelf: 'center', borderWidth: isSearch ? 1 : 0, borderRadius: 100, height: 26, paddingLeft: 10, paddingRight: 10 }} autoFocus ></TextInput> :
+            <View style={{ flex: 1, flexDirection: 'row', alignContent: 'center' }}>
+              {isEdit ? <TextInput style={{ fontSize: 22, alignSelf: 'center' }} value={name} onChangeText={(text) => { setName(text) }} autoFocus></TextInput> : <Text style={{ fontSize: 22, alignSelf: 'center' }}>{name}</Text>}
+              <TouchableOpacity style={{ marginLeft: 10, alignContent: 'center', justifyContent: 'center' }} onPress={() => { setIsEdit(!isEdit) }}>
+                {isEdit ? <Entypo name="check" size={24} color="black" /> : <MaterialIcons name="edit" size={24} color="black" />}
+              </TouchableOpacity>
+            </View>
+          }
+          <TouchableOpacity style={{ alignSelf: 'flex-end', alignSelf: 'center', marginLeft: 20 }} onPress={() => setIsSearch(!isSearch)}>
+            {isSearch ? <Feather name="x" size={24} color="black" /> : <Octicons name="search" size={24} color="black" />}
+          </TouchableOpacity>
+        </View>
+        <View style={{ flexDirection: 'row', borderBottomWidth: 1, marginLeft: 20, marginRight: 20, alignContent: 'center', justifyContent: 'center' }}>
+          <TouchableOpacity onPress={() => { navigation.navigate('SolveScreen') }} style={{ flex: 1, alignSelf: 'center', }}>
+            {/* <Text style={{alignSelf:'center', fontSize: Platform.OS === 'ios' || Platform.OS === 'android' ? 20 : 25 }}>문제풀기</Text> */}
+            <MaterialCommunityIcons style={{ alignSelf: 'center' }} name="play-outline" size={24} color="black" />
+          </TouchableOpacity>
+          <TouchableOpacity  onPress={() => { setModalVisible(!modalVisible) }}  style={{ flex: 1, alignSelf: 'center', }}>
+            {/* <Text style={{alignSelf:'center', fontSize: Platform.OS === 'ios' || Platform.OS === 'android' ? 20 : 25 }}>카테고리 추가</Text> */}
+            <Ionicons style={{ alignSelf: 'center' }} name="add" size={24} color="black" />
+          </TouchableOpacity>
+          {Platform.OS === 'ios' || Platform.OS === 'android' ?
+            <TouchableOpacity style={{ flex: 1, alignSelf: 'center', }}
+              onPress={() => {
+                Alert.alert(
+                  "카테고리 삭제",
+                  "선택한 카테고리를 삭제하시겠습니까?",
+                  [
+                    {
+                      text: "Cancel",
+                      onPress: () => console.log("Cancel Pressed"),
+                      style: "cancel"
+                    },
+                    { text: "OK", onPress: () => console.log("OK Pressed") }
+                  ],
+                  { cancelable: false }
+                );
+              }}>
+              <Entypo style={{ alignSelf: 'center' }} name="trash" size={24} color="black" />
             </TouchableOpacity>
-          </View>
-        }
-        <TouchableOpacity style={{ alignSelf: 'flex-end', alignSelf: 'center', marginLeft: 20 }} onPress={() => setIsSearch(!isSearch)}>
-          {isSearch ? <Feather name="x" size={24} color="black" /> : <Octicons name="search" size={24} color="black" />}
-        </TouchableOpacity>
-      </View>
-      <View style={{ flexDirection: 'row', borderBottomWidth: 1, marginLeft: 20, marginRight: 20, alignContent: 'center', justifyContent: 'center' }}>
-        <TouchableOpacity onPress={() => { navigation.navigate('SolveScreen') }} style={{flex:1, alignSelf: 'center', }}>
-          {/* <Text style={{alignSelf:'center', fontSize: Platform.OS === 'ios' || Platform.OS === 'android' ? 20 : 25 }}>문제풀기</Text> */}
-          <MaterialCommunityIcons style={{ alignSelf: 'center'}} name="play-outline" size={24} color="black" />
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => { navigation.navigate('SolveScreen') }} style={{flex:1, alignSelf: 'center', }}>
-          {/* <Text style={{alignSelf:'center', fontSize: Platform.OS === 'ios' || Platform.OS === 'android' ? 20 : 25 }}>카테고리 추가</Text> */}
-          <Ionicons style={{ alignSelf: 'center'}} name="add" size={24} color="black" />
-        </TouchableOpacity>        
-        {Platform.OS === 'ios' || Platform.OS === 'android' ?
-        <TouchableOpacity style={{ flex:1, alignSelf: 'center', }} 
-          onPress={() => {
-              Alert.alert(
-                "카테고리 삭제",
-                "선택한 카테고리를 삭제하시겠습니까?",
-                [
-                  {
-                    text: "Cancel",
-                    onPress: () => console.log("Cancel Pressed"),
-                    style: "cancel"
-                  },
-                  { text: "OK", onPress: () => console.log("OK Pressed") }
-                ],
-                { cancelable: false }
-              );
-          }}>
-          <Entypo style={{alignSelf:'center'}} name="trash" size={24} color="black" />
-        </TouchableOpacity>    
-        :
-        <TouchableOpacity style={{ flex:1, alignSelf: 'center', }} 
-          onPress={() => {
-            if (confirm("선택한 카테고리를 삭제하시겠습니까?")) {
-              // 확인 버튼 클릭 시 동작
-            } else {
-              // 취소 버튼 클릭 시 동작
-            }
-          }}>
-          <Entypo style={{alignSelf:'center'}} name="trash" size={24} color="black" />
-        </TouchableOpacity>   
-        }
-      </View>
-      <KeyboardAwareScrollView>
-        <ScrollView style={{}}>
-          <FlatList
-            data={DATA}
-            renderItem={({ item }) => <CategoryScreenRow
-              navigation={navigation}
-              title={item.title}
-            />}
-            keyExtractor={item => item.id}
-          />
-        </ScrollView>
-      </KeyboardAwareScrollView>
-    </SafeAreaView>
+            :
+            <TouchableOpacity style={{ flex: 1, alignSelf: 'center', }}
+              onPress={() => {
+                if (confirm("선택한 카테고리를 삭제하시겠습니까?")) {
+                  // 확인 버튼 클릭 시 동작
+                } else {
+                  // 취소 버튼 클릭 시 동작
+                }
+              }}>
+              <Entypo style={{ alignSelf: 'center' }} name="trash" size={24} color="black" />
+            </TouchableOpacity>
+          }
+        </View>
+        <KeyboardAwareScrollView>
+          <ScrollView style={{}}>
+            <FlatList
+              data={DATA}
+              renderItem={({ item }) => <CategoryScreenRow
+                navigation={navigation}
+                title={item.title}
+              />}
+              keyExtractor={item => item.id}
+            />
+          </ScrollView>
+        </KeyboardAwareScrollView>
+      </SafeAreaView>
+    </Provider>
   );
 }
 
