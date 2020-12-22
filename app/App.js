@@ -13,6 +13,7 @@ import AddProblemScreen from './screens/AddProblemScreen';
 import SearchScreen from './screens/SearchScreen';
 import SearchCategoryScreen from './screens/SearchCategoryScreen';
 import SearchCategoryProblemScreen from './screens/SearchCategoryProblemScreen';
+import JoinScreen from './screens/JoinScreen';
 
 const Stack = createStackNavigator();
 
@@ -20,8 +21,8 @@ function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="MyProblemSetScreen" component={MyProblemSetScreen} />
         <Stack.Screen name="LoginScreen" component={LoginScreen} />
+        <Stack.Screen name="MyProblemSetScreen" component={MyProblemSetScreen} />
         <Stack.Screen name="SearchCategoryScreen" component={SearchCategoryScreen} />
         <Stack.Screen name="SearchScreen" component={SearchScreen} />
         <Stack.Screen name="SearchCategoryProblemScreen" component={SearchCategoryProblemScreen} />
@@ -31,7 +32,7 @@ function App() {
         <Stack.Screen name="CategoryScreen" component={CategoryScreen} />
         <Stack.Screen name="MakeScreen" component={MakeScreen} />
         <Stack.Screen name="EditProblemScreen" component={EditProblemScreen} />
-        
+        <Stack.Screen name="JoinScreen" component={JoinScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

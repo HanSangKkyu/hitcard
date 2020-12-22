@@ -20,6 +20,12 @@ public interface UserMapper {
     @Select("select * from USER WHERE SN = #{SN};")
     User getOne(@Param("SN") String SN);
 
+    @Select("select * from USER WHERE ID = #{id};")
+    User getById(@Param("id") String id);
+
+    @Select("select * from USER WHERE PW = #{pw};")
+    User getByPw(@Param("pw") String pw);
+
     @Insert("INSERT INTO USER( id, pw, introduction ) VALUES (#{id}, #{pw}, #{introduction} );")
     boolean insert(@Param("id") String id, @Param("pw") String pw, @Param("introduction") String introduction);
 

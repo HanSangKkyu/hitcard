@@ -67,6 +67,14 @@ public class UserController {
         Util.reponse_jobs(res,  userMapper.insert(id, pw, introduction)+"");
 	}
 
+	@RequestMapping(value = "/userbyid", method = RequestMethod.POST)
+	public void userPostById(HttpServletRequest req, HttpServletResponse res, @RequestBody HashMap<String, Object> map, Locale locale) throws IOException, SQLException {
+		System.out.println(Util.getTime() + ".=== " + req.getMethod() +" "+req.getRequestURL() + " ==========");
+		String id = (String) map.get("id");
+
+        Util.reponse_jobs(res,  userMapper.getById(id).toString());
+	}
+
 	@RequestMapping(value = "/user/{SN}", method = RequestMethod.PUT)
 	public void userPut(HttpServletRequest req, HttpServletResponse res, @RequestBody HashMap<String, Object> map, Locale locale, @PathVariable("SN") String _SN) throws IOException, SQLException {
 		System.out.println("========== " + req.getRequestURL() + " " + req.getMethod() + " ==========");
