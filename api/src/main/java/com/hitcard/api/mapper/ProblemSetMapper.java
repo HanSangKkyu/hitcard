@@ -23,8 +23,8 @@ public interface ProblemSetMapper {
     @Select("select * from PROBLEM_SET WHERE SN = #{SN};")
     ProblemSet getOne(@Param("SN") String SN);
 
-    @Insert("INSERT INTO PROBLEM_SET( name, owner, tag, hit ) VALUES (#{name}, #{owner}, #{tag}, #{hit} );")
-    boolean insert(@Param("name") String name, @Param("owner") String owner, @Param("tag") String tag, @Param("hit") String hit);
+    @Insert("INSERT INTO PROBLEM_SET( name, owner, tag ) VALUES (#{name}, #{owner}, #{tag} );")
+    boolean insert(@Param("name") String name, @Param("owner") String owner, @Param("tag") String tag);
 
     @Update("UPDATE PROBLEM_SET SET name = #{name}, owner = #{owner}, tag = #{tag}, hit = #{hit} WHERE SN = #{SN}")
     boolean update(@Param("SN") String SN, @Param("name") String name, @Param("owner") String owner, @Param("tag") String tag, @Param("hit") String hit);

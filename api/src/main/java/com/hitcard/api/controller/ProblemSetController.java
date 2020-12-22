@@ -48,7 +48,7 @@ public class ProblemSetController {
         Util.reponse_jobs(res, listToJson(problemSetMapper.get()));
 	}
 
-	@RequestMapping(value = "/problem-set/{owner}", method = RequestMethod.GET)
+	@RequestMapping(value = "/problem-set/owner/{owner}", method = RequestMethod.GET)
 	public void problemSetGetOfOwner(HttpServletRequest req, HttpServletResponse res, Locale locale, @PathVariable("owner") String _owner) throws IOException, SQLException {
 		System.out.println("========== " + req.getRequestURL() + " " + req.getMethod() + " ==========");
 
@@ -70,9 +70,8 @@ public class ProblemSetController {
 		String name = (String) map.get("name");
 		String owner = (String) map.get("owner");
 		String tag = (String) map.get("tag");
-		String hit = (String) map.get("hit");
 
-		Util.reponse_jobs(res,  problemSetMapper.insert(name, owner, tag, hit)+"");
+		Util.reponse_jobs(res,  problemSetMapper.insert(name, owner, tag)+"");
 	}
 
 	@RequestMapping(value = "/problemset/{SN}", method = RequestMethod.PUT)

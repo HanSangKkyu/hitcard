@@ -55,7 +55,7 @@ export default function JoinScreen({ navigation }) {
     })
       .then((response) => response.text())
       .then((responseJson) => {
-        // console.log(responseJson);
+        console.log(JSON.stringify(JSON.parse(jsonEscape(responseJson)), undefined, 4));
         var resjson = JSON.parse(jsonEscape(responseJson));
 
         console.log(resjson.status);
@@ -109,7 +109,7 @@ export default function JoinScreen({ navigation }) {
       })
         .then((response) => response.text())
         .then((responseJson) => {
-          console.log(responseJson);
+          console.log(JSON.stringify(JSON.parse(jsonEscape(responseJson)), undefined, 4));
           navigation.navigate('MyProblemSetScreen');
         })
         .catch((error) => {
