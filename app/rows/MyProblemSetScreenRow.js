@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, Image, TouchableWithoutFeedback, TouchableOpacity, Button, TextInput } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableWithoutFeedback, TouchableOpacity, Button, TextInput, Alert } from 'react-native';
 import { Ionicons, Feather, MaterialCommunityIcons, Octicons, AntDesign, FontAwesome, SimpleLineIcons, MaterialIcons, FontAwesome5, Foundation, Entypo } from '@expo/vector-icons';
 import { Checkbox, Modal, Portal, Provider } from 'react-native-paper';
 import { WINDOW_WIDTH, WINDOW_HEIGHT, USER_SN, APIVO, jsonEscape, PROBLEMSET_SELECTED } from "../Common";
@@ -67,14 +67,14 @@ export default function MyProblemSetScreenRow({ navigation, SN, name, tag, hit, 
     console.log(modifyEnable);
     if (nameInModal) {
       setModifyEnable(true);
-    }else {
+    } else {
       setModifyEnable(false);
     }
   }, [nameInModal]);
 
   function editProblemSet() {
-    console.log(APIVO + '/problem-set/'+SN);
-    fetch(APIVO + '/problem-set/'+SN, {
+    console.log(APIVO + '/problem-set/' + SN);
+    fetch(APIVO + '/problem-set/' + SN, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -83,7 +83,7 @@ export default function MyProblemSetScreenRow({ navigation, SN, name, tag, hit, 
         'name': nameInModal,
         'owner': USER_SN[0],
         'tag': tagInModal,
-        'hit':hit
+        'hit': hit
       })
     })
       .then((response) => response.text())
@@ -98,12 +98,35 @@ export default function MyProblemSetScreenRow({ navigation, SN, name, tag, hit, 
       });
   }
 
+  function deleteItem(){
+    console.log(APIVO + '/problem-set/' + SN);
+    fetch(APIVO + '/problem-set/' + SN, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({})
+    })
+      .then((response) => response.text())
+      .then((responseJson) => {
+        // console.log(responseJson)
+        console.log(JSON.stringify(JSON.parse(jsonEscape(responseJson)), undefined, 4));
+        getDATA();
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }
+
   return (
     <TouchableOpacity
       onPress={() => {
-        navigation.navigate("CategoryScreen");
+        navigation.navigate("CategoryScreen",{
+          "problemSetSN" : SN,
+          "problemSetName" : name
+        });
       }}
-      >
+    >
 
       <Portal>
         <Modal visible={modalVisible} contentContainerStyle={{ backgroundColor: 'white', padding: 20, margin: 20, flexDirection: 'column', marginBottom: 100 }}>
@@ -111,7 +134,24 @@ export default function MyProblemSetScreenRow({ navigation, SN, name, tag, hit, 
           <TextInput style={{ borderWidth: 1, height: 40, fontSize: 20, padding: 5, marginBottom: 5 }} placeholder="문제SET 이름" onChangeText={(text) => { setNameInModal(text); }} value={nameInModal} autoFocus></TextInput>
           <TextInput style={{ borderWidth: 1, height: 40, fontSize: 20, padding: 5 }} placeholder="태그 (ex: tag1, tag2, tag3)" value={tagInModal} onChangeText={(text) => { setTagInModal(text); }} ></TextInput>
           <View style={{ marginTop: 10, flexDirection: 'row' }}>
-            <TouchableOpacity style={{ flex: 1 }} onPress={() => { setModalVisible(!modalVisible) }}>
+            <TouchableOpacity style={{ flex: 1 }}
+              onPress={() => {
+                Alert.alert(
+                  "카테고리 삭제",
+                  name+"를 삭제하시겠습니까?",
+                  [
+                    {
+                      text: "Cancel",
+                      onPress: () => console.log("Cancel Pressed"),
+                      style: "cancel"
+                    },
+                    { text: "OK", onPress: () => deleteItem() }
+                  ],
+                  { cancelable: false }
+                );
+                setModalVisible(!modalVisible);
+              }}
+            >
               <View style={{ flexDirection: 'row', alignContent: 'center' }}>
                 <Entypo style={{ alignSelf: 'center' }} name="trash" size={24} color="black" />
                 <Text style={{ marginLeft: 10, alignSelf: 'center', fontSize: 18 }}>삭제</Text>

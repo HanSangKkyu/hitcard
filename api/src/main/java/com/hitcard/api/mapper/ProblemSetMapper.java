@@ -26,7 +26,7 @@ public interface ProblemSetMapper {
     @Insert("INSERT INTO PROBLEM_SET( name, owner, tag ) VALUES (#{name}, #{owner}, #{tag} );")
     boolean insert(@Param("name") String name, @Param("owner") String owner, @Param("tag") String tag);
 
-    @Update("UPDATE PROBLEM_SET SET name = #{name}, owner = #{owner}, tag = #{tag}, hit = #{hit} WHERE SN = #{SN}")
+    @Update("UPDATE PROBLEM_SET SET name = #{name}, owner = #{owner}, tag = #{tag}, hit = #{hit}, MODIFIED_DATE = CURRENT_TIMESTAMP() WHERE SN = #{SN}")
     boolean update(@Param("SN") String SN, @Param("name") String name, @Param("owner") String owner, @Param("tag") String tag, @Param("hit") String hit);
 
     @Update("UPDATE PROBLEM_SET SET HIT = (HIT+1) WHERE SN = #{SN}")

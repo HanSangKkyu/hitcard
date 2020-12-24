@@ -49,51 +49,43 @@ const styles = StyleSheet.create({
     },
 });
 
-export default function CategoryScreeRow({ navigation, title }) {
+export default function CategoryScreeRow({ navigation, SN, name, problemSet }) {
     const [isSelected, setIsSelected] = React.useState(false); // 서버로 부터 받은 데이터를 저장하는 변수
+
+    function selectThisItem(){
+        setIsSelected(!isSelected);
+        if (isSelected == true) {
+            const idx = CATEGORY_SELECTED.indexOf(name)
+            if (idx > -1) CATEGORY_SELECTED.splice(idx, 1)
+        } else {
+            CATEGORY_SELECTED.push(name);
+        }
+        console.log(CATEGORY_SELECTED);
+    }
 
     return (
         <TouchableOpacity
             onPress={() => {
-                setIsSelected(!isSelected);
-                if (isSelected == true) {
-                    const idx = CATEGORY_SELECTED.indexOf(title)
-                    if (idx > -1) CATEGORY_SELECTED.splice(idx, 1)
-                } else {
-                    CATEGORY_SELECTED.push(title);
-                }
-                console.log(CATEGORY_SELECTED);
+                selectThisItem();
             }}>
             <View style={styles.container}>
                 <View style={styles.photo}>
-                    {/* <SimpleLineIcons name="doc" size={30} color="black" /> */}
                     <Feather name="folder" size={30} color="black" />
                 </View>
                 <View style={styles.container_text}>
                     <View style={{ flex: 1, flexDirection: 'column' }}>
                         <Text style={styles.title}>
-                            {title}
-                        </Text>
-                        <Text style={styles.title}>
-                            <Text>수정일: </Text> {title}
+                            {name}
                         </Text>
                     </View>
                 </View>
                 <View style={{ alignContent: 'center', justifyContent: 'center' }}>
                     <Checkbox
                         onPress={() => {
-                            setIsSelected(!isSelected);
-                            if (isSelected == true) {
-                                const idx = CATEGORY_SELECTED.indexOf(title)
-                                if (idx > -1) CATEGORY_SELECTED.splice(idx, 1)
-                            } else {
-                                CATEGORY_SELECTED.push(title);
-                            }
-                            console.log(CATEGORY_SELECTED);
+                            selectThisItem();
                         }}
                         style={{ borderWidth: 1, borderBottomColor: 'black', backgroundColor: 'black' }}
                         status={isSelected ? 'checked' : 'unchecked'}
-
                     />
                 </View>
                 <TouchableOpacity style={{ alignContent: 'center', justifyContent: 'center' }} onPress={()=>{navigation.navigate('ProblemScreen')}}>

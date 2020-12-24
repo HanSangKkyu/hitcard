@@ -6,15 +6,20 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import CategoryScreenRow from '../rows/CategoryScreenRow';
 import { ScrollView } from 'react-native-gesture-handler';
-import { WINDOW_WIDTH } from "../Common";
+import { WINDOW_WIDTH, WINDOW_HEIGHT, USER_SN, APIVO, jsonEscape, CATEGORY_SELECTED } from "../Common";
 import { Modal, Portal, Provider } from "react-native-paper";
 
-export default function CategoryScreen({ navigation }) {
+export default function CategoryScreen({ route, navigation }) {
+  const {problemSetSN, problemSetName} = route.params; // 서버로 부터 받은 데이터를 저장하는 변수
   const [DATA, setDATA] = React.useState('?'); // 서버로 부터 받은 데이터를 저장하는 변수
+  const [DATA_copy, setDATA_copy] = React.useState('?'); // 서버로 부터 받은 데이터를 저장하는 변수
   const [isSearch, setIsSearch] = React.useState(false);
   const [isEdit, setIsEdit] = React.useState(false);
-  const [name, setName] = React.useState("~의 카테고리");
+  const [name, setName] = React.useState(problemSetName+"의 카테고리");
   const [modalVisible, setModalVisible] = React.useState(false);
+  const [createEnable, setCreateEnable] = React.useState(false);
+  const [createName, setCreateName] = React.useState("");
+  
 
 
   React.useEffect(() => {
@@ -22,62 +27,61 @@ export default function CategoryScreen({ navigation }) {
       // The screen is focused
       // Call any action
       getDATA();
+      CATEGORY_SELECTED.length = 0;
       console.log('CategoryScreen focused!');
     });
     return unsubscribe;
   }, [navigation, DATA]);
 
+  React.useEffect(() => {
+    if(createName){
+      setCreateEnable(true);
+    }else{
+      setCreateEnable(false);
+    }
+
+  }, [navigation, createName]);
+
   function getDATA() {
-    // fetch(APIVO+'/db', {
-    //   method: 'GET'
-    // })
-    // .then((response) => response.text())
-    // .then((responseJson) => {
-    //   setDATA(JSON.parse(jsonEscape(responseJson)).array);
-    //   setDATA_copy(JSON.stringify(JSON.parse(jsonEscape(responseJson)).array));
-    //   setSpinner(false);
-    // })
-    // .catch((error) => {
-    //     console.error(error);
-    // });
-    setDATA([
-      {
-        id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
-        title: '모든 문제',
+    fetch(APIVO+'/problem-set/'+problemSetSN+'/category', {
+      method: 'GET'
+    })
+    .then((response) => response.text())
+    .then((responseJson) => {
+      console.log(JSON.stringify(JSON.parse(jsonEscape(responseJson)), undefined, 4));
+      setDATA(JSON.parse(jsonEscape(responseJson)).array);
+      setDATA_copy(JSON.stringify(JSON.parse(jsonEscape(responseJson)).array));
+      setName(problemSetName+"의 카테고리");
+      // setSpinner(false);
+    })
+    .catch((error) => {
+        console.error(error);
+    });
+  }
+
+  function create_category(){
+    if(!createEnable){
+      return
+    }
+
+    fetch(APIVO+'/category', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
       },
-      {
-        id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
-        title: '신라',
-      },
-      {
-        id: '58694a0f-3da1-471f-bd9-145571e29d72',
-        title: '고려',
-      },
-      {
-        id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28a',
-        title: '삼국시대',
-      },
-      {
-        id: '3ac68afc-c605-48d3-a4f8-fbd91a97f63',
-        title: '일제강점기',
-      },
-      {
-        id: '58694a0f-3da1-471f-bd96-14557129d72',
-        title: '1hit',
-      },
-      {
-        id: 'bd7acbea-c1b1-46c2-aed5-ad53abb28ba',
-        title: '2hit',
-      },
-      {
-        id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f3',
-        title: '3hit',
-      },
-      {
-        id: '58694a0f-3da1-471f-bd96-145571e29d72',
-        title: '4hit',
-      },
-    ]);
+      body: JSON.stringify({
+        'name' : createName,
+        'problemSet' : problemSetSN
+      })
+    })
+    .then((response) => response.text())
+    .then((responseJson) => {
+      getDATA();
+    })
+    .catch((error) => {
+        console.error(error);
+    });
+    setModalVisible(!modalVisible);
   }
 
   return (
@@ -86,7 +90,7 @@ export default function CategoryScreen({ navigation }) {
         <Portal>
           <Modal visible={modalVisible} contentContainerStyle={{ backgroundColor: 'white', padding: 20, margin: 20, flexDirection: 'column', marginBottom: 100 }}>
             <Text style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 10 }}>새 카테고리 만들기</Text>
-            <TextInput style={{ borderWidth: 1, height: 30, fontSize: 20, paddingBottom: 5, paddingLeft: 5 }} autoFocus></TextInput>
+            <TextInput style={{ borderWidth: 1, height: 30, fontSize: 20, paddingBottom: 5, paddingLeft: 5 }} onChangeText={(text)=>{setCreateName(text)}} autoFocus></TextInput>
             <View style={{ marginTop: 10, flexDirection: 'row' }}>
               <TouchableOpacity style={{ flex: 1 }} onPress={() => { setModalVisible(!modalVisible) }}>
                 <View style={{ flexDirection: 'row', alignContent: 'center' }}>
@@ -94,10 +98,10 @@ export default function CategoryScreen({ navigation }) {
                   <Text style={{ marginLeft: 10, alignSelf: 'center', fontSize: 18 }}>취소</Text>
                 </View>
               </TouchableOpacity>
-              <TouchableOpacity style={{ flex: 1 }} onPress={() => { setModalVisible(!modalVisible) }}>
+              <TouchableOpacity style={{ flex: 1 }} onPress={() => { create_category(); }}>
                 <View style={{ flexDirection: 'row', alignContent: 'center' }}>
-                  <Entypo name="check" size={24} color="black" />
-                  <Text style={{ marginLeft: 10, alignSelf: 'center', fontSize: 18 }}>생성</Text>
+                  <Entypo name="check" size={24} color={createEnable?"black":"gray"} />
+                  <Text style={{ marginLeft: 10, alignSelf: 'center', fontSize: 18, color:createEnable?'black':'gray' }}>생성</Text>
                 </View>
               </TouchableOpacity>
             </View>
@@ -166,7 +170,9 @@ export default function CategoryScreen({ navigation }) {
               data={DATA}
               renderItem={({ item }) => <CategoryScreenRow
                 navigation={navigation}
-                title={item.title}
+                SN={item.sn}
+                name={item.name}
+                problemSet={item.problemSet}
               />}
               keyExtractor={item => item.id}
             />
