@@ -74,7 +74,7 @@ public class ProblemSetController {
 		Util.reponse_jobs(res,  problemSetMapper.insert(name, owner, tag)+"");
 	}
 
-	@RequestMapping(value = "/problemset/{SN}", method = RequestMethod.PUT)
+	@RequestMapping(value = "/problem-set/{SN}", method = RequestMethod.PUT)
 	public void problemSetPut(HttpServletRequest req, HttpServletResponse res, @RequestBody HashMap<String, Object> map, Locale locale, @PathVariable("SN") String _SN) throws IOException, SQLException {
 		System.out.println("========== " + req.getRequestURL() + " " + req.getMethod() + " ==========");
 		String name = (String) map.get("name");
@@ -85,21 +85,21 @@ public class ProblemSetController {
 		Util.reponse_jobs(res,  problemSetMapper.update(_SN, name, owner, tag, hit)+"");
     }
 
-	@RequestMapping(value = "/problemset/{SN}/hitup", method = RequestMethod.PUT)
+	@RequestMapping(value = "/problem-set/{SN}/hitup", method = RequestMethod.PUT)
 	public void problemSetPutHitUp(HttpServletRequest req, HttpServletResponse res, @RequestBody HashMap<String, Object> map, Locale locale, @PathVariable("SN") String _SN) throws IOException, SQLException {
 		System.out.println("========== " + req.getRequestURL() + " " + req.getMethod() + " ==========");
 
 		Util.reponse_jobs(res,  problemSetMapper.updateHitUp(_SN)+"");
 	}
 	
-	@RequestMapping(value = "/problemset/{SN}/hitdown", method = RequestMethod.PUT)
+	@RequestMapping(value = "/problem-set/{SN}/hitdown", method = RequestMethod.PUT)
 	public void problemSetPutHitDown(HttpServletRequest req, HttpServletResponse res, @RequestBody HashMap<String, Object> map, Locale locale, @PathVariable("SN") String _SN) throws IOException, SQLException {
 		System.out.println("========== " + req.getRequestURL() + " " + req.getMethod() + " ==========");
 
 		Util.reponse_jobs(res,  problemSetMapper.updateHitDown(_SN)+"");
     }
 
-	@RequestMapping(value = "/problemset/{SN}", method = RequestMethod.DELETE)
+	@RequestMapping(value = "/problem-set/{SN}", method = RequestMethod.DELETE)
 	public void problemSetDelete(HttpServletRequest req, HttpServletResponse res, Locale locale, @PathVariable("SN") String _SN) throws IOException, SQLException {
 		System.out.println("========== " + req.getRequestURL() + " " + req.getMethod() + " ==========");
 		Util.reponse_jobs(res,  problemSetMapper.delete(_SN)+"");

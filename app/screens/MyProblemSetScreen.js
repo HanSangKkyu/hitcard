@@ -5,7 +5,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import MyProblemSetScreenRow from '../rows/MyProblemSetScreenRow';
-import { WINDOW_WIDTH, WINDOW_HEIGHT, USER_SN, APIVO, jsonEscape } from "../Common";
+import { WINDOW_WIDTH, WINDOW_HEIGHT, USER_SN, APIVO, jsonEscape, PROBLEMSET_SELECTED } from "../Common";
 import { Modal, Portal, Provider } from "react-native-paper";
 
 export default function MyProblemSetScreen({ navigation }) {
@@ -16,7 +16,6 @@ export default function MyProblemSetScreen({ navigation }) {
   const [name, setName] = React.useState("");
   const [tag, setTag] = React.useState("");
   const [createEnable, setCreateEnable] = React.useState(false);
-
 
   React.useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
@@ -50,16 +49,6 @@ export default function MyProblemSetScreen({ navigation }) {
     .catch((error) => {
         console.error(error);
     });
-    // setDATA([
-    //   {
-    //     id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
-    //     title: 'First Item',
-    //   },
-    //   {
-    //     id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
-    //     title: 'Second Item',
-    //   },
-    // ]);
   }
 
   function createProblemSet() {
@@ -111,7 +100,6 @@ export default function MyProblemSetScreen({ navigation }) {
         </Portal>
         <View style={{ margin: 20, marginBottom: 0, borderBottomWidth: 1, flexDirection: 'row', paddingBottom: 10, }}>
           <TouchableOpacity style={{ marginRight: 20, alignSelf: 'center' }} onPress={() => navigation.goBack()} >
-            {/* <AntDesign name="arrowleft" size={24} color="black" /> */}
             <MaterialIcons name="menu" size={24} color="black" />
           </TouchableOpacity>
           {isSearch ? <TextInput style={{ flex: 1, alignSelf: 'center', borderWidth: isSearch ? 1 : 0, borderRadius: 100, height: 26, paddingLeft: 10, paddingRight: 10 }} autoFocus ></TextInput> : <Text style={{ flex: 1, fontSize: 22, alignSelf: 'center' }}>내 문제 SET</Text>}
@@ -122,10 +110,8 @@ export default function MyProblemSetScreen({ navigation }) {
         <View style={{ flexDirection: 'row', borderBottomWidth: 1, marginLeft: 20, marginRight: 20, alignContent: 'center', justifyContent: 'center' }}>
           <TouchableOpacity onPress={() => { navigation.navigate('SearchScreen') }} style={{ flex: 1, alignSelf: 'center', }} >
             <MaterialCommunityIcons style={{ alignSelf: 'center' }} name="cloud-search-outline" size={24} color="black" />
-            {/* <Ionicons style={{ alignSelf: 'center'}} name="add" size={24} color="black" /> */}
           </TouchableOpacity>
           <TouchableOpacity onPress={() => { setModalVisible(!modalVisible) }} style={{ flex: 1, alignSelf: 'center', }} >
-            {/* <Text style={{alignSelf:'center', fontSize:Platform.OS === 'ios' || Platform.OS === 'android'? 20 : 25}}>추가</Text> */}
             <Ionicons style={{ alignSelf: 'center' }} name="add" size={24} color="black" />
           </TouchableOpacity>
           {Platform.OS === 'ios' || Platform.OS === 'android' ?
@@ -165,9 +151,13 @@ export default function MyProblemSetScreen({ navigation }) {
             <FlatList data={DATA}
               renderItem={({ item }) => <MyProblemSetScreenRow
                 navigation={navigation}
+                SN={item.SN}
                 name={item.name}
                 tag={item.tag}
+                hit={item.hit}
+                created_data={item.created_data}
                 modified_data={item.modified_data}
+                getDATA={getDATA}
               />}
               keyExtractor={item => item.name}
             />
