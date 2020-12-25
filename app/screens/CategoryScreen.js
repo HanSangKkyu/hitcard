@@ -111,12 +111,13 @@ export default function CategoryScreen({ route, navigation }) {
           <TouchableOpacity style={{ marginRight: 20, alignSelf: 'center' }} onPress={() => navigation.goBack()} >
             <AntDesign name="arrowleft" size={24} color="black" />
           </TouchableOpacity>
-          {isSearch ? <TextInput style={{ flex: 1, alignSelf: 'center', borderWidth: isSearch ? 1 : 0, borderRadius: 100, height: 26, paddingLeft: 10, paddingRight: 10 }} autoFocus ></TextInput> :
+          {isSearch ? <TextInput style={{ flex: 1, alignSelf: 'center', borderWidth: isSearch ? 1 : 0, borderRadius: 100, height: 30, paddingLeft: 10, paddingRight: 10 }} autoFocus ></TextInput> :
             <View style={{ flex: 1, flexDirection: 'row', alignContent: 'center' }}>
-              {isEdit ? <TextInput style={{ fontSize: 22, alignSelf: 'center' }} value={name} onChangeText={(text) => { setName(text) }} autoFocus></TextInput> : <Text style={{ fontSize: 22, alignSelf: 'center' }}>{name}</Text>}
+              <Text style={{ fontSize: 22, alignSelf: 'center' }}>{name}</Text>
+              {/* {isEdit ? <TextInput style={{ fontSize: 22, alignSelf: 'center' }} value={name} onChangeText={(text) => { setName(text) }} autoFocus></TextInput> : <Text style={{ fontSize: 22, alignSelf: 'center' }}>{name}</Text>}
               <TouchableOpacity style={{ marginLeft: 10, alignContent: 'center', justifyContent: 'center' }} onPress={() => { setIsEdit(!isEdit) }}>
                 {isEdit ? <Entypo name="check" size={24} color="black" /> : <MaterialIcons name="edit" size={24} color="black" />}
-              </TouchableOpacity>
+              </TouchableOpacity> */}
             </View>
           }
           <TouchableOpacity style={{ alignSelf: 'flex-end', alignSelf: 'center', marginLeft: 20 }} onPress={() => setIsSearch(!isSearch)}>
@@ -170,7 +171,7 @@ export default function CategoryScreen({ route, navigation }) {
               data={DATA}
               renderItem={({ item }) => <CategoryScreenRow
                 navigation={navigation}
-                SN={item.sn}
+                SN={item.SN}
                 name={item.name}
                 problemSet={item.problemSet}
               />}

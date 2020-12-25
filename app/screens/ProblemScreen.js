@@ -6,14 +6,16 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import ProblemScreenRow from '../rows/ProblemScreenRow';
 import { ScrollView } from 'react-native-gesture-handler';
-import { WINDOW_HEIGHT, WINDOW_WIDTH } from '../Common';
+import { WINDOW_HEIGHT, WINDOW_WIDTH, APIVO } from '../Common';
 import { Modal, Portal, Provider } from "react-native-paper";
 
-export default function ProblemScreen({ navigation }) {
+export default function ProblemScreen({ route, navigation }) {
+  const { categorySN, categoryName, problemSet } = route.params;
   const [DATA, setDATA] = React.useState('?'); // 서버로 부터 받은 데이터를 저장하는 변수
   const [isSearch, setIsSearch] = React.useState(false);
   const [isEdit, setIsEdit] = React.useState(false);
-  const [name, setName] = React.useState("~의 문제");
+  const [editEnable, setEditEnable] = React.useState(false);
+  const [name, setName] = React.useState(categoryName);
   const [modalVisible, setModalVisible] = React.useState(false);
 
   React.useEffect(() => {
@@ -25,6 +27,14 @@ export default function ProblemScreen({ navigation }) {
     });
     return unsubscribe;
   }, [navigation, DATA]);
+
+  React.useEffect(() => {
+    if(name){
+      setEditEnable(true);
+    }else{
+      setEditEnable(false);
+    }
+  }, [navigation, name]);
 
   function getDATA() {
     // fetch(APIVO+'/db', {
@@ -39,144 +49,35 @@ export default function ProblemScreen({ navigation }) {
     // .catch((error) => {
     //     console.error(error);
     // });
-    setDATA([
-      {
-        id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
-        title: '모든 문제',
-      },
-      {
-        id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
-        title: '신라',
-      },
-      {
-        id: '58694a0f-3da1-471f-bd9-145571e29d72',
-        title: '고려',
-      },
-      {
-        id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28a',
-        title: '삼국시대',
-      },
-      {
-        id: '3ac68afc-c605-48d3-a4f8-fbd91a97f63',
-        title: '일제강점기',
-      },
-      {
-        id: '58694a0f-3da1-471f-bd96-14557129d72',
-        title: '1hit',
-      },
-      {
-        id: 'bd7acbea-c1b1-46c2-aed5-ad53abb28ba',
-        title: '2hit',
-      },
-      {
-        id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f3',
-        title: '3hit',
-      },
-      {
-        id: '58694a0f-3da1-471f-bd96-145571e29d72',
-        title: '4hit',
-      },
-      {
-        id: '3ac68afc-c605-48d3-a4f8-fbd91a97f63',
-        title: '일제강점기',
-      },
-      {
-        id: '58694a0f-3da1-471f-bd96-14557129d72',
-        title: '1hit',
-      },
-      {
-        id: 'bd7acbea-c1b1-46c2-aed5-ad53abb28ba',
-        title: '2hit',
-      },
-      {
-        id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f3',
-        title: '3hit',
-      },
-      {
-        id: '58694a0f-3da1-471f-bd96-145571e29d72',
-        title: '4hit',
-      },
-      {
-        id: '3ac68afc-c605-48d3-a4f8-fbd91a97f63',
-        title: '일제강점기',
-      },
-      {
-        id: '58694a0f-3da1-471f-bd96-14557129d72',
-        title: '1hit',
-      },
-      {
-        id: 'bd7acbea-c1b1-46c2-aed5-ad53abb28ba',
-        title: '2hit',
-      },
-      {
-        id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f3',
-        title: '3hit',
-      },
-      {
-        id: '58694a0f-3da1-471f-bd96-145571e29d72',
-        title: '4hit',
-      },
-      {
-        id: '3ac68afc-c605-48d3-a4f8-fbd91a97f63',
-        title: '일제강점기',
-      },
-      {
-        id: '58694a0f-3da1-471f-bd96-14557129d72',
-        title: '1hit',
-      },
-      {
-        id: 'bd7acbea-c1b1-46c2-aed5-ad53abb28ba',
-        title: '2hit',
-      },
-      {
-        id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f3',
-        title: '3hit',
-      },
-      {
-        id: '58694a0f-3da1-471f-bd96-145571e29d72',
-        title: '4hit',
-      },
-      {
-        id: '3ac68afc-c605-48d3-a4f8-fbd91a97f63',
-        title: '일제강점기',
-      },
-      {
-        id: '58694a0f-3da1-471f-bd96-14557129d72',
-        title: '1hit',
-      },
-      {
-        id: 'bd7acbea-c1b1-46c2-aed5-ad53abb28ba',
-        title: '2hit',
-      },
-      {
-        id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f3',
-        title: '3hit',
-      },
-      {
-        id: '58694a0f-3da1-471f-bd96-145571e29d72',
-        title: '4hit',
-      },
-      {
-        id: '3ac68afc-c605-48d3-a4f8-fbd91a97f63',
-        title: '일제강점기',
-      },
-      {
-        id: '58694a0f-3da1-471f-bd96-14557129d72',
-        title: '1hit',
-      },
-      {
-        id: 'bd7acbea-c1b1-46c2-aed5-ad53abb28ba',
-        title: '2hit',
-      },
-      {
-        id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f3',
-        title: '3hit',
-      },
-      {
-        id: '58694a0f-3da1-471f-bd96-145571e29d72',
-        title: '4hit',
-      },
-    ]);
+  }
+
+  function editCategoryName(){
+    console.log('editEnable ' + editEnable);
+    console.log('isEdit ' + isEdit);
+    if(editEnable && isEdit){
+      console.log('categorySN '+categorySN);
+      fetch(APIVO+'/category/'+categorySN, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          'name' : name,
+          'problemSet' : problemSet
+        })
+      })
+      .then((response) => response.text())
+      .then((responseJson) => {
+        // getDATA();
+        setName(name);
+        setIsEdit(false);
+      })
+      .catch((error) => {
+          console.error(error);
+      });
+    }else{
+      setIsEdit(true);
+    }
   }
 
   return (
@@ -212,8 +113,8 @@ export default function ProblemScreen({ navigation }) {
           {isSearch ? <TextInput style={{ flex: 1, alignSelf: 'center', borderWidth: isSearch ? 1 : 0, borderRadius: 100, height: 26, paddingLeft: 10, paddingRight: 10 }} autoFocus ></TextInput> :
             <View style={{ flex: 1, flexDirection: 'row', alignContent: 'center' }}>
               {isEdit ? <TextInput style={{ fontSize: 22, alignSelf: 'center' }} value={name} onChangeText={(text) => { setName(text) }} autoFocus></TextInput> : <Text style={{ fontSize: 22, alignSelf: 'center' }}>{name}</Text>}
-              <TouchableOpacity style={{ marginLeft: 10, alignContent: 'center', justifyContent: 'center' }} onPress={() => { setIsEdit(!isEdit) }}>
-                {isEdit ? <Entypo name="check" size={24} color="black" /> : <MaterialIcons name="edit" size={24} color="black" />}
+              <TouchableOpacity style={{ marginLeft: 10, alignContent: 'center', justifyContent: 'center' }} onPress={() => { editCategoryName(); }}>
+                {isEdit ? <Entypo name="check" size={24} color={editEnable?"black":"gray"} /> : <MaterialIcons name="edit" size={24} color="black" />}
               </TouchableOpacity>
             </View>
           }

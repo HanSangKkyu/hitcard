@@ -88,7 +88,12 @@ export default function CategoryScreeRow({ navigation, SN, name, problemSet }) {
                         status={isSelected ? 'checked' : 'unchecked'}
                     />
                 </View>
-                <TouchableOpacity style={{ alignContent: 'center', justifyContent: 'center' }} onPress={()=>{navigation.navigate('ProblemScreen')}}>
+                <TouchableOpacity style={{ alignContent: 'center', justifyContent: 'center' }} 
+                    onPress={()=>{navigation.navigate('ProblemScreen', {
+                        "categorySN" : SN,
+                        "categoryName" : name,
+                        "problemSet" : problemSet
+                    })}}>
                     <Feather name="edit" size={24} color="black" />
                 </TouchableOpacity>
             </View>
