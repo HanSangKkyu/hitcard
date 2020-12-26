@@ -19,6 +19,8 @@ export default function CategoryScreen({ route, navigation }) {
   const [modalVisible, setModalVisible] = React.useState(false);
   const [createEnable, setCreateEnable] = React.useState(false);
   const [createName, setCreateName] = React.useState("");
+  const [deleteEnable, setDeleteEnable] = React.useState(false);
+  const [selectedItem, setSelectedItem] = React.useState([]);
   
 
 
@@ -41,6 +43,27 @@ export default function CategoryScreen({ route, navigation }) {
     }
 
   }, [navigation, createName]);
+
+  function toggleSelectedItem(_SN){
+    const idx = selectedItem.indexOf(_SN)
+    if (idx > -1) {
+      // CATEGORY_SELECTED.splice(idx, 1)
+      selectedItem.splice(idx, 1)
+      setSelectedItem(selectedItem);
+    }else{
+      // CATEGORY_SELECTED.push(_SN);
+      selectedItem.push(_SN);
+      setSelectedItem(selectedItem);
+    }
+
+    if(selectedItem.length > 0){
+      setDeleteEnable(true);
+    }else{
+      setDeleteEnable(false);
+    }
+
+    console.log(selectedItem);
+  }
 
   function getDATA() {
     fetch(APIVO+'/problem-set/'+problemSetSN+'/category', {
@@ -82,6 +105,30 @@ export default function CategoryScreen({ route, navigation }) {
         console.error(error);
     });
     setModalVisible(!modalVisible);
+  }
+
+  function delete_category(){
+    if(!deleteEnable){
+      return
+    }
+
+    selectedItem.forEach(element => {
+      fetch(APIVO+'/category/'+element, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({})
+      })
+      .then((response) => response.text())
+      .then((responseJson) => {
+        getDATA();
+        toggleSelectedItem(element);
+      })
+      .catch((error) => {
+          console.error(error);
+      });
+    });
   }
 
   return (
@@ -127,7 +174,7 @@ export default function CategoryScreen({ route, navigation }) {
         <View style={{ flexDirection: 'row', borderBottomWidth: 1, marginLeft: 20, marginRight: 20, alignContent: 'center', justifyContent: 'center' }}>
           <TouchableOpacity onPress={() => { navigation.navigate('SolveScreen') }} style={{ flex: 1, alignSelf: 'center', }}>
             {/* <Text style={{alignSelf:'center', fontSize: Platform.OS === 'ios' || Platform.OS === 'android' ? 20 : 25 }}>문제풀기</Text> */}
-            <MaterialCommunityIcons style={{ alignSelf: 'center' }} name="play-outline" size={24} color="black" />
+            <MaterialCommunityIcons style={{ alignSelf: 'center' }} name="play-outline" size={24} color={deleteEnable?"black":"gray"} />
           </TouchableOpacity>
           <TouchableOpacity  onPress={() => { setModalVisible(!modalVisible) }}  style={{ flex: 1, alignSelf: 'center', }}>
             {/* <Text style={{alignSelf:'center', fontSize: Platform.OS === 'ios' || Platform.OS === 'android' ? 20 : 25 }}>카테고리 추가</Text> */}
@@ -136,6 +183,9 @@ export default function CategoryScreen({ route, navigation }) {
           {Platform.OS === 'ios' || Platform.OS === 'android' ?
             <TouchableOpacity style={{ flex: 1, alignSelf: 'center', }}
               onPress={() => {
+                if(!deleteEnable){
+                  return
+                }
                 Alert.alert(
                   "카테고리 삭제",
                   "선택한 카테고리를 삭제하시겠습니까?",
@@ -145,12 +195,12 @@ export default function CategoryScreen({ route, navigation }) {
                       onPress: () => console.log("Cancel Pressed"),
                       style: "cancel"
                     },
-                    { text: "OK", onPress: () => console.log("OK Pressed") }
+                    { text: "OK", onPress: () => {delete_category();console.log("OK Pressed");} }
                   ],
                   { cancelable: false }
                 );
               }}>
-              <Entypo style={{ alignSelf: 'center' }} name="trash" size={24} color="black" />
+              <Entypo style={{ alignSelf: 'center' }} name="trash" size={24} color={deleteEnable?"black":"gray"} />
             </TouchableOpacity>
             :
             <TouchableOpacity style={{ flex: 1, alignSelf: 'center', }}
@@ -174,6 +224,7 @@ export default function CategoryScreen({ route, navigation }) {
                 SN={item.SN}
                 name={item.name}
                 problemSet={item.problemSet}
+                toggleSelectedItem = {toggleSelectedItem}
               />}
               keyExtractor={item => item.id}
             />

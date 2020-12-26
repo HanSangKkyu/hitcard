@@ -49,18 +49,19 @@ const styles = StyleSheet.create({
     },
 });
 
-export default function CategoryScreeRow({ navigation, SN, name, problemSet }) {
+export default function CategoryScreeRow({ navigation, SN, name, problemSet, toggleSelectedItem }) {
     const [isSelected, setIsSelected] = React.useState(false); // 서버로 부터 받은 데이터를 저장하는 변수
 
     function selectThisItem(){
         setIsSelected(!isSelected);
-        if (isSelected == true) {
-            const idx = CATEGORY_SELECTED.indexOf(name)
-            if (idx > -1) CATEGORY_SELECTED.splice(idx, 1)
-        } else {
-            CATEGORY_SELECTED.push(name);
-        }
-        console.log(CATEGORY_SELECTED);
+        toggleSelectedItem(SN);
+        // if (isSelected == true) {
+        //     const idx = CATEGORY_SELECTED.indexOf(SN)
+        //     if (idx > -1) CATEGORY_SELECTED.splice(idx, 1)
+        // } else {
+        //     CATEGORY_SELECTED.push(SN);
+        // }
+        // console.log(CATEGORY_SELECTED);
     }
 
     return (
