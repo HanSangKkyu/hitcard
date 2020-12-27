@@ -16,7 +16,6 @@ export let USER_SN = [];
 export let USER_ID = [];
 
 export let PROBLEMSET_SELECTED = [];
-export let CATEGORY_SELECTED = [];
 export let PROBLEM_SELECTED = [];
 
 

@@ -2,7 +2,6 @@ import React from 'react';
 import { View, Text, StyleSheet, Image, TouchableWithoutFeedback, TouchableOpacity, Button } from 'react-native';
 import { Ionicons, Feather, MaterialCommunityIcons, Octicons, AntDesign, FontAwesome, SimpleLineIcons } from '@expo/vector-icons';
 import { Checkbox, TouchableRipple } from 'react-native-paper';
-import { CATEGORY_SELECTED } from '../Common';
 
 
 const styles = StyleSheet.create({
@@ -55,13 +54,6 @@ export default function CategoryScreeRow({ navigation, SN, name, problemSet, tog
     function selectThisItem(){
         setIsSelected(!isSelected);
         toggleSelectedItem(SN);
-        // if (isSelected == true) {
-        //     const idx = CATEGORY_SELECTED.indexOf(SN)
-        //     if (idx > -1) CATEGORY_SELECTED.splice(idx, 1)
-        // } else {
-        //     CATEGORY_SELECTED.push(SN);
-        // }
-        // console.log(CATEGORY_SELECTED);
     }
 
     return (

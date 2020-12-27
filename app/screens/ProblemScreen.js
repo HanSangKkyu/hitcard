@@ -6,12 +6,13 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import ProblemScreenRow from '../rows/ProblemScreenRow';
 import { ScrollView } from 'react-native-gesture-handler';
-import { WINDOW_HEIGHT, WINDOW_WIDTH, APIVO } from '../Common';
+import { WINDOW_WIDTH, WINDOW_HEIGHT, USER_SN, APIVO, jsonEscape } from "../Common";
 import { Modal, Portal, Provider } from "react-native-paper";
 
 export default function ProblemScreen({ route, navigation }) {
   const { categorySN, categoryName, problemSet } = route.params;
   const [DATA, setDATA] = React.useState('?'); // 서버로 부터 받은 데이터를 저장하는 변수
+  const [DATA_copy, setDATA_copy] = React.useState('?'); 
   const [isSearch, setIsSearch] = React.useState(false);
   const [isEdit, setIsEdit] = React.useState(false);
   const [editEnable, setEditEnable] = React.useState(false);
@@ -23,7 +24,7 @@ export default function ProblemScreen({ route, navigation }) {
       // The screen is focused
       // Call any action
       getDATA();
-      console.log('CategoryScreen focused!');
+      console.log('ProblemScreen focused!');
     });
     return unsubscribe;
   }, [navigation, DATA]);
@@ -37,18 +38,19 @@ export default function ProblemScreen({ route, navigation }) {
   }, [navigation, name]);
 
   function getDATA() {
-    // fetch(APIVO+'/db', {
-    //   method: 'GET'
-    // })
-    // .then((response) => response.text())
-    // .then((responseJson) => {
-    //   setDATA(JSON.parse(jsonEscape(responseJson)).array);
-    //   setDATA_copy(JSON.stringify(JSON.parse(jsonEscape(responseJson)).array));
-    //   setSpinner(false);
-    // })
-    // .catch((error) => {
-    //     console.error(error);
-    // });
+    fetch(APIVO+'/category/'+categorySN+'/problem', {
+      method: 'GET'
+    })
+    .then((response) => response.text())
+    .then((responseJson) => {
+      console.log(JSON.stringify(JSON.parse(jsonEscape(responseJson)), undefined, 4));
+      setDATA(JSON.parse(jsonEscape(responseJson)).array);
+      setDATA_copy(JSON.stringify(JSON.parse(jsonEscape(responseJson)).array));
+      // setSpinner(false);
+    })
+    .catch((error) => {
+        console.error(error);
+    });
   }
 
   function editCategoryName(){
@@ -127,7 +129,7 @@ export default function ProblemScreen({ route, navigation }) {
             {/* <Text style={{ alignSelf: 'center', fontSize: Platform.OS === 'ios' || Platform.OS === 'android' ? 20 : 25 }}>이동</Text> */}
             <MaterialCommunityIcons style={{ alignSelf: 'center' }} name="file-move-outline" size={24} color="black" />
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => { navigation.navigate('AddProblemScreen') }} style={{ flex: 1, alignSelf: 'flex-start' }}>
+          <TouchableOpacity onPress={() => { navigation.navigate('AddProblemScreen', {'categorySN':categorySN, 'problemSet':problemSet}) }} style={{ flex: 1, alignSelf: 'flex-start' }}>
             {/* <Text style={{ alignSelf: 'center', fontSize: Platform.OS === 'ios' || Platform.OS === 'android' ? 20 : 25 }}>문제 추가</Text> */}
             <Ionicons style={{ alignSelf: 'center' }} name="add" size={24} color="black" />
           </TouchableOpacity>
@@ -169,7 +171,11 @@ export default function ProblemScreen({ route, navigation }) {
               data={DATA}
               renderItem={({ item }) => <ProblemScreenRow
                 navigation={navigation}
-                title={item.title}
+                SN={item.SN}
+                question={item.question}
+                answer={item.answer}
+                category={item.category}
+                hit={item.hit}
               />}
               keyExtractor={item => item.id}
             />

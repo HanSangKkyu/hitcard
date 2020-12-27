@@ -6,13 +6,13 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import CategoryScreenRow from '../rows/CategoryScreenRow';
 import { ScrollView } from 'react-native-gesture-handler';
-import { WINDOW_WIDTH, WINDOW_HEIGHT, USER_SN, APIVO, jsonEscape, CATEGORY_SELECTED } from "../Common";
+import { WINDOW_WIDTH, WINDOW_HEIGHT, USER_SN, APIVO, jsonEscape } from "../Common";
 import { Modal, Portal, Provider } from "react-native-paper";
 
 export default function CategoryScreen({ route, navigation }) {
-  const {problemSetSN, problemSetName} = route.params; // 서버로 부터 받은 데이터를 저장하는 변수
+  const {problemSetSN, problemSetName} = route.params;
   const [DATA, setDATA] = React.useState('?'); // 서버로 부터 받은 데이터를 저장하는 변수
-  const [DATA_copy, setDATA_copy] = React.useState('?'); // 서버로 부터 받은 데이터를 저장하는 변수
+  const [DATA_copy, setDATA_copy] = React.useState('?'); 
   const [isSearch, setIsSearch] = React.useState(false);
   const [isEdit, setIsEdit] = React.useState(false);
   const [name, setName] = React.useState(problemSetName+"의 카테고리");
@@ -29,7 +29,6 @@ export default function CategoryScreen({ route, navigation }) {
       // The screen is focused
       // Call any action
       getDATA();
-      CATEGORY_SELECTED.length = 0;
       console.log('CategoryScreen focused!');
     });
     return unsubscribe;
@@ -47,11 +46,9 @@ export default function CategoryScreen({ route, navigation }) {
   function toggleSelectedItem(_SN){
     const idx = selectedItem.indexOf(_SN)
     if (idx > -1) {
-      // CATEGORY_SELECTED.splice(idx, 1)
       selectedItem.splice(idx, 1)
       setSelectedItem(selectedItem);
     }else{
-      // CATEGORY_SELECTED.push(_SN);
       selectedItem.push(_SN);
       setSelectedItem(selectedItem);
     }

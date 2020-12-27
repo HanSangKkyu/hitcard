@@ -49,20 +49,24 @@ const styles = StyleSheet.create({
     },
 });
 
-export default function ProblemScreenRow({ navigation, title }) {
+export default function ProblemScreenRow({ navigation, SN, question, answer, category, hit }) {
     const [isSelected, setIsSelected] = React.useState(false); // 서버로 부터 받은 데이터를 저장하는 변수
+
+    function selectProblem() {
+        setIsSelected(!isSelected);
+        if (isSelected == true) {
+            const idx = PROBLEM_SELECTED.indexOf(SN)
+            if (idx > -1) PROBLEM_SELECTED.splice(idx, 1)
+        } else {
+            PROBLEM_SELECTED.push(SN);
+        }
+        console.log(PROBLEM_SELECTED);
+    }
 
     return (
         <TouchableOpacity
             onPress={() => {
-                setIsSelected(!isSelected);
-                if (isSelected == true) {
-                    const idx = PROBLEM_SELECTED.indexOf(title)
-                    if (idx > -1) PROBLEM_SELECTED.splice(idx, 1)
-                } else {
-                    PROBLEM_SELECTED.push(title);
-                }
-                console.log(PROBLEM_SELECTED);
+                selectProblem();
             }}>
             <View style={styles.container}>
                 <View style={styles.photo}>
@@ -71,10 +75,10 @@ export default function ProblemScreenRow({ navigation, title }) {
                 <View style={styles.container_text}>
                     <View style={{ flex: 1, flexDirection: 'column' }}>
                         <Text style={styles.title}>
-                            {title}
+                            {question}
                         </Text>
                         <Text style={styles.title}>
-                            <Text>수정일: </Text> {title}
+                            <Text>hit: </Text> {hit}
                         </Text>
                     </View>
                 </View>
@@ -83,14 +87,7 @@ export default function ProblemScreenRow({ navigation, title }) {
                         style={{ borderWidth: 1, borderBottomColor: 'black', backgroundColor: 'black' }}
                         status={isSelected ? 'checked' : 'unchecked'}
                         onPress={() => {
-                            setIsSelected(!isSelected);
-                            if (isSelected == true) {
-                                const idx = PROBLEM_SELECTED.indexOf(title)
-                                if (idx > -1) PROBLEM_SELECTED.splice(idx, 1)
-                            } else {
-                                PROBLEM_SELECTED.push(title);
-                            }
-                            console.log(PROBLEM_SELECTED);
+                            selectProblem();
                         }}
                     />
                 </View>
