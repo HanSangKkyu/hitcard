@@ -18,6 +18,8 @@ export default function ProblemScreen({ route, navigation }) {
   const [editEnable, setEditEnable] = React.useState(false);
   const [name, setName] = React.useState(categoryName);
   const [modalVisible, setModalVisible] = React.useState(false);
+  const [deleteEnable, setDeleteEnable] = React.useState(false);
+  const [selectedItem, setSelectedItem] = React.useState([]);
 
   React.useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
@@ -82,6 +84,52 @@ export default function ProblemScreen({ route, navigation }) {
     }
   }
 
+  function toggleSelectedItem(_SN){
+    const idx = selectedItem.indexOf(_SN)
+    if (idx > -1) {
+      selectedItem.splice(idx, 1)
+      setSelectedItem(selectedItem);
+    }else{
+      selectedItem.push(_SN);
+      setSelectedItem(selectedItem);
+    }
+
+    if(selectedItem.length > 0){
+      setDeleteEnable(true);
+    }else{
+      setDeleteEnable(false);
+    }
+
+    console.log(selectedItem);
+  }
+
+  function delete_problem(){
+    if(!deleteEnable){
+      return
+    }
+
+    selectedItem.forEach(element => {
+      fetch(APIVO+'/problem/'+element, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({})
+      })
+      .then((response) => response.text())
+      .then((responseJson) => {
+        getDATA();
+        toggleSelectedItem(element);
+      })
+      .catch((error) => {
+          console.error(error);
+      });
+    });
+
+    // navigation.goBack();
+    // navigation.navigate('ProblemScreen');
+  }
+
   return (
     <Provider>
       <SafeAreaView style={{}}>
@@ -127,7 +175,7 @@ export default function ProblemScreen({ route, navigation }) {
         <View style={{ flexDirection: 'row', borderBottomWidth: 1, marginLeft: 20, marginRight: 20, }}>
           <TouchableOpacity onPress={() => { setModalVisible(!modalVisible) }} style={{ flex: 1, alignSelf: 'flex-start' }}>
             {/* <Text style={{ alignSelf: 'center', fontSize: Platform.OS === 'ios' || Platform.OS === 'android' ? 20 : 25 }}>이동</Text> */}
-            <MaterialCommunityIcons style={{ alignSelf: 'center' }} name="file-move-outline" size={24} color="black" />
+            <MaterialCommunityIcons style={{ alignSelf: 'center' }} name="file-move-outline" size={24} color={deleteEnable?"black":"gray"} />
           </TouchableOpacity>
           <TouchableOpacity onPress={() => { navigation.navigate('AddProblemScreen', {'categorySN':categorySN, 'problemSet':problemSet}) }} style={{ flex: 1, alignSelf: 'flex-start' }}>
             {/* <Text style={{ alignSelf: 'center', fontSize: Platform.OS === 'ios' || Platform.OS === 'android' ? 20 : 25 }}>문제 추가</Text> */}
@@ -136,32 +184,39 @@ export default function ProblemScreen({ route, navigation }) {
           {Platform.OS === 'ios' || Platform.OS === 'android' ?
             <TouchableOpacity style={{ flex: 1, alignSelf: 'center', }}
               onPress={() => {
+                if(!deleteEnable){
+                  return
+                }
                 Alert.alert(
-                  "카테고리 삭제",
+                  "문제 삭제",
                   "선택한 문제를 삭제하시겠습니까?",
                   [
                     {
                       text: "Cancel",
-                      onPress: () => console.log("Cancel Pressed"),
+                      onPress: () => {console.log("cancel Pressed")},
                       style: "cancel"
                     },
-                    { text: "OK", onPress: () => console.log("OK Pressed") }
+                    { text: "OK", onPress: () => {delete_problem();console.log("OK Pressed");} }
                   ],
                   { cancelable: false }
                 );
               }}>
-              <Entypo style={{ alignSelf: 'center' }} name="trash" size={24} color="black" />
+              <Entypo style={{ alignSelf: 'center' }} name="trash" size={24} color={deleteEnable?"black":"gray"} />
             </TouchableOpacity>
             :
             <TouchableOpacity style={{ flex: 1, alignSelf: 'center', }}
               onPress={() => {
+                if(!deleteEnable){
+                  return
+                }
+
                 if (confirm("선택한 문제를 삭제하시겠습니까?")) {
-                  // 확인 버튼 클릭 시 동작
+                  delete_problem();
                 } else {
                   // 취소 버튼 클릭 시 동작
                 }
               }}>
-              <Entypo style={{ alignSelf: 'center' }} name="trash" size={24} color="black" />
+              <Entypo style={{ alignSelf: 'center' }} name="trash" size={24} color={deleteEnable?"black":"gray"} />
             </TouchableOpacity>
           }
         </View>
@@ -176,8 +231,9 @@ export default function ProblemScreen({ route, navigation }) {
                 answer={item.answer}
                 category={item.category}
                 hit={item.hit}
+                toggleSelectedItem={toggleSelectedItem}
               />}
-              keyExtractor={item => item.id}
+              keyExtractor={item => item.SN}
             />
           </ScrollView>
         </KeyboardAwareScrollView>

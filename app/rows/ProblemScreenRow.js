@@ -49,18 +49,23 @@ const styles = StyleSheet.create({
     },
 });
 
-export default function ProblemScreenRow({ navigation, SN, question, answer, category, hit }) {
+export default function ProblemScreenRow({ navigation, SN, question, answer, category, hit, toggleSelectedItem }) {
     const [isSelected, setIsSelected] = React.useState(false); // 서버로 부터 받은 데이터를 저장하는 변수
+    // const [selectedItemList, setSelectedItemList] = React.useState(selectedItem);
+    
+    // React.useEffect(() => {
+    //     console.log('selectedItemList '+selectedItemList);
+    //     const idx = selectedItemList.indexOf(SN);
+    //     if (idx > -1) {
+    //         setIsSelected(true);
+    //     }else{
+    //         setIsSelected(false);
+    //     }
+    // }, [selectedItemList.length]);
 
     function selectProblem() {
         setIsSelected(!isSelected);
-        if (isSelected == true) {
-            const idx = PROBLEM_SELECTED.indexOf(SN)
-            if (idx > -1) PROBLEM_SELECTED.splice(idx, 1)
-        } else {
-            PROBLEM_SELECTED.push(SN);
-        }
-        console.log(PROBLEM_SELECTED);
+        toggleSelectedItem(SN);
     }
 
     return (

@@ -202,13 +202,17 @@ export default function CategoryScreen({ route, navigation }) {
             :
             <TouchableOpacity style={{ flex: 1, alignSelf: 'center', }}
               onPress={() => {
+                if(!deleteEnable){
+                  return
+                }
+
                 if (confirm("선택한 카테고리를 삭제하시겠습니까?")) {
-                  // 확인 버튼 클릭 시 동작
+                  delete_category();console.log("OK Pressed");
                 } else {
-                  // 취소 버튼 클릭 시 동작
+                  console.log("Cancel Pressed")
                 }
               }}>
-              <Entypo style={{ alignSelf: 'center' }} name="trash" size={24} color="black" />
+              <Entypo style={{ alignSelf: 'center' }} name="trash" size={24} color={deleteEnable?"black":"gray"} />
             </TouchableOpacity>
           }
         </View>
@@ -223,7 +227,7 @@ export default function CategoryScreen({ route, navigation }) {
                 problemSet={item.problemSet}
                 toggleSelectedItem = {toggleSelectedItem}
               />}
-              keyExtractor={item => item.id}
+              keyExtractor={item => item.SN}
             />
           </ScrollView>
         </KeyboardAwareScrollView>
