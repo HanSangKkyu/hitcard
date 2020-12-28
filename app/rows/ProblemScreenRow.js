@@ -49,19 +49,8 @@ const styles = StyleSheet.create({
     },
 });
 
-export default function ProblemScreenRow({ navigation, SN, question, answer, category, hit, toggleSelectedItem }) {
+export default function ProblemScreenRow({ navigation, SN, question, answer, category, hit, toggleSelectedItem, problemSet }) {
     const [isSelected, setIsSelected] = React.useState(false); // 서버로 부터 받은 데이터를 저장하는 변수
-    // const [selectedItemList, setSelectedItemList] = React.useState(selectedItem);
-    
-    // React.useEffect(() => {
-    //     console.log('selectedItemList '+selectedItemList);
-    //     const idx = selectedItemList.indexOf(SN);
-    //     if (idx > -1) {
-    //         setIsSelected(true);
-    //     }else{
-    //         setIsSelected(false);
-    //     }
-    // }, [selectedItemList.length]);
 
     function selectProblem() {
         setIsSelected(!isSelected);
@@ -96,7 +85,23 @@ export default function ProblemScreenRow({ navigation, SN, question, answer, cat
                         }}
                     />
                 </View>
-                <TouchableOpacity style={{ alignContent: 'center', justifyContent: 'center' }} onPress={()=>{navigation.navigate('EditProblemScreen')}}>
+                <TouchableOpacity style={{ alignContent: 'center', justifyContent: 'center' }}
+                    onPress={() => {
+                        console.log('-- '+SN);
+                        console.log('-- '+question);
+                        console.log('-- '+answer);
+                        console.log('-- '+category);
+                        console.log('-- '+hit);
+                        console.log('-- '+problemSet);
+                        navigation.navigate("EditProblemScreen", {
+                            "SN": SN,
+                            "question": question,
+                            "answer": answer,
+                            "category": category,
+                            "hit": hit,
+                            "problemSet": problemSet
+                        });
+                    }}>
                     <Feather name="edit" size={24} color="black" />
                 </TouchableOpacity>
             </View>

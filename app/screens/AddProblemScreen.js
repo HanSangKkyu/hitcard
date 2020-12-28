@@ -13,7 +13,6 @@ import { set } from 'react-native-reanimated';
 export default function AddProblemScreen({ navigation, route }) {
   const { categorySN, problemSet } = route.params;
   const [DATA, setDATA] = React.useState([]); // 서버로 부터 받은 데이터를 저장하는 변수
-  const [DATA_copy, setDATA_copy] = React.useState('?'); 
   const [question, setQuestion] = React.useState("");
   const [answer, setAnswer] = React.useState("");
   const [category, setCategory] = React.useState(categorySN);
@@ -51,7 +50,6 @@ export default function AddProblemScreen({ navigation, route }) {
     .then((responseJson) => {
       console.log(JSON.stringify(JSON.parse(jsonEscape(responseJson)), undefined, 4));
       setDATA(JSON.parse(jsonEscape(responseJson)).array);
-      setDATA_copy(JSON.stringify(JSON.parse(jsonEscape(responseJson)).array));
       // setSpinner(false);
       console.log('aasdf'+DATA);
     })

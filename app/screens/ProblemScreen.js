@@ -232,6 +232,7 @@ export default function ProblemScreen({ route, navigation }) {
                 category={item.category}
                 hit={item.hit}
                 toggleSelectedItem={toggleSelectedItem}
+                problemSet={problemSet}
               />}
               keyExtractor={item => item.SN}
             />

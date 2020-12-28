@@ -6,104 +6,85 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import MyProblemSetScreenRow from '../rows/MyProblemSetScreenRow';
 import { ScrollView } from 'react-native-gesture-handler';
-import { WINDOW_HEIGHT, WINDOW_WIDTH } from '../Common';
+import { WINDOW_WIDTH, WINDOW_HEIGHT, USER_SN, APIVO, jsonEscape } from "../Common";
 import { Picker } from '@react-native-community/picker';
 
-export default function MakeScreen({ navigation }) {
-  const [DATA, setDATA] = React.useState('?'); // 서버로 부터 받은 데이터를 저장하는 변수
-  const [question, setQuestion] = React.useState("");
-  const [answer, setAnswer] = React.useState("");
-  const [category, setCategory] = React.useState("모든문제");
+export default function EditProblemScreen({ navigation, route }) {
+  const { SN, question, answer, category, hit, problemSet } = route.params;
+  const [DATA, setDATA] = React.useState([]); // 서버로 부터 받은 데이터를 저장하는 변수
+  const [question_e, setQuestion_e] = React.useState(question);
+  const [answer_e, setAnswer_e] = React.useState(answer);
+  const [category_e, setCategory_e] = React.useState(category);
+  const [hit_e, setHit_e] = React.useState(parseInt(hit));
+  const [editEnable, setEditEnable] = React.useState(false);
+
+  let pickerItems = DATA.map((element, i) => {
+    return (<Picker.Item label={element.name} key={i} value={element.SN} />)
+  });
 
   React.useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       // The screen is focused
       // Call any action
+      console.log('EditProblemScreen focused!');
       getDATA();
-      console.log('MakeScreen focused!');
     });
     return unsubscribe;
   }, [navigation, DATA]);
 
+  React.useEffect(() => {
+    if(question_e && answer_e){
+      setEditEnable(true);
+    }else{
+      setEditEnable(false);
+    }
+  }, [question_e, answer_e]);
+
   function getDATA() {
-    // fetch(APIVO+'/db', {
-    //   method: 'GET'
-    // })
-    // .then((response) => response.text())
-    // .then((responseJson) => {
-    //   setDATA(JSON.parse(jsonEscape(responseJson)).array);
-    //   setDATA_copy(JSON.stringify(JSON.parse(jsonEscape(responseJson)).array));
-    //   setSpinner(false);
-    // })
-    // .catch((error) => {
-    //     console.error(error);
-    // });
-    setDATA([
-      {
-        id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
-        title: 'First Item',
+    console.log('problemSet ' + problemSet);
+    fetch(APIVO + '/problem-set/' + problemSet + '/category', {
+      method: 'GET'
+    })
+      .then((response) => response.text())
+      .then((responseJson) => {
+        console.log(JSON.stringify(JSON.parse(jsonEscape(responseJson)), undefined, 4));
+        setDATA(JSON.parse(jsonEscape(responseJson)).array);
+        // setSpinner(false);
+        console.log(DATA);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }
+
+  function edit_problem() {
+    if(!editEnable){
+      return
+    }
+
+    fetch(APIVO+'/problem/'+SN, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
       },
-      {
-        id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
-        title: 'Second Item',
-      },
-      {
-        id: '58694a0f-3da1-471f-bd9-145571e29d72',
-        title: 'Third Item',
-      },
-      {
-        id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28a',
-        title: 'First Item',
-      },
-      {
-        id: '3ac68afc-c605-48d3-a4f8-fbd91a97f63',
-        title: 'Second Item',
-      },
-      {
-        id: '58694a0f-3da1-471f-bd96-14557129d72',
-        title: 'Third Item',
-      },
-      {
-        id: 'bd7acbea-c1b1-46c2-aed5-ad53abb28ba',
-        title: 'First Item',
-      },
-      {
-        id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f3',
-        title: 'Second Item',
-      },
-      {
-        id: '58694a0f-3da1-471f-bd96-145571e29d72',
-        title: 'Third Item',
-      },
-      {
-        id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f3',
-        title: 'Second Item',
-      },
-      {
-        id: '58694a0f-3da1-471f-bd96-145571e29d72',
-        title: 'Third Item',
-      },
-      {
-        id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f3',
-        title: 'Second Item',
-      },
-      {
-        id: '58694a0f-3da1-471f-bd96-145571e29d72',
-        title: 'Third Item',
-      },
-      {
-        id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f3',
-        title: 'Second Item',
-      },
-      {
-        id: '58694a0f-3da1-471f-bd96-145571e29d72',
-        title: 'Third Item',
-      },
-    ]);
+      body: JSON.stringify({
+        'question' : question_e,
+        'answer' : answer_e,
+        'category' : category_e,
+        'hit' : hit_e.toString()
+      })
+    })
+    .then((response) => response.text())
+    .then((responseJson) => {
+      navigation.goBack();
+    })
+    .catch((error) => {
+        console.error(error);
+    });
   }
 
   return (
-    <SafeAreaView style={{ flexDirection:'column',margin: 20, }}>
+    <SafeAreaView style={{ flexDirection: 'column', margin: 20, }}>
       <View style={{ borderBottomWidth: 1, flexDirection: 'row', paddingBottom: 10, }}>
         <TouchableOpacity style={{ marginRight: 20, alignSelf: 'center' }} onPress={() => navigation.goBack()} >
           <AntDesign name="arrowleft" size={24} color="black" />
@@ -111,44 +92,45 @@ export default function MakeScreen({ navigation }) {
         <Text style={{ flex: 1, fontSize: 22, alignSelf: 'center' }}>문제 수정하기</Text>
       </View>
       <KeyboardAwareScrollView style={{}}>
-        <View style={{flexDirection:'column', height:WINDOW_HEIGHT-100}}>
-          <TextInput 
-            style={{flex:1, backgroundColor:'white', borderWidth:1,}}
-            multiline={true}     
+        <View style={{ flexDirection: 'column', height: WINDOW_HEIGHT - 100 }}>
+          <TextInput
+            style={{ flex: 1, backgroundColor: 'white', borderWidth: 1, }}
+            multiline={true}
             numberOfLines={10}
-            onChangeText={(text) => setQuestion({text})}
-            />
-          <TextInput 
-            style={{flex:1, backgroundColor:'white', borderWidth:1,}}
-            multiline={true}     
+            value={question_e}
+            onChangeText={(text) => setQuestion_e(text)}
+          />
+          <TextInput
+            style={{ flex: 1, backgroundColor: 'white', borderWidth: 1, }}
+            multiline={true}
             numberOfLines={10}
-            onChangeText={(text) => setAnswer({text})}
-            />
+            value={answer_e}
+            onChangeText={(text) => setAnswer_e(text)}
+          />
           <Picker
-            style={{flex:1,backgroundColor:'white',borderWidth:1, justifyContent:'center',}}
-            selectedValue={category}
-            onValueChange={(itemValue, itemIndex) => setCategory(itemValue)}>
-            <Picker.Item label="Java" value="java" />
-            <Picker.Item label="JavaScript" value="js" />
+            style={{ flex: 1, backgroundColor: 'white', borderWidth: 1, justifyContent: 'center', }}
+            selectedValue={category_e}
+            onValueChange={(itemValue, itemIndex) => setCategory_e(itemValue)}>
+            {pickerItems}
           </Picker>
-          <View style={{flexDirection:'row', alignContent:'center', justifyContent:'center', paddingVertical:10, backgroundColor:'white', borderWidth:1}}>
-            <TouchableOpacity style={{marginTop:10, alignContent:'center', justifyContent:'flex-start'}}>
+          <View style={{ flexDirection: 'row', alignContent: 'center', justifyContent: 'center', paddingVertical: 10, backgroundColor: 'white', borderWidth: 1 }}>
+            <TouchableOpacity style={{ marginTop: 10, alignContent: 'center', justifyContent: 'flex-start' }} onPress={() => { setHit_e(hit_e + 1) }}>
               <AntDesign name="caretup" size={24} color="gray" />
             </TouchableOpacity>
-            <View style={{flexDirection:'column',marginLeft:10, marginRight:10, alignContent:'center', justifyContent:'flex-start' }}>
+            <View style={{ flexDirection: 'column', marginLeft: 10, marginRight: 10, alignContent: 'center', justifyContent: 'flex-start' }}>
               <Text>
                 H!T
               </Text>
-              <Text style={{alignSelf:'center'}}>
-                2
+              <Text style={{ alignSelf: 'center' }}>
+                {hit_e}
               </Text>
             </View>
-            <TouchableOpacity style={{marginTop:10, alignContent:'center', justifyContent:'flex-start'}}>
+            <TouchableOpacity style={{ marginTop: 10, alignContent: 'center', justifyContent: 'flex-start' }} onPress={() => { setHit_e(hit_e - 1) }}>
               <AntDesign name="caretdown" size={24} color="gray" />
             </TouchableOpacity>
           </View>
-          <TouchableOpacity style={{flex:1, justifyContent:'center', alignContent:'center', backgroundColor:'white',borderWidth:1}}>
-            <Text style={{alignSelf:'center'}}>완료</Text>
+          <TouchableOpacity style={{ flex: 1, justifyContent: 'center', alignContent: 'center', backgroundColor: 'white', borderWidth: 1 }} onPress={() => {edit_problem()}}>
+            <Text style={{ alignSelf: 'center', color:editEnable?'black':'gray' }}>완료</Text>
           </TouchableOpacity>
         </View>
       </KeyboardAwareScrollView>
