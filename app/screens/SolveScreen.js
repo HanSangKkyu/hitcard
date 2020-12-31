@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, StatusBar, TextInput, TouchableOpacity, SafeAreaView, FlatList } from 'react-native';
+import { StyleSheet, Text, View, StatusBar, TextInput, TouchableOpacity, SafeAreaView, FlatList, Alert } from 'react-native';
 import { Ionicons, Feather, MaterialCommunityIcons, Octicons, AntDesign, FontAwesome, SimpleLineIcons, MaterialIcons, FontAwesome5, Foundation, Entypo } from '@expo/vector-icons';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { NavigationContainer } from '@react-navigation/native';
@@ -31,22 +31,22 @@ export default function SolveScreen({ navigation, route }) {
   });
 
   function edit_problem_category(_category) {
-    fetch(APIVO+'/problem/'+DATA[nowIdex].SN+'/category', {
+    fetch(APIVO + '/problem/' + DATA[nowIdex].SN + '/category', {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        'category' : _category,
+        'category': _category,
       })
     })
-    .then((response) => response.text())
-    .then((responseJson) => {
-      console.log(responseJson);
-    })
-    .catch((error) => {
+      .then((response) => response.text())
+      .then((responseJson) => {
+        console.log(responseJson);
+      })
+      .catch((error) => {
         console.error(error);
-    });
+      });
   }
 
   React.useEffect(() => {
@@ -139,7 +139,7 @@ export default function SolveScreen({ navigation, route }) {
       .then((response) => response.text())
       .then((responseJson) => {
         console.log(JSON.stringify(JSON.parse(jsonEscape(responseJson)).array, undefined, 4));
-        DATA[nowIdex].hit = parseInt(DATA[nowIdex].hit)+1;
+        DATA[nowIdex].hit = parseInt(DATA[nowIdex].hit) + 1;
         setHit(DATA[nowIdex].hit);
       })
       .catch((error) => {
@@ -158,8 +158,49 @@ export default function SolveScreen({ navigation, route }) {
       .then((response) => response.text())
       .then((responseJson) => {
         console.log(JSON.stringify(JSON.parse(jsonEscape(responseJson)).array, undefined, 4));
-        DATA[nowIdex].hit = parseInt(DATA[nowIdex].hit)-1;
+        DATA[nowIdex].hit = parseInt(DATA[nowIdex].hit) - 1;
         setHit(DATA[nowIdex].hit);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }
+
+  function delete_problem_Q() {
+    if (Platform.OS === 'ios' || Platform.OS === 'android') {
+      Alert.alert(
+        "문제 삭제",
+        "이 문제를 삭제하시겠습니까?",
+        [
+          {
+            text: "Cancel",
+            onPress: () => { console.log("cancel Pressed") },
+            style: "cancel"
+          },
+          { text: "OK", onPress: () => { delete_problem(); console.log("OK Pressed"); } }
+        ],
+        { cancelable: false }
+      )
+    } else {
+      if (confirm("이 문제를 삭제하시겠습니까?")) {
+        delete_problem();
+      } else {
+        // 취소 버튼 클릭 시 동작
+      }
+    }
+  }
+
+  function delete_problem() {
+    fetch(APIVO + '/problem/' + DATA[nowIdex].SN, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({})
+    })
+      .then((response) => response.text())
+      .then((responseJson) => {
+        console.log(responseJson);
       })
       .catch((error) => {
         console.error(error);
@@ -179,7 +220,7 @@ export default function SolveScreen({ navigation, route }) {
                 <Text style={{ marginLeft: 10, alignSelf: 'center', fontSize: 18 }}>다른 카테고리로 이동</Text>
               </View>
             </TouchableOpacity>
-            <TouchableOpacity style={{ marginTop: 20 }} onPress={() => { setIsMenu(!isMenu) }}>
+            <TouchableOpacity style={{ marginTop: 20 }} onPress={() => { setIsMenu(!isMenu); delete_problem_Q(); }}>
               <View style={{ flexDirection: 'row', alignContent: 'center' }}>
                 {/* <Foundation name="page-remove" size={30} color="black" /> */}
                 <Entypo style={{ alignSelf: 'center' }} name="trash" size={24} color="black" />
@@ -195,7 +236,7 @@ export default function SolveScreen({ navigation, route }) {
           </Modal>
 
           <Modal visible={isCategory} contentContainerStyle={{ backgroundColor: 'white', padding: 20, margin: 20, flexDirection: 'column' }}>
-            <Text style={{fontSize:20, fontWeight:'bold', marginBottom:10}}>다른 카테고리로 이동</Text>
+            <Text style={{ fontSize: 20, fontWeight: 'bold', marginBottom: 10 }}>다른 카테고리로 이동</Text>
             {categoryList}
             <TouchableOpacity style={{ marginTop: 60 }} onPress={() => { setIsCategory(!isCategory) }}>
               <View style={{ flexDirection: 'row', alignContent: 'center' }}>
