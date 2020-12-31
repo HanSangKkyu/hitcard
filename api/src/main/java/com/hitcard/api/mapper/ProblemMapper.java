@@ -32,6 +32,9 @@ public interface ProblemMapper {
     @Update("UPDATE PROBLEM SET QUESTION = #{question}, ANSWER = #{answer}, CATEGORY = #{category}, HIT = #{hit} WHERE SN = #{SN}")
     boolean update(@Param("SN") String SN, @Param("question") String question, @Param("answer") String answer, @Param("category") String category, @Param("hit") String hit);
 
+    @Update("UPDATE PROBLEM SET CATEGORY = #{category} WHERE SN = #{SN}")
+    boolean updateCategory(@Param("SN") String SN, @Param("category") String category);
+
     @Update("UPDATE PROBLEM SET HIT = (HIT+1) WHERE SN = #{SN}")
     boolean updateHitUp(@Param("SN") String SN);
 

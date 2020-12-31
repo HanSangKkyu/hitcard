@@ -93,6 +93,14 @@ public class ProblemController {
 		Util.reponse_jobs(res,  problemMapper.update(_SN, question, answer, category, hit)+"");
 	}
 	
+	@RequestMapping(value = "/problem/{SN}/category", method = RequestMethod.PUT)
+	public void problemCategoryPut(HttpServletRequest req, HttpServletResponse res, @RequestBody HashMap<String, Object> map, Locale locale, @PathVariable("SN") String _SN) throws IOException, SQLException {
+		System.out.println("========== " + req.getRequestURL() + " " + req.getMethod() + " ==========");
+		String category = (String) map.get("category");
+
+		Util.reponse_jobs(res,  problemMapper.updateCategory(_SN, category)+"");
+	}
+
 	@RequestMapping(value = "/problem/{SN}/hitup", method = RequestMethod.PUT)
 	public void problemPutHitUp(HttpServletRequest req, HttpServletResponse res, @RequestBody HashMap<String, Object> map, Locale locale, @PathVariable("SN") String _SN) throws IOException, SQLException {
 		System.out.println("========== " + req.getRequestURL() + " " + req.getMethod() + " ==========");
