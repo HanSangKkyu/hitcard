@@ -10,7 +10,7 @@ import { WINDOW_WIDTH, WINDOW_HEIGHT, USER_SN, APIVO, jsonEscape } from "../Comm
 import { Modal, Portal, Provider } from "react-native-paper";
 
 export default function SolveScreen({ navigation, route }) {
-  const { selectedItem, category } = route.params;
+  const { selectedItem, category, problemSetSN } = route.params;
   const [DATA, setDATA] = React.useState([]); // 서버로 부터 받은 데이터를 저장하는 변수
   const [isMenu, setIsMenu] = React.useState(false);
   const [isCategory, setIsCategory] = React.useState(false);
@@ -68,6 +68,40 @@ export default function SolveScreen({ navigation, route }) {
   }, [nowIdex, isQuestTurn]);
 
   function getDATA() {
+    console.log('eiofo'+selectedItem.toString());
+    if(selectedItem.toString().indexOf('-1') != -1){
+      console.log('/problem-set/'+problemSetSN+'/problem');
+      for (let i = 0; i < category.length; i++) {
+        fetch(APIVO + '/category/' + category[i].SN + '/problem', {
+          method: 'GET'
+        })
+          .then((response) => response.text())
+          .then((responseJson) => {
+            console.log(JSON.stringify(JSON.parse(jsonEscape(responseJson)).array, undefined, 4));
+            var tt = JSON.parse(jsonEscape(responseJson)).array;
+            tt.forEach(element => {
+              DATA.push(element)
+            });
+            setDATA(DATA);
+            // setDATA_copy(JSON.stringify(JSON.parse(jsonEscape(responseJson)).array));
+            // setName(problemSetName + "의 카테고리");
+            // setSpinner(false);
+  
+            if (i == selectedItem.length - 1) {
+              console.log('abser' + DATA);
+              setDATA(shuffle(DATA));
+              setQuestion(DATA[0].question);
+              setAnswer(DATA[0].answer);
+              setHit(DATA[0].hit);
+            }
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      }
+      return;
+    }
+
     for (let i = 0; i < selectedItem.length; i++) {
       fetch(APIVO + '/category/' + selectedItem[i] + '/problem', {
         method: 'GET'

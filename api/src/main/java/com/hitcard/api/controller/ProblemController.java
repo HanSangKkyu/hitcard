@@ -55,12 +55,13 @@ public class ProblemController {
         Util.reponse_jobs(res, listToJson(problemMapper.getOfCategory(category)));
 	}	
 
-	@RequestMapping(value = "/problem-set/{problemSet}/problem", method = RequestMethod.GET)
-	public void problemGetOfProblemSet(HttpServletRequest req, HttpServletResponse res, Locale locale, @PathVariable("problemSet") String problemSet) throws IOException, SQLException {
-		System.out.println(Util.getTime() + ".=== " + req.getMethod() +" "+req.getRequestURL() + " ==========");
+	// @RequestMapping(value = "/problem-set/{problemSet}/problem", method = RequestMethod.GET)
+	// public void problemGetOfProblemSet(HttpServletRequest req, HttpServletResponse res, Locale locale, @PathVariable("problemSet") String problemSet) throws IOException, SQLException {
+	// 	System.out.println(Util.getTime() + ".=== " + req.getMethod() +" "+req.getRequestURL() + " ==========");
+	// 	System.out.println(problemSet);
 
-        Util.reponse_jobs(res, listToJson(problemMapper.getOfProblemSet(problemSet)));
-	}	
+    //     Util.reponse_jobs(res, listToJson(problemMapper.getOfProblemSet(problemSet)));
+	// }	
 
 	@RequestMapping(value = "/problem/{SN}", method = RequestMethod.GET)
 	public void problemGetOne(HttpServletRequest req, HttpServletResponse res, Locale locale, @PathVariable("SN") String _SN) throws IOException, SQLException {
@@ -92,7 +93,7 @@ public class ProblemController {
 
 		Util.reponse_jobs(res,  problemMapper.update(_SN, question, answer, category, hit)+"");
 	}
-	
+
 	@RequestMapping(value = "/problem/{SN}/category", method = RequestMethod.PUT)
 	public void problemCategoryPut(HttpServletRequest req, HttpServletResponse res, @RequestBody HashMap<String, Object> map, Locale locale, @PathVariable("SN") String _SN) throws IOException, SQLException {
 		System.out.println("========== " + req.getRequestURL() + " " + req.getMethod() + " ==========");

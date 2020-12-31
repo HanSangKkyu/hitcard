@@ -10,7 +10,7 @@ import { WINDOW_WIDTH, WINDOW_HEIGHT, USER_SN, APIVO, jsonEscape } from "../Comm
 import { Modal, Portal, Provider } from "react-native-paper";
 
 export default function ProblemScreen({ route, navigation }) {
-  const { categorySN, categoryName, problemSet } = route.params;
+  const { categorySN, categoryName, problemSet, category } = route.params;
   const [DATA, setDATA] = React.useState([]); // 서버로 부터 받은 데이터를 저장하는 변수
   const [categoryDATA, setCategoryDATA] = React.useState([]); // 서버로 부터 받은 데이터를 저장하는 변수
   const [DATA_copy, setDATA_copy] = React.useState('?');
@@ -39,8 +39,8 @@ export default function ProblemScreen({ route, navigation }) {
     const unsubscribe = navigation.addListener('focus', () => {
       // The screen is focused
       // Call any action
-      getDATA();
       getCategoryDATA();
+      getDATA();
       console.log('ProblemScreen focused!');
     });
     return unsubscribe;
@@ -55,6 +55,34 @@ export default function ProblemScreen({ route, navigation }) {
   }, [navigation, name]);
 
   function getDATA() {
+    let tmp_data = [];
+    console.log('categorySN '+categorySN);
+    if(categorySN.toString() == "-1"){
+      for(let i=1;i<category.length;i++){
+        fetch(APIVO + '/category/' + category[i].SN + '/problem', {
+          method: 'GET'
+        })
+          .then((response) => response.text())
+          .then((responseJson) => {
+            console.log(JSON.stringify(JSON.parse(jsonEscape(responseJson)).array, undefined, 4));
+            var tt = JSON.parse(jsonEscape(responseJson)).array;
+            tt.forEach(element => {
+              tmp_data.push(element);
+            });
+            if (i == category.length - 1) {
+              setDATA(tmp_data);
+              setDATA_copy(tmp_data);
+            }
+            // setSpinner(false);
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      }
+      return;
+    }
+    
+
     fetch(APIVO + '/category/' + categorySN + '/problem', {
       method: 'GET'
     })

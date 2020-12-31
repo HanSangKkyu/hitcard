@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
     },
 });
 
-export default function CategoryScreeRow({ navigation, SN, name, problemSet, toggleSelectedItem }) {
+export default function CategoryScreeRow({ navigation, SN, name, problemSet, toggleSelectedItem, category }) {
     const [isSelected, setIsSelected] = React.useState(false); // 서버로 부터 받은 데이터를 저장하는 변수
 
     function selectThisItem(){
@@ -85,7 +85,8 @@ export default function CategoryScreeRow({ navigation, SN, name, problemSet, tog
                     onPress={()=>{navigation.navigate('ProblemScreen', {
                         "categorySN" : SN,
                         "categoryName" : name,
-                        "problemSet" : problemSet
+                        "problemSet" : problemSet,
+                        "category" : category
                     })}}>
                     {/* <Feather name="edit" size={24} color="black" /> */}
                     <MaterialIcons name="read-more" size={24} color="black" />

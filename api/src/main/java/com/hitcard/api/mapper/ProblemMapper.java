@@ -17,8 +17,8 @@ public interface ProblemMapper {
     @Select("select * from PROBLEM;")
     List<Problem> get();
 
-    @Select("select * from PROBLEM WHERE PROBLEM_SET = #{problemSet};")
-    List<Problem> getOfProblemSet(@Param("problemSet") String problemSet);
+    // @Select("select * from PROBLEM WHERE PROBLEM_SET = #{problemSet};")
+    // List<Problem> getOfProblemSet(@Param("problemSet") String problemSet);
 
     @Select("select * from PROBLEM WHERE CATEGORY = #{category};")
     List<Problem> getOfCategory(@Param("category") String category);

@@ -11,7 +11,7 @@ import { Modal, Portal, Provider } from "react-native-paper";
 
 export default function CategoryScreen({ route, navigation }) {
   const {problemSetSN, problemSetName} = route.params;
-  const [DATA, setDATA] = React.useState('?'); // 서버로 부터 받은 데이터를 저장하는 변수
+  const [DATA, setDATA] = React.useState([]); // 서버로 부터 받은 데이터를 저장하는 변수
   const [DATA_copy, setDATA_copy] = React.useState('?'); 
   const [isSearch, setIsSearch] = React.useState(false);
   const [isEdit, setIsEdit] = React.useState(false);
@@ -31,6 +31,7 @@ export default function CategoryScreen({ route, navigation }) {
       getDATA();
       console.log('CategoryScreen focused!');
     });
+    console.log(DATA);
     return unsubscribe;
   }, [navigation, DATA]);
 
@@ -69,7 +70,12 @@ export default function CategoryScreen({ route, navigation }) {
     .then((response) => response.text())
     .then((responseJson) => {
       console.log(JSON.stringify(JSON.parse(jsonEscape(responseJson)), undefined, 4));
-      setDATA(JSON.parse(jsonEscape(responseJson)).array);
+      var res = JSON.parse(jsonEscape(responseJson)).array;
+      if(res.length > 0){
+        res.unshift({"SN":-1, "name":"모든 문제", "problemSet":problemSetSN});
+      }
+      setDATA(res);
+      // DATA.unshift({"SN":-1, "name":"모든 문제", "problemSet":problemSetSN});
       setDATA_copy(JSON.stringify(JSON.parse(jsonEscape(responseJson)).array));
       setName(problemSetName+"의 카테고리");
       // setSpinner(false);
@@ -133,7 +139,8 @@ export default function CategoryScreen({ route, navigation }) {
     if(deleteEnable){
       navigation.navigate('SolveScreen',{
         "selectedItem":selectedItem,
-        "category":DATA
+        "category":DATA,
+        "problemSetSN":problemSetSN
       });
     }
   }
@@ -236,6 +243,7 @@ export default function CategoryScreen({ route, navigation }) {
                 name={item.name}
                 problemSet={item.problemSet}
                 toggleSelectedItem = {toggleSelectedItem}
+                category={DATA}
               />}
               keyExtractor={item => item.SN}
             />
