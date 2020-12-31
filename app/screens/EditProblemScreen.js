@@ -94,14 +94,14 @@ export default function EditProblemScreen({ navigation, route }) {
       <KeyboardAwareScrollView style={{}}>
         <View style={{ flexDirection: 'column', height: WINDOW_HEIGHT - 100 }}>
           <TextInput
-            style={{ flex: 1, backgroundColor: 'white', borderWidth: 1, }}
+            style={{ flex: 1, backgroundColor: 'white', borderWidth: 1, padding:10 }}
             multiline={true}
             numberOfLines={10}
             value={question_e}
             onChangeText={(text) => setQuestion_e(text)}
           />
           <TextInput
-            style={{ flex: 1, backgroundColor: 'white', borderWidth: 1, }}
+            style={{ flex: 1, backgroundColor: 'white', borderWidth: 1, padding:10 }}
             multiline={true}
             numberOfLines={10}
             value={answer_e}

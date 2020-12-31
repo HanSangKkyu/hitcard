@@ -189,7 +189,7 @@ export default function ProblemScreen({ route, navigation }) {
       <SafeAreaView style={{}}>
         <Portal>
           <Modal visible={modalVisible} style={{ margin: 10 }} contentContainerStyle={{ backgroundColor: 'white', padding: 20, margin: 20, flexDirection: 'column' }}>
-            <Text style={{fontSize:20, fontWeight:'bold', marginBottom:10}}>다른 카테고리로 옮기기</Text>
+            <Text style={{fontSize:20, fontWeight:'bold', marginBottom:10}}>다른 카테고리로 이동</Text>
             {categoryList}
             <TouchableOpacity style={{ marginTop: 60 }} onPress={() => { setModalVisible(!modalVisible) }}>
               <View style={{ flexDirection: 'row', alignContent: 'center' }}>
@@ -216,7 +216,7 @@ export default function ProblemScreen({ route, navigation }) {
           </TouchableOpacity>
         </View>
         <View style={{ flexDirection: 'row', borderBottomWidth: 1, marginLeft: 20, marginRight: 20, }}>
-          <TouchableOpacity onPress={() => { setModalVisible(!modalVisible) }} style={{ flex: 1, alignSelf: 'flex-start' }}>
+          <TouchableOpacity onPress={() => { if(deleteEnable){setModalVisible(!modalVisible)} }} style={{ flex: 1, alignSelf: 'flex-start' }}>
             {/* <Text style={{ alignSelf: 'center', fontSize: Platform.OS === 'ios' || Platform.OS === 'android' ? 20 : 25 }}>이동</Text> */}
             <MaterialCommunityIcons style={{ alignSelf: 'center' }} name="file-move-outline" size={24} color={deleteEnable ? "black" : "gray"} />
           </TouchableOpacity>

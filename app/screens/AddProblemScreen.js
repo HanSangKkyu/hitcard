@@ -97,14 +97,14 @@ export default function AddProblemScreen({ navigation, route }) {
       <KeyboardAwareScrollView style={{}}>
         <View style={{flexDirection:'column', height:WINDOW_HEIGHT-100}}>
           <TextInput 
-            style={{flex:1, backgroundColor:'white', borderWidth:1, padding:5}}
+            style={{flex:1, backgroundColor:'white', borderWidth:1, padding:10}}
             multiline={true}     
             numberOfLines={10}
             value={question}
             onChangeText={(text) => setQuestion(text)}
             />
           <TextInput 
-            style={{flex:1, backgroundColor:'white', borderWidth:1, padding:5}}
+            style={{flex:1, backgroundColor:'white', borderWidth:1, padding:10}}
             multiline={true}     
             numberOfLines={10}
             value={answer}

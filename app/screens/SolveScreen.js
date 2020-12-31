@@ -10,14 +10,44 @@ import { WINDOW_WIDTH, WINDOW_HEIGHT, USER_SN, APIVO, jsonEscape } from "../Comm
 import { Modal, Portal, Provider } from "react-native-paper";
 
 export default function SolveScreen({ navigation, route }) {
-  const { selectedItem } = route.params;
+  const { selectedItem, category } = route.params;
   const [DATA, setDATA] = React.useState([]); // 서버로 부터 받은 데이터를 저장하는 변수
   const [isMenu, setIsMenu] = React.useState(false);
+  const [isCategory, setIsCategory] = React.useState(false);
   const [nowIdex, setNowIdex] = React.useState(0);
   const [question, setQuestion] = React.useState('');
   const [answer, setAnswer] = React.useState('');
   const [hit, setHit] = React.useState('');
   const [isQuestTurn, setIsQuestTurn] = React.useState(true);
+
+  let categoryList = category.map((element, i) => {
+    return (
+      <TouchableOpacity style={{ marginTop: 10 }} onPress={() => { edit_problem_category(element.SN); setIsCategory(!isCategory); }}>
+        <View style={{ flexDirection: 'row', alignContent: 'center' }}>
+          <Feather name="folder" size={24} color="black" />
+          <Text style={{ marginLeft: 10, alignSelf: 'center', fontSize: 18 }}>{element.name}</Text>
+        </View>
+      </TouchableOpacity>)
+  });
+
+  function edit_problem_category(_category) {
+    fetch(APIVO+'/problem/'+DATA[nowIdex].SN+'/category', {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        'category' : _category,
+      })
+    })
+    .then((response) => response.text())
+    .then((responseJson) => {
+      console.log(responseJson);
+    })
+    .catch((error) => {
+        console.error(error);
+    });
+  }
 
   React.useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
@@ -142,19 +172,32 @@ export default function SolveScreen({ navigation, route }) {
         <Portal>
           <Modal visible={isMenu} contentContainerStyle={{ backgroundColor: 'white', padding: 20, margin: 20, flexDirection: 'column' }}>
             {/* <Text>hi</Text> */}
-            <TouchableOpacity style={{ marginTop: 10 }} onPress={() => { setIsMenu(!isMenu) }}>
+            <TouchableOpacity style={{ marginTop: 10 }} onPress={() => { setIsCategory(!isCategory); setIsMenu(!isMenu); }}>
               <View style={{ flexDirection: 'row', alignContent: 'center' }}>
-                <FontAwesome5 name="file-import" size={24} color="black" />
+                {/* <FontAwesome5 name="file-import" size={24} color="black" /> */}
+                <MaterialCommunityIcons style={{ alignSelf: 'center' }} name="file-move-outline" size={24} color="black" />
                 <Text style={{ marginLeft: 10, alignSelf: 'center', fontSize: 18 }}>다른 카테고리로 이동</Text>
               </View>
             </TouchableOpacity>
             <TouchableOpacity style={{ marginTop: 20 }} onPress={() => { setIsMenu(!isMenu) }}>
               <View style={{ flexDirection: 'row', alignContent: 'center' }}>
-                <Foundation name="page-remove" size={30} color="black" />
+                {/* <Foundation name="page-remove" size={30} color="black" /> */}
+                <Entypo style={{ alignSelf: 'center' }} name="trash" size={24} color="black" />
                 <Text style={{ marginLeft: 12, alignSelf: 'center', fontSize: 18 }}>이 문제 삭제</Text>
               </View>
             </TouchableOpacity>
             <TouchableOpacity style={{ marginTop: 60 }} onPress={() => { setIsMenu(!isMenu) }}>
+              <View style={{ flexDirection: 'row', alignContent: 'center' }}>
+                <AntDesign name="close" size={24} color="black" />
+                <Text style={{ marginLeft: 10, alignSelf: 'center', fontSize: 18 }}>닫기</Text>
+              </View>
+            </TouchableOpacity>
+          </Modal>
+
+          <Modal visible={isCategory} contentContainerStyle={{ backgroundColor: 'white', padding: 20, margin: 20, flexDirection: 'column' }}>
+            <Text style={{fontSize:20, fontWeight:'bold', marginBottom:10}}>다른 카테고리로 이동</Text>
+            {categoryList}
+            <TouchableOpacity style={{ marginTop: 60 }} onPress={() => { setIsCategory(!isCategory) }}>
               <View style={{ flexDirection: 'row', alignContent: 'center' }}>
                 <AntDesign name="close" size={24} color="black" />
                 <Text style={{ marginLeft: 10, alignSelf: 'center', fontSize: 18 }}>닫기</Text>
