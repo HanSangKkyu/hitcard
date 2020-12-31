@@ -97,6 +97,45 @@ export default function SolveScreen({ navigation, route }) {
     setIsQuestTurn(!isQuestTurn);
   }
 
+  function hitup() {
+
+    fetch(APIVO + '/problem/' + DATA[nowIdex].SN + '/hitup', {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({})
+    })
+      .then((response) => response.text())
+      .then((responseJson) => {
+        console.log(JSON.stringify(JSON.parse(jsonEscape(responseJson)).array, undefined, 4));
+        DATA[nowIdex].hit = parseInt(DATA[nowIdex].hit)+1;
+        setHit(DATA[nowIdex].hit);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }
+
+  function hitdown() {
+    fetch(APIVO + '/problem/' + DATA[nowIdex].SN + '/hitdown', {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({})
+    })
+      .then((response) => response.text())
+      .then((responseJson) => {
+        console.log(JSON.stringify(JSON.parse(jsonEscape(responseJson)).array, undefined, 4));
+        DATA[nowIdex].hit = parseInt(DATA[nowIdex].hit)-1;
+        setHit(DATA[nowIdex].hit);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }
+
   return (
     <Provider>
       <SafeAreaView style={{ flexDirection: 'column', height: WINDOW_HEIGHT }}>
@@ -132,7 +171,7 @@ export default function SolveScreen({ navigation, route }) {
 
         <View style={{ flex: 1, flexDirection: 'column', margin: 20 }}>
           <View style={{ flex: 3, alignItems: 'center', justifyContent: 'center', }}>
-            <Text style={{color:isQuestTurn?'black':'red'}}>{DATA.length > 0?isQuestTurn?DATA[nowIdex].question:DATA[nowIdex].answer:null}</Text>
+            <Text style={{ color: isQuestTurn ? 'black' : 'red' }}>{DATA.length > 0 ? isQuestTurn ? DATA[nowIdex].question : DATA[nowIdex].answer : null}</Text>
           </View>
           <View style={{ flex: 0.5 }}>
             <TouchableOpacity style={{ alignSelf: 'flex-end' }} onPress={() => { setIsMenu(!isMenu) }}>
@@ -140,21 +179,21 @@ export default function SolveScreen({ navigation, route }) {
             </TouchableOpacity>
           </View>
           <View style={{ flex: 0.5 }}>
-            <Text style={{ alignSelf: 'center', fontSize: 30 }}>{nowIdex+1} 번째 {isQuestTurn?"문제":"답"}</Text>
+            <Text style={{ alignSelf: 'center', fontSize: 30 }}>{nowIdex + 1} 번째 {isQuestTurn ? "문제" : "답"}</Text>
           </View>
           <View style={{ flex: 1, flexDirection: 'row', alignContent: 'center', justifyContent: 'center' }}>
-            <TouchableOpacity style={{ marginTop: 10, alignContent: 'center', justifyContent: 'flex-start' }}>
+            <TouchableOpacity style={{ marginTop: 10, alignContent: 'center', justifyContent: 'flex-start' }} onPress={() => { hitup() }}>
               <AntDesign name="caretup" size={24} color="gray" />
             </TouchableOpacity>
             <View style={{ flexDirection: 'column', marginLeft: 10, marginRight: 10, alignContent: 'center', justifyContent: 'flex-start' }}>
-            <Text>
-              H!T
+              <Text>
+                H!T
             </Text>
-            <Text style={{ alignSelf: 'center' }}>
-              {DATA.length > 0?DATA[nowIdex].hit:null}
-            </Text>
+              <Text style={{ alignSelf: 'center' }}>
+                {DATA.length > 0 ? DATA[nowIdex].hit : null}
+              </Text>
             </View>
-            <TouchableOpacity style={{ marginTop: 10, alignContent: 'center', justifyContent: 'flex-start' }}>
+            <TouchableOpacity style={{ marginTop: 10, alignContent: 'center', justifyContent: 'flex-start' }} onPress={() => { hitdown() }}>
               <AntDesign name="caretdown" size={24} color="gray" />
             </TouchableOpacity>
           </View>

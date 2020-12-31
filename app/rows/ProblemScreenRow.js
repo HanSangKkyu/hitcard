@@ -69,7 +69,10 @@ export default function ProblemScreenRow({ navigation, SN, question, answer, cat
                 <View style={styles.container_text}>
                     <View style={{ flex: 1, flexDirection: 'column' }}>
                         <Text style={styles.title}>
-                            {question}
+                            Q. {question}
+                        </Text>
+                        <Text style={styles.title}>
+                            A. {answer}
                         </Text>
                         <Text style={styles.title}>
                             <Text>hit: </Text> {hit}
