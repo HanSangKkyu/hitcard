@@ -6,106 +6,102 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import MyProblemSetScreenRow from '../rows/MyProblemSetScreenRow';
 import { ScrollView } from 'react-native-gesture-handler';
-import { WINDOW_HEIGHT, WINDOW_WIDTH } from '../Common';
+import { WINDOW_WIDTH, WINDOW_HEIGHT, USER_SN, APIVO, jsonEscape } from "../Common";
 import { Modal, Portal, Provider } from "react-native-paper";
 
-export default function SolveScreen({ navigation }) {
-  const [DATA, setDATA] = React.useState('?'); // 서버로 부터 받은 데이터를 저장하는 변수
+export default function SolveScreen({ navigation, route }) {
+  const { selectedItem } = route.params;
+  const [DATA, setDATA] = React.useState([]); // 서버로 부터 받은 데이터를 저장하는 변수
   const [isMenu, setIsMenu] = React.useState(false);
-  const [modalVisible, setModalVisible] = React.useState(false);
+  const [nowIdex, setNowIdex] = React.useState(0);
+  const [question, setQuestion] = React.useState('');
+  const [answer, setAnswer] = React.useState('');
+  const [hit, setHit] = React.useState('');
+  const [isQuestTurn, setIsQuestTurn] = React.useState(true);
 
   React.useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       // The screen is focused
       // Call any action
       getDATA();
-      console.log('SolveScreen focused!');
+      console.log('SolveScreen focused!' + selectedItem);
     });
     return unsubscribe;
   }, [navigation, DATA]);
 
+  React.useEffect(() => {
+    if (DATA.length > 0) {
+      setQuestion(DATA[nowIdex].question);
+      setAnswer(DATA[nowIdex].answer);
+      setHit(DATA[nowIdex].hit);
+    }
+  }, [nowIdex, isQuestTurn]);
+
   function getDATA() {
-    // fetch(APIVO+'/db', {
-    //   method: 'GET'
-    // })
-    // .then((response) => response.text())
-    // .then((responseJson) => {
-    //   setDATA(JSON.parse(jsonEscape(responseJson)).array);
-    //   setDATA_copy(JSON.stringify(JSON.parse(jsonEscape(responseJson)).array));
-    //   setSpinner(false);
-    // })
-    // .catch((error) => {
-    //     console.error(error);
-    // });
-    setDATA([
-      {
-        id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
-        title: 'First Item',
-      },
-      {
-        id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
-        title: 'Second Item',
-      },
-      {
-        id: '58694a0f-3da1-471f-bd9-145571e29d72',
-        title: 'Third Item',
-      },
-      {
-        id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28a',
-        title: 'First Item',
-      },
-      {
-        id: '3ac68afc-c605-48d3-a4f8-fbd91a97f63',
-        title: 'Second Item',
-      },
-      {
-        id: '58694a0f-3da1-471f-bd96-14557129d72',
-        title: 'Third Item',
-      },
-      {
-        id: 'bd7acbea-c1b1-46c2-aed5-ad53abb28ba',
-        title: 'First Item',
-      },
-      {
-        id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f3',
-        title: 'Second Item',
-      },
-      {
-        id: '58694a0f-3da1-471f-bd96-145571e29d72',
-        title: 'Third Item',
-      },
-      {
-        id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f3',
-        title: 'Second Item',
-      },
-      {
-        id: '58694a0f-3da1-471f-bd96-145571e29d72',
-        title: 'Third Item',
-      },
-      {
-        id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f3',
-        title: 'Second Item',
-      },
-      {
-        id: '58694a0f-3da1-471f-bd96-145571e29d72',
-        title: 'Third Item',
-      },
-      {
-        id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f3',
-        title: 'Second Item',
-      },
-      {
-        id: '58694a0f-3da1-471f-bd96-145571e29d72',
-        title: 'Third Item',
-      },
-    ]);
+    for (let i = 0; i < selectedItem.length; i++) {
+      fetch(APIVO + '/category/' + selectedItem[i] + '/problem', {
+        method: 'GET'
+      })
+        .then((response) => response.text())
+        .then((responseJson) => {
+          console.log(JSON.stringify(JSON.parse(jsonEscape(responseJson)).array, undefined, 4));
+          var tt = JSON.parse(jsonEscape(responseJson)).array;
+          tt.forEach(element => {
+            DATA.push(element)
+          });
+          setDATA(DATA);
+          // setDATA_copy(JSON.stringify(JSON.parse(jsonEscape(responseJson)).array));
+          // setName(problemSetName + "의 카테고리");
+          // setSpinner(false);
+
+          if (i == selectedItem.length - 1) {
+            console.log('abser' + DATA);
+            setDATA(shuffle(DATA));
+            setQuestion(DATA[0].question);
+            setAnswer(DATA[0].answer);
+            setHit(DATA[0].hit);
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
+  }
+
+  function shuffle(a) {
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+
+  function showNextProblem() {
+    // console.log(nowIdex)
+    // console.log(isQuestTurn)
+    // console.log(DATA[nowIdex])
+    if (!isQuestTurn && DATA.length - 1 > nowIdex) {
+      setNowIdex(nowIdex + 1);
+    }
+    setIsQuestTurn(!isQuestTurn);
+  }
+
+  function showPreviousProblem() {
+    // console.log(nowIdex)
+    // console.log(isQuestTurn)
+    // console.log(DATA[nowIdex])
+
+    if (isQuestTurn && nowIdex > 0) {
+      setNowIdex(nowIdex - 1);
+    }
+    setIsQuestTurn(!isQuestTurn);
   }
 
   return (
     <Provider>
       <SafeAreaView style={{ flexDirection: 'column', height: WINDOW_HEIGHT }}>
         <Portal>
-          <Modal visible={isMenu} contentContainerStyle={{ backgroundColor: 'white', padding: 20, margin:20, flexDirection: 'column' }}>
+          <Modal visible={isMenu} contentContainerStyle={{ backgroundColor: 'white', padding: 20, margin: 20, flexDirection: 'column' }}>
             {/* <Text>hi</Text> */}
             <TouchableOpacity style={{ marginTop: 10 }} onPress={() => { setIsMenu(!isMenu) }}>
               <View style={{ flexDirection: 'row', alignContent: 'center' }}>
@@ -136,7 +132,7 @@ export default function SolveScreen({ navigation }) {
 
         <View style={{ flex: 1, flexDirection: 'column', margin: 20 }}>
           <View style={{ flex: 3, alignItems: 'center', justifyContent: 'center', }}>
-            <Text>신라시대의 왕은?</Text>
+            <Text style={{color:isQuestTurn?'black':'red'}}>{DATA.length > 0?isQuestTurn?DATA[nowIdex].question:DATA[nowIdex].answer:null}</Text>
           </View>
           <View style={{ flex: 0.5 }}>
             <TouchableOpacity style={{ alignSelf: 'flex-end' }} onPress={() => { setIsMenu(!isMenu) }}>
@@ -144,18 +140,18 @@ export default function SolveScreen({ navigation }) {
             </TouchableOpacity>
           </View>
           <View style={{ flex: 0.5 }}>
-            <Text style={{ alignSelf: 'center', fontSize: 30 }}>31번 문제</Text>
+            <Text style={{ alignSelf: 'center', fontSize: 30 }}>{nowIdex+1} 번째 {isQuestTurn?"문제":"답"}</Text>
           </View>
           <View style={{ flex: 1, flexDirection: 'row', alignContent: 'center', justifyContent: 'center' }}>
             <TouchableOpacity style={{ marginTop: 10, alignContent: 'center', justifyContent: 'flex-start' }}>
               <AntDesign name="caretup" size={24} color="gray" />
             </TouchableOpacity>
             <View style={{ flexDirection: 'column', marginLeft: 10, marginRight: 10, alignContent: 'center', justifyContent: 'flex-start' }}>
-              <Text>
-                H!T
+            <Text>
+              H!T
             </Text>
-              <Text style={{ alignSelf: 'center' }}>
-                2
+            <Text style={{ alignSelf: 'center' }}>
+              {DATA.length > 0?DATA[nowIdex].hit:null}
             </Text>
             </View>
             <TouchableOpacity style={{ marginTop: 10, alignContent: 'center', justifyContent: 'flex-start' }}>
@@ -163,10 +159,10 @@ export default function SolveScreen({ navigation }) {
             </TouchableOpacity>
           </View>
           <View style={{ flex: 2, flexDirection: 'row' }}>
-            <TouchableOpacity style={{ flex: 1, }}>
+            <TouchableOpacity style={{ flex: 1, }} onPressOut={() => { showPreviousProblem() }}>
               <AntDesign name="caretleft" size={40} color="gray" style={{ alignSelf: 'center', justifyContent: 'center' }} />
             </TouchableOpacity>
-            <TouchableOpacity style={{ flex: 1, }}>
+            <TouchableOpacity style={{ flex: 1, }} onPressOut={() => { showNextProblem() }}>
               <AntDesign name="caretright" size={40} color="gray" style={{ alignSelf: 'center', justifyContent: 'center' }} />
             </TouchableOpacity>
           </View>

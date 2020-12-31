@@ -128,6 +128,16 @@ export default function CategoryScreen({ route, navigation }) {
     });
   }
 
+  function goSolve(){
+    console.log(deleteEnable);
+    if(deleteEnable){
+      navigation.navigate('SolveScreen',{
+        "selectedItem":selectedItem,
+        "category":DATA
+      });
+    }
+  }
+
   return (
     <Provider>
       <SafeAreaView style={{}}>
@@ -152,7 +162,7 @@ export default function CategoryScreen({ route, navigation }) {
           </Modal>
         </Portal>
         <View style={{ margin: 20, marginBottom: 0, borderBottomWidth: 1, flexDirection: 'row', paddingBottom: 10, }}>
-          <TouchableOpacity style={{ marginRight: 20, alignSelf: 'center' }} onPress={() => navigation.goBack()} >
+          <TouchableOpacity style={{ marginRight: 20, alignSelf: 'center' }} onPress={()=>{navigation.goBack();}} >
             <AntDesign name="arrowleft" size={24} color="black" />
           </TouchableOpacity>
           {isSearch ? <TextInput style={{ flex: 1, alignSelf: 'center', borderWidth: isSearch ? 1 : 0, borderRadius: 100, height: 30, paddingLeft: 10, paddingRight: 10 }} autoFocus ></TextInput> :
@@ -169,7 +179,7 @@ export default function CategoryScreen({ route, navigation }) {
           </TouchableOpacity>
         </View>
         <View style={{ flexDirection: 'row', borderBottomWidth: 1, marginLeft: 20, marginRight: 20, alignContent: 'center', justifyContent: 'center' }}>
-          <TouchableOpacity onPress={() => { navigation.navigate('SolveScreen') }} style={{ flex: 1, alignSelf: 'center', }}>
+          <TouchableOpacity onPress={() => { goSolve() }} style={{ flex: 1, alignSelf: 'center', }}>
             {/* <Text style={{alignSelf:'center', fontSize: Platform.OS === 'ios' || Platform.OS === 'android' ? 20 : 25 }}>문제풀기</Text> */}
             <MaterialCommunityIcons style={{ alignSelf: 'center' }} name="play-outline" size={24} color={deleteEnable?"black":"gray"} />
           </TouchableOpacity>

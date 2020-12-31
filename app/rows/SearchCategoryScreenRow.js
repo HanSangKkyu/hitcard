@@ -2,7 +2,6 @@ import React from 'react';
 import { View, Text, StyleSheet, Image, TouchableWithoutFeedback, TouchableOpacity, Button } from 'react-native';
 import { Ionicons, Feather, MaterialCommunityIcons, Octicons, AntDesign, FontAwesome, SimpleLineIcons, Foundation,  } from '@expo/vector-icons';
 import { Checkbox, TouchableRipple } from 'react-native-paper';
-import { CATEGORY_SELECTED } from '../Common';
 
 
 const styles = StyleSheet.create({
@@ -56,13 +55,7 @@ export default function SearchCategoryScreenRow({ navigation, title }) {
         <TouchableOpacity
             onPress={() => {
                 setIsSelected(!isSelected);
-                if (isSelected == true) {
-                    const idx = CATEGORY_SELECTED.indexOf(title)
-                    if (idx > -1) CATEGORY_SELECTED.splice(idx, 1)
-                } else {
-                    CATEGORY_SELECTED.push(title);
-                }
-                console.log(CATEGORY_SELECTED);
+ 
             }}>
             <View style={styles.container}>
                 <View style={styles.photo}>
