@@ -77,6 +77,11 @@ export default function MyProblemSetScreen({ navigation }) {
   return (
     <Provider>
       <SafeAreaView style={{}}>
+        {Platform.OS === 'android' ?
+        <StatusBar
+          backgroundColor="black"
+          barStyle="default"
+        />:null}
         <Portal>
           <Modal visible={modalVisible} contentContainerStyle={{ backgroundColor: 'white', padding: 20, margin: 20, flexDirection: 'column', marginBottom: 100 }}>
             <Text style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 10 }}>새 문제 SET 만들기</Text>
@@ -114,7 +119,7 @@ export default function MyProblemSetScreen({ navigation }) {
           <TouchableOpacity onPress={() => { setModalVisible(!modalVisible) }} style={{ flex: 1, alignSelf: 'center', }} >
             <Ionicons style={{ alignSelf: 'center' }} name="add" size={24} color="black" />
           </TouchableOpacity>
-          {Platform.OS === 'ios' || Platform.OS === 'android' ?
+          {/* {Platform.OS === 'ios' || Platform.OS === 'android' ?
             <TouchableOpacity style={{ flex: 1, alignSelf: 'center', }}
               onPress={() => {
                 Alert.alert(
@@ -144,7 +149,7 @@ export default function MyProblemSetScreen({ navigation }) {
               }}>
               <Entypo style={{ alignSelf: 'center' }} name="trash" size={24} color="black" />
             </TouchableOpacity>
-          }
+          } */}
         </View>
         <KeyboardAwareScrollView>
           <ScrollView style={{ height: WINDOW_HEIGHT - 100 }}>
