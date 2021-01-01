@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
     },
 });
 
-export default function ProblemScreenRow({ navigation, SN, question, answer, category, hit, toggleSelectedItem, problemSet }) {
+export default function ProblemScreenRow({ navigation, SN, question, answer, category, hit, toggleSelectedItem, problemSet, visible }) {
     const [isSelected, setIsSelected] = React.useState(false); // 서버로 부터 받은 데이터를 저장하는 변수
 
     function selectProblem() {
@@ -62,7 +62,7 @@ export default function ProblemScreenRow({ navigation, SN, question, answer, cat
             onPress={() => {
                 selectProblem();
             }}>
-            <View style={styles.container}>
+            <View style={visible?styles.container:{height:0}}>
                 <View style={styles.photo}>
                     <FontAwesome name="sticky-note-o" size={24} color="black" />
                 </View>

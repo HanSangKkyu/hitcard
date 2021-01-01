@@ -37,7 +37,12 @@ export default function MyProblemSetScreen({ navigation }) {
 
   React.useEffect(() => {
     if(!isSearch){
-      setDATA(DATA_copy);
+      let res = [];
+      for (let i = 0; i < DATA.length; i++) {
+        DATA[i].visible = true;
+        res.push(DATA[i]);
+      }
+      setDATA(res);
     }
   }, [isSearch]);
 
@@ -48,8 +53,13 @@ export default function MyProblemSetScreen({ navigation }) {
     .then((response) => response.text())
     .then((responseJson) => {
       console.log(JSON.stringify(JSON.parse(jsonEscape(responseJson)), undefined, 4));
-      setDATA(JSON.parse(jsonEscape(responseJson)).array);
-      setDATA_copy(JSON.parse(jsonEscape(responseJson)).array);
+
+      let res = JSON.parse(jsonEscape(responseJson)).array;
+      for (let i = 0; i < res.length; i++) {
+        res[i].visible = true;
+      }
+      setDATA(res);
+      setDATA_copy(res);
       // setSpinner(false);
     })
     .catch((error) => {
@@ -82,18 +92,19 @@ export default function MyProblemSetScreen({ navigation }) {
 
   function search(_text){
     let res = [];
-    for (let i = 0; i < DATA_copy.length; i++) {
-      const element = DATA_copy[i];
-      // console.log(JSON.stringify(element));
+    for (let i = 0; i < DATA.length; i++) {
+      const element = DATA[i];
       if(element.name.indexOf(_text) != -1 ||
       element.tag.indexOf(_text) != -1||
       element.hit.indexOf(_text) != -1||
       element.created_data.indexOf(_text) != -1||
       element.modified_data.indexOf(_text) != -1){
-        res.push(element);
+        DATA[i].visible = true;
+      }else{
+        DATA[i].visible = false;
       }
+      res.push(DATA[i]);
     }
-
     setDATA(res);
   }
 
@@ -155,6 +166,7 @@ export default function MyProblemSetScreen({ navigation }) {
                 created_data={item.created_data}
                 modified_data={item.modified_data}
                 getDATA={getDATA}
+                visible={item.visible}
               />}
               keyExtractor={item => item.name}
             />

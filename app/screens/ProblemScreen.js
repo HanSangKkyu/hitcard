@@ -56,7 +56,12 @@ export default function ProblemScreen({ route, navigation }) {
 
   React.useEffect(() => {
     if(!isSearch){
-      setDATA(DATA_copy);
+      let res = [];
+      for (let i = 0; i < DATA.length; i++) {
+        DATA[i].visible = true;
+        res.push(DATA[i]);
+      }
+      setDATA(res);
     }
   }, [isSearch]);
 
@@ -80,6 +85,10 @@ export default function ProblemScreen({ route, navigation }) {
               tmp_data.push(element);
             });
             if (cnt == categorylength - 1) {
+              for (let i = 0; i < tmp_data.length; i++) {
+                tmp_data[i].visible = true;
+              }
+
               if(categorySN.toString().indexOf("@") != -1){
                 // hit 별로 보기로 들어온 경우
                 let hit_data = [];
@@ -115,8 +124,14 @@ export default function ProblemScreen({ route, navigation }) {
       .then((response) => response.text())
       .then((responseJson) => {
         console.log(JSON.stringify(JSON.parse(jsonEscape(responseJson)), undefined, 4));
-        setDATA(JSON.parse(jsonEscape(responseJson)).array);
-        setDATA_copy(JSON.parse(jsonEscape(responseJson)).array);
+
+        let res = JSON.parse(jsonEscape(responseJson)).array;
+        for (let i = 0; i < res.length; i++) {
+          res[i].visible = true;
+        }
+
+        setDATA(res);
+        setDATA_copy(res);
         // setSpinner(false);
       })
       .catch((error) => {
@@ -240,16 +255,17 @@ export default function ProblemScreen({ route, navigation }) {
 
   function search(_text){
     let res = [];
-    for (let i = 0; i < DATA_copy.length; i++) {
-      const element = DATA_copy[i];
-      console.log(JSON.stringify(element));
+    for (let i = 0; i < DATA.length; i++) {
+      const element = DATA[i];
       if(element.question.indexOf(_text) != -1||
       element.answer.indexOf(_text) != -1||
       element.hit.indexOf(_text) != -1){
-        res.push(element);
+        DATA[i].visible = true;
+      }else{
+        DATA[i].visible = false;
       }
+      res.push(DATA[i]);
     }
-
     setDATA(res);
   }
 
@@ -345,6 +361,7 @@ export default function ProblemScreen({ route, navigation }) {
                 hit={item.hit}
                 toggleSelectedItem={toggleSelectedItem}
                 problemSet={problemSet}
+                visible={item.visible}
               />}
               keyExtractor={item => item.SN}
             />

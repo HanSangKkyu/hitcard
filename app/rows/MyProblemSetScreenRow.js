@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
   },
 });
 
-export default function MyProblemSetScreenRow({ navigation, SN, name, tag, hit, created_data, modified_data, getDATA }) {
+export default function MyProblemSetScreenRow({ navigation, SN, name, tag, hit, created_data, modified_data, getDATA, visible }) {
   const [isSelected, setIsSelected] = React.useState(false); // 서버로 부터 받은 데이터를 저장하는 변수
   const [modalVisible, setModalVisible] = React.useState(false);
   const [modifyEnable, setModifyEnable] = React.useState(false);
@@ -182,7 +182,7 @@ export default function MyProblemSetScreenRow({ navigation, SN, name, tag, hit, 
           </View>
         </Modal>
       </Portal>
-      <View style={styles.container}>
+      <View style={visible?styles.container:{height:0}}>
         <View style={styles.photo}>
           <AntDesign name="inbox" size={30} color="black" />
         </View>

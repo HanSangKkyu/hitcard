@@ -48,7 +48,12 @@ export default function CategoryScreen({ route, navigation }) {
 
   React.useEffect(() => {
     if(!isSearch){
-      setDATA(DATA_copy);
+      let res = [];
+      for (let i = 0; i < DATA.length; i++) {
+        DATA[i].visible = true;
+        res.push(DATA[i]);
+      }
+      setDATA(res);
     }
   }, [isSearch]);
 
@@ -128,6 +133,10 @@ export default function CategoryScreen({ route, navigation }) {
             res.push({"SN":('@'+item), "name":"hit "+item, "problemSet":problemSetSN})
           }
 
+          for (let j = 0; j < res.length; j++) {
+            res[j].visible = true;
+          }
+
           setDATA(res);
           setDATA_copy(res);
         }
@@ -200,14 +209,15 @@ export default function CategoryScreen({ route, navigation }) {
 
   function search(_text){
     let res = [];
-    for (let i = 0; i < DATA_copy.length; i++) {
-      const element = DATA_copy[i];
-      // console.log(JSON.stringify(element));
+    for (let i = 0; i < DATA.length; i++) {
+      const element = DATA[i];
       if(element.name.indexOf(_text) != -1){
-        res.push(element);
+        DATA[i].visible = true;
+      }else{
+        DATA[i].visible = false;
       }
+      res.push(DATA[i]);
     }
-
     setDATA(res);
   }
 
@@ -310,6 +320,7 @@ export default function CategoryScreen({ route, navigation }) {
                 problemSet={item.problemSet}
                 toggleSelectedItem = {toggleSelectedItem}
                 category={DATA}
+                visible={item.visible}
               />}
               keyExtractor={item => item.SN}
             />
