@@ -12,6 +12,7 @@ import { Modal, Portal, Provider } from "react-native-paper";
 export default function CategoryScreen({ route, navigation }) {
   const {problemSetSN, problemSetName} = route.params;
   const [DATA, setDATA] = React.useState([]); // 서버로 부터 받은 데이터를 저장하는 변수
+  const [problemDATA, setProblemDATA] = React.useState([]);
   const [DATA_copy, setDATA_copy] = React.useState('?'); 
   const [isSearch, setIsSearch] = React.useState(false);
   const [isEdit, setIsEdit] = React.useState(false);
@@ -31,7 +32,8 @@ export default function CategoryScreen({ route, navigation }) {
       getDATA();
       console.log('CategoryScreen focused!');
     });
-    console.log(DATA);
+    // console.log(DATA);
+    
     return unsubscribe;
   }, [navigation, DATA]);
 
@@ -72,17 +74,75 @@ export default function CategoryScreen({ route, navigation }) {
       console.log(JSON.stringify(JSON.parse(jsonEscape(responseJson)), undefined, 4));
       var res = JSON.parse(jsonEscape(responseJson)).array;
       if(res.length > 0){
-        res.unshift({"SN":-1, "name":"모든 문제", "problemSet":problemSetSN});
+        res.unshift({"SN": -1, "name":"모든 문제", "problemSet":problemSetSN});
       }
       setDATA(res);
       // DATA.unshift({"SN":-1, "name":"모든 문제", "problemSet":problemSetSN});
       setDATA_copy(JSON.stringify(JSON.parse(jsonEscape(responseJson)).array));
       setName(problemSetName+"의 카테고리");
+      
+      getProblem(res);
       // setSpinner(false);
     })
     .catch((error) => {
         console.error(error);
     });
+  }
+
+  function getProblem(_DATA) {
+    let tmp_data = [];
+    // console.log('_DATA.length '+_DATA.length);
+    const datalength = _DATA.length;
+    let cnt = 0;
+
+    for (let i = 1; i < _DATA.length; i++) {
+      // console.log("getProblem called! "+DATA[i].SN)
+      fetch(APIVO + '/category/' + _DATA[i].SN + '/problem', {
+        method: 'GET'
+      })
+      .then((response) => response.text())
+      .then((responseJson) => {
+        // console.log(JSON.stringify(JSON.parse(jsonEscape(responseJson)), undefined, 4));
+        cnt++;
+        var tt = JSON.parse(jsonEscape(responseJson)).array;
+        tt.forEach(element => {
+          tmp_data.push(element);
+        });
+
+        // console.log('fffff '+_DATA[i].SN+' '+cnt+' ffff ');
+        // console.log(datalength);
+        if (cnt == datalength - 1) {
+          setProblemDATA(tmp_data);
+          // console.log('all problem '+JSON.stringify(tmp_data));
+
+          // const hitset = new Set();
+          // for (let j = 0; j < tmp_data.length; j++) {
+          //   console.log(parseInt(tmp_data[j].hit));
+          //   hitset.add(parseInt(tmp_data[j].hit));
+            
+          // }
+          let tmp_hitset = [];
+          for (let j = 0; j < tmp_data.length; j++) {
+            tmp_hitset.push(parseInt(tmp_data[j].hit));
+          }
+          tmp_hitset.sort();
+          const hitset = new Set(tmp_hitset);
+
+          var res = _DATA;
+          for (const item of hitset) {
+            // console.log('flag1 '+('@'+item));
+            res.push({"SN":('@'+item), "name":"hit "+item, "problemSet":problemSetSN})
+          }
+
+          setDATA(res);
+          
+          // res.unshift({"SN":-1, "name":"모든 문제", "problemSet":problemSetSN});
+        }
+      })
+      .catch((error) => {
+          console.error(error);
+      });
+    }
   }
 
   function create_category(){

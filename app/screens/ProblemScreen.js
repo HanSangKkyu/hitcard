@@ -57,7 +57,10 @@ export default function ProblemScreen({ route, navigation }) {
   function getDATA() {
     let tmp_data = [];
     console.log('categorySN '+categorySN);
-    if(categorySN.toString() == "-1"){
+    let categorylength = category.length;
+    let cnt = 1;
+    if(categorySN.toString() == "-1" || categorySN.toString().indexOf("@") != -1){
+      
       for(let i=1;i<category.length;i++){
         fetch(APIVO + '/category/' + category[i].SN + '/problem', {
           method: 'GET'
@@ -65,13 +68,29 @@ export default function ProblemScreen({ route, navigation }) {
           .then((response) => response.text())
           .then((responseJson) => {
             console.log(JSON.stringify(JSON.parse(jsonEscape(responseJson)).array, undefined, 4));
+            cnt++;
             var tt = JSON.parse(jsonEscape(responseJson)).array;
             tt.forEach(element => {
               tmp_data.push(element);
             });
-            if (i == category.length - 1) {
-              setDATA(tmp_data);
-              setDATA_copy(tmp_data);
+            if (cnt == categorylength - 1) {
+              if(categorySN.toString().indexOf("@") != -1){
+                // hit 별로 보기로 들어온 경우
+                let hit_data = [];
+                for (let j = 0; j < tmp_data.length; j++) {
+                  console.log(tmp_data[j].hit+' '+parseInt(categorySN.substring(1)));
+                  if(tmp_data[j].hit.toString() == categorySN.substring(1).toString()){
+                    hit_data.push(tmp_data[j]);
+                  }
+                }
+                setDATA(hit_data);
+                setDATA_copy(hit_data);
+              }else{
+                // 모든 문제 보기로 들어온 경우
+                setDATA(tmp_data);
+                setDATA_copy(tmp_data);
+              }
+        
             }
             // setSpinner(false);
           })
@@ -83,6 +102,7 @@ export default function ProblemScreen({ route, navigation }) {
     }
     
 
+    // 사용자 지정 카테고리로 들어온 겨우
     fetch(APIVO + '/category/' + categorySN + '/problem', {
       method: 'GET'
     })
