@@ -67,63 +67,65 @@ export default function SolveScreen({ navigation, route }) {
     }
   }, [nowIdex, isQuestTurn]);
 
+  React.useEffect(() => {
+    if (DATA.length > 0) {
+      setQuestion(DATA[0].question);
+      setAnswer(DATA[0].answer);
+      setHit(DATA[0].hit);
+    }
+  }, [DATA]);
+
   function getDATA() {
     console.log('eiofo'+selectedItem.toString());
-    if(selectedItem.toString().indexOf('-1') != -1){
-      console.log('/problem-set/'+problemSetSN+'/problem');
-      for (let i = 0; i < category.length; i++) {
-        fetch(APIVO + '/category/' + category[i].SN + '/problem', {
-          method: 'GET'
-        })
-          .then((response) => response.text())
-          .then((responseJson) => {
-            console.log(JSON.stringify(JSON.parse(jsonEscape(responseJson)).array, undefined, 4));
-            var tt = JSON.parse(jsonEscape(responseJson)).array;
-            tt.forEach(element => {
-              DATA.push(element)
-            });
-            setDATA(DATA);
-            // setDATA_copy(JSON.stringify(JSON.parse(jsonEscape(responseJson)).array));
-            // setName(problemSetName + "의 카테고리");
-            // setSpinner(false);
-  
-            if (i == selectedItem.length - 1) {
-              console.log('abser' + DATA);
-              setDATA(shuffle(DATA));
-              setQuestion(DATA[0].question);
-              setAnswer(DATA[0].answer);
-              setHit(DATA[0].hit);
-            }
-          })
-          .catch((error) => {
-            console.error(error);
-          });
-      }
-      return;
-    }
-
-    for (let i = 0; i < selectedItem.length; i++) {
-      fetch(APIVO + '/category/' + selectedItem[i] + '/problem', {
+    let cnt = 1;
+    let categorylength = category.length;
+    let allProblem = [];
+    for (let i = 0; i < category.length; i++) {
+      fetch(APIVO + '/category/' + category[i].SN + '/problem', {
         method: 'GET'
       })
         .then((response) => response.text())
         .then((responseJson) => {
           console.log(JSON.stringify(JSON.parse(jsonEscape(responseJson)).array, undefined, 4));
+          cnt++;
+          
           var tt = JSON.parse(jsonEscape(responseJson)).array;
           tt.forEach(element => {
-            DATA.push(element)
+            allProblem.push(element)
           });
-          setDATA(DATA);
-          // setDATA_copy(JSON.stringify(JSON.parse(jsonEscape(responseJson)).array));
-          // setName(problemSetName + "의 카테고리");
-          // setSpinner(false);
 
-          if (i == selectedItem.length - 1) {
-            console.log('abser' + DATA);
-            setDATA(shuffle(DATA));
-            setQuestion(DATA[0].question);
-            setAnswer(DATA[0].answer);
-            setHit(DATA[0].hit);
+          if (cnt == categorylength - 1) {
+            console.log('abser' + allProblem);
+            if(selectedItem.toString().indexOf('-1') != -1){
+              // 모든 문제를 골랐을 시
+              setDATA(shuffle(allProblem));        
+              return;
+            }else{
+              let real_problem = [];
+              for (let j = 0; j < selectedItem.length; j++) {
+                var item = selectedItem[j];
+                if(item.toString().indexOf('@') != -1){
+                  // hit인 경우
+                  item = parseInt(item.substring(1));
+                  for (let k = 0; k < allProblem.length; k++) {
+                    if(allProblem[k].hit.toString() == item){
+                      real_problem.push(allProblem[k]);
+                    } 
+                  }
+                }else{
+                  // 일반 카테고리 경우
+                  for (let k = 0; k < allProblem.length; k++) {
+                    if(allProblem[k].category.toString() == item){
+                      real_problem.push(allProblem[k]);
+                    } 
+                  }
+                  
+                }
+              }
+              var tmp_set =  new Set(real_problem);
+              var result = Array.from(tmp_set);
+              setDATA(shuffle(result));
+            }
           }
         })
         .catch((error) => {

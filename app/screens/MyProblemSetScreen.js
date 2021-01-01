@@ -168,7 +168,7 @@ export default function MyProblemSetScreen({ navigation }) {
                 getDATA={getDATA}
                 visible={item.visible}
               />}
-              keyExtractor={item => item.name}
+              keyExtractor={item => item.SN}
             />
           </ScrollView>
         </KeyboardAwareScrollView>

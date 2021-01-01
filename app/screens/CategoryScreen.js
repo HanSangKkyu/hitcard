@@ -29,6 +29,7 @@ export default function CategoryScreen({ route, navigation }) {
     const unsubscribe = navigation.addListener('focus', () => {
       // The screen is focused
       // Call any action
+      // setSelectedItem([]);
       getDATA();
       console.log('CategoryScreen focused!');
     });
@@ -138,6 +139,7 @@ export default function CategoryScreen({ route, navigation }) {
           }
 
           setDATA(res);
+          console.log('fffff '+JSON.stringify(res, undefined, 4));
           setDATA_copy(res);
         }
       })
@@ -204,6 +206,9 @@ export default function CategoryScreen({ route, navigation }) {
         "category":DATA,
         "problemSetSN":problemSetSN
       });
+      // for (let i = 0; i < selectedItem.length; i++) {
+      //   toggleSelectedItem(selectedItem[i]);
+      // }
     }
   }
 
@@ -321,8 +326,9 @@ export default function CategoryScreen({ route, navigation }) {
                 toggleSelectedItem = {toggleSelectedItem}
                 category={DATA}
                 visible={item.visible}
+                selectedItem={selectedItem}
               />}
-              keyExtractor={item => item.SN}
+              keyExtractor={item => item.SN.toString()}
             />
           </ScrollView>
         </KeyboardAwareScrollView>
