@@ -9,10 +9,10 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { WINDOW_WIDTH, WINDOW_HEIGHT, USER_SN, APIVO, jsonEscape } from "../Common";
 import { Modal, Portal, Provider } from "react-native-paper";
 
-export default function ProblemScreen({ route, navigation }) {
+export default function ProblemScreen({ navigation, route }) {
   const { categorySN, categoryName, problemSet, category } = route.params;
   const [DATA, setDATA] = React.useState([]); // 서버로 부터 받은 데이터를 저장하는 변수
-  const [categoryDATA, setCategoryDATA] = React.useState([]); // 서버로 부터 받은 데이터를 저장하는 변수
+  const [categoryDATA, setCategoryDATA] = React.useState([]);
   const [DATA_copy, setDATA_copy] = React.useState('?');
   const [isSearch, setIsSearch] = React.useState(false);
   const [isEdit, setIsEdit] = React.useState(false);

@@ -5,10 +5,11 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import SearchScreenRow from '../rows/SearchScreenRow';
-import { WINDOW_WIDTH } from "../Common";
+import { WINDOW_WIDTH, WINDOW_HEIGHT, USER_SN, APIVO, jsonEscape, PROBLEMSET_SELECTED } from "../Common";
 
 export default function SearchScreen({ navigation }) {
-  const [DATA, setDATA] = React.useState('?'); // 서버로 부터 받은 데이터를 저장하는 변수
+  const [DATA, setDATA] = React.useState([]); // 서버로 부터 받은 데이터를 저장하는 변수
+  const [DATA_copy, setDATA_copy] = React.useState([]); // 서버로 부터 받은 데이터를 저장하는 변수
   const [isSearch, setIsSearch] = React.useState(false);
 
   React.useEffect(() => {
@@ -21,81 +22,66 @@ export default function SearchScreen({ navigation }) {
     return unsubscribe;
   }, [navigation, DATA]);
 
+  React.useEffect(() => {
+    if(!isSearch){
+      let res = [];
+      for (let i = 0; i < DATA.length; i++) {
+        DATA[i].visible = true;
+        res.push(DATA[i]);
+      }
+      setDATA(res);
+    }
+    // try {
+    //   if(!isSearch){
+    //     let res = [];
+    //     for (let i = 0; i < DATA.length; i++) {
+    //       DATA[i].visible = true;
+    //       res.push(DATA[i]);
+    //     }
+    //     setDATA(res);
+    //   }
+    // } catch (error) {
+    //   console.log(error);
+    // }
+  }, [isSearch]);
+
+  
+  function search(_text){
+    let res = [];
+    for (let i = 0; i < DATA.length; i++) {
+      const element = DATA[i];
+      if(element.name.indexOf(_text) != -1 ||
+      element.tag.indexOf(_text) != -1||
+      element.owner.indexOf(_text) != -1||
+      element.hit.indexOf(_text) != -1){
+        DATA[i].visible = true;
+      }else{
+        DATA[i].visible = false;
+      }
+      res.push(DATA[i]);
+    }
+    setDATA(res);
+  }
+
   function getDATA() {
-    // fetch(APIVO+'/db', {
-    //   method: 'GET'
-    // })
-    // .then((response) => response.text())
-    // .then((responseJson) => {
-    //   setDATA(JSON.parse(jsonEscape(responseJson)).array);
-    //   setDATA_copy(JSON.stringify(JSON.parse(jsonEscape(responseJson)).array));
-    //   setSpinner(false);
-    // })
-    // .catch((error) => {
-    //     console.error(error);
-    // });
-    setDATA([
-      {
-        id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
-        title: 'First Item',
-      },
-      {
-        id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
-        title: 'Second Item',
-      },
-      {
-        id: '58694a0f-3da1-471f-bd9-145571e29d72',
-        title: 'Third Item',
-      },
-      {
-        id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28a',
-        title: 'First Item',
-      },
-      {
-        id: '3ac68afc-c605-48d3-a4f8-fbd91a97f63',
-        title: 'Second Item',
-      },
-      {
-        id: '58694a0f-3da1-471f-bd96-14557129d72',
-        title: 'Third Item',
-      },
-      {
-        id: 'bd7acbea-c1b1-46c2-aed5-ad53abb28ba',
-        title: 'First Item',
-      },
-      {
-        id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f3',
-        title: 'Second Item',
-      },
-      {
-        id: '58694a0f-3da1-471f-bd96-145571e29d72',
-        title: 'Third Item',
-      },
-      {
-        id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f3',
-        title: 'Second Item',
-      },
-      {
-        id: '58694a0f-3da1-471f-bd96-145571e29d72',
-        title: 'Third Item',
-      },
-      {
-        id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f3',
-        title: 'Second Item',
-      },
-      {
-        id: '58694a0f-3da1-471f-bd96-145571e29d72',
-        title: 'Third Item',
-      },
-      {
-        id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f3',
-        title: 'Second Item',
-      },
-      {
-        id: '58694a0f-3da1-471f-bd96-145571e29d72',
-        title: 'Third Item',
-      },
-    ]);
+    fetch(APIVO+'/problem-set', {
+      method: 'GET'
+    })
+    .then((response) => response.text())
+    .then((responseJson) => {
+      console.log(JSON.stringify(JSON.parse(jsonEscape(responseJson)), undefined, 4));
+
+      let res = JSON.parse(jsonEscape(responseJson)).array;
+      for (let i = 0; i < res.length; i++) {
+        res[i].visible = true;
+      }
+      setDATA(res);
+      setDATA_copy(res);
+      // setSpinner(false);
+    })
+    .catch((error) => {
+        console.error(error);
+    });
   }
 
   return (
@@ -105,7 +91,7 @@ export default function SearchScreen({ navigation }) {
           <AntDesign name="arrowleft" size={24} color="black" />
           {/* <MaterialIcons name="menu" size={24} color="black" /> */}
         </TouchableOpacity>
-          {isSearch ? <TextInput style={{ flex: 1, alignSelf: 'center', borderWidth: isSearch ? 1 : 0, borderRadius: 100, height: 26, paddingLeft: 10, paddingRight: 10 }} autoFocus ></TextInput> : <Text style={{ flex: 1, fontSize: 22, alignSelf: 'center' }}>문제 검색</Text>}
+          {isSearch ? <TextInput style={{ flex: 1, alignSelf: 'center', borderWidth: isSearch ? 1 : 0, borderRadius: 100, height: 26, paddingLeft: 10, paddingRight: 10 }} onChangeText={(text)=>{search(text);}} autoFocus ></TextInput> : <Text style={{ flex: 1, fontSize: 22, alignSelf: 'center' }}>문제 검색</Text>}
         <TouchableOpacity style={{ alignSelf: 'flex-end', alignSelf: 'center', marginLeft: 20 }} onPress={() => setIsSearch(!isSearch)}>
           {isSearch ? <Feather name="x" size={24} color="black" /> : <Octicons name="search" size={24} color="black" />}
         </TouchableOpacity>
@@ -116,9 +102,14 @@ export default function SearchScreen({ navigation }) {
           <FlatList data={DATA}
             renderItem={({ item }) => <SearchScreenRow
               navigation={navigation}
-              title={item.title}
+              SN={item.SN}
+              name={item.name}
+              owner={item.owner}
+              tag={item.tag}
+              hit={item.hit}
+              visible={item.visible}
             />}
-            keyExtractor={item => item.id}
+            keyExtractor={item => item.SN}
           />
         </ScrollView>
       </KeyboardAwareScrollView>

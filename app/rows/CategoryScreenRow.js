@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, Image, TouchableWithoutFeedback, TouchableOpacity, Button } from 'react-native';
-import { Ionicons, Feather, MaterialCommunityIcons, Octicons, AntDesign, FontAwesome, SimpleLineIcons, MaterialIcons } from '@expo/vector-icons';
+import { Ionicons, Feather, MaterialCommunityIcons, Octicons, AntDesign, FontAwesome, SimpleLineIcons, MaterialIcons, Foundation } from '@expo/vector-icons';
 import { Checkbox, TouchableRipple } from 'react-native-paper';
 
 
@@ -101,7 +101,7 @@ export default function CategoryScreeRow({ navigation, SN, name, problemSet, tog
                         })
                     }}>
                     {/* <Feather name="edit" size={24} color="black" /> */}
-                    <MaterialIcons name="read-more" size={24} color="black" />
+                    <Foundation name="indent-more" size={24} color="black" />
                 </TouchableOpacity>
             </View>
         </TouchableOpacity>

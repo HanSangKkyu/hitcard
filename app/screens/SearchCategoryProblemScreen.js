@@ -1,18 +1,21 @@
 import * as React from 'react';
 import { StyleSheet, Text, View, StatusBar, TextInput, TouchableOpacity, SafeAreaView, FlatList, Platform, Alert } from 'react-native';
-import { Ionicons, Feather, MaterialCommunityIcons, Octicons, AntDesign, FontAwesome, SimpleLineIcons, MaterialIcons, Entypo } from '@expo/vector-icons';
+import { Ionicons, Feather, MaterialCommunityIcons, Octicons, AntDesign, FontAwesome, SimpleLineIcons, MaterialIcons, Entypo, FontAwesome5, Foundation } from '@expo/vector-icons';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import SearchCategoryProblemScreenRow from '../rows/SearchCategoryProblemScreenRow';
 import { ScrollView } from 'react-native-gesture-handler';
-import { WINDOW_WIDTH } from "../Common";
+import { WINDOW_WIDTH, WINDOW_HEIGHT, USER_SN, APIVO, jsonEscape } from "../Common";
 
-export default function SearchCategoryProblemScreen({ navigation }) {
-  const [DATA, setDATA] = React.useState('?'); // 서버로 부터 받은 데이터를 저장하는 변수
+export default function SearchCategoryProblemScreen({ navigation, route }) {
+  const { categorySN, categoryName, problemSet, category } = route.params;
+  const [DATA, setDATA] = React.useState([]); // 서버로 부터 받은 데이터를 저장하는 변수
+  const [categoryDATA, setCategoryDATA] = React.useState([]);
+  const [DATA_copy, setDATA_copy] = React.useState([]);
   const [isSearch, setIsSearch] = React.useState(false);
   const [isEdit, setIsEdit] = React.useState(false);
-  const [name, setName] = React.useState("~의 문제");
+  const [name, setName] = React.useState(categoryName);
 
 
   React.useEffect(() => {
@@ -25,57 +28,118 @@ export default function SearchCategoryProblemScreen({ navigation }) {
     return unsubscribe;
   }, [navigation, DATA]);
 
+  React.useEffect(() => {
+    if(!isSearch){
+      let res = [];
+      for (let i = 0; i < DATA.length; i++) {
+        DATA[i].visible = true;
+        res.push(DATA[i]);
+      }
+      setDATA(res);
+    }
+    // try {
+    //   if(!isSearch){
+    //     let res = [];
+    //     for (let i = 0; i < DATA.length; i++) {
+    //       DATA[i].visible = true;
+    //       res.push(DATA[i]);
+    //     }
+    //     setDATA(res);
+    //   }
+    // } catch (error) {
+    //   console.log(error);
+    // }
+  }, [isSearch]);
+
+  
+  function search(_text){
+    let res = [];
+    for (let i = 0; i < DATA.length; i++) {
+      const element = DATA[i];
+      if(element.question.indexOf(_text) != -1 ||
+      element.answer.indexOf(_text) != -1||
+      element.hit.indexOf(_text) != -1){
+        DATA[i].visible = true;
+      }else{
+        DATA[i].visible = false;
+      }
+      res.push(DATA[i]);
+    }
+    setDATA(res);
+  }
+
   function getDATA() {
-    // fetch(APIVO+'/db', {
-    //   method: 'GET'
-    // })
-    // .then((response) => response.text())
-    // .then((responseJson) => {
-    //   setDATA(JSON.parse(jsonEscape(responseJson)).array);
-    //   setDATA_copy(JSON.stringify(JSON.parse(jsonEscape(responseJson)).array));
-    //   setSpinner(false);
-    // })
-    // .catch((error) => {
-    //     console.error(error);
-    // });
-    setDATA([
-      {
-        id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
-        title: '모든 문제',
-      },
-      {
-        id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
-        title: '신라',
-      },
-      {
-        id: '58694a0f-3da1-471f-bd9-145571e29d72',
-        title: '고려',
-      },
-      {
-        id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28a',
-        title: '삼국시대',
-      },
-      {
-        id: '3ac68afc-c605-48d3-a4f8-fbd91a97f63',
-        title: '일제강점기',
-      },
-      {
-        id: '58694a0f-3da1-471f-bd96-14557129d72',
-        title: '1hit',
-      },
-      {
-        id: 'bd7acbea-c1b1-46c2-aed5-ad53abb28ba',
-        title: '2hit',
-      },
-      {
-        id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f3',
-        title: '3hit',
-      },
-      {
-        id: '58694a0f-3da1-471f-bd96-145571e29d72',
-        title: '4hit',
-      },
-    ]);
+    let tmp_data = [];
+    console.log('categorySN '+categorySN);
+    let categorylength = category.length;
+    let cnt = 1;
+    if(categorySN.toString() == "-1" || categorySN.toString().indexOf("@") != -1){
+      
+      for(let i=1;i<category.length;i++){
+        fetch(APIVO + '/category/' + category[i].SN + '/problem', {
+          method: 'GET'
+        })
+          .then((response) => response.text())
+          .then((responseJson) => {
+            console.log(JSON.stringify(JSON.parse(jsonEscape(responseJson)).array, undefined, 4));
+            cnt++;
+            var tt = JSON.parse(jsonEscape(responseJson)).array;
+            tt.forEach(element => {
+              tmp_data.push(element);
+            });
+            if (cnt == categorylength - 1) {
+              for (let i = 0; i < tmp_data.length; i++) {
+                tmp_data[i].visible = true;
+              }
+
+              if(categorySN.toString().indexOf("@") != -1){
+                // hit 별로 보기로 들어온 경우
+                let hit_data = [];
+                for (let j = 0; j < tmp_data.length; j++) {
+                  console.log(tmp_data[j].hit+' '+parseInt(categorySN.substring(1)));
+                  if(tmp_data[j].hit.toString() == categorySN.substring(1).toString()){
+                    hit_data.push(tmp_data[j]);
+                  }
+                }
+                setDATA(hit_data);
+                setDATA_copy(hit_data);
+              }else{
+                // 모든 문제 보기로 들어온 경우
+                setDATA(tmp_data);
+                setDATA_copy(tmp_data);
+              }
+        
+            }
+            // setSpinner(false);
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      }
+      return;
+    }
+    
+
+    // 사용자 지정 카테고리로 들어온 겨우
+    fetch(APIVO + '/category/' + categorySN + '/problem', {
+      method: 'GET'
+    })
+      .then((response) => response.text())
+      .then((responseJson) => {
+        console.log(JSON.stringify(JSON.parse(jsonEscape(responseJson)), undefined, 4));
+
+        let res = JSON.parse(jsonEscape(responseJson)).array;
+        for (let i = 0; i < res.length; i++) {
+          res[i].visible = true;
+        }
+
+        setDATA(res);
+        setDATA_copy(res);
+        // setSpinner(false);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   }
 
   return (
@@ -84,7 +148,7 @@ export default function SearchCategoryProblemScreen({ navigation }) {
         <TouchableOpacity style={{ marginRight: 20, alignSelf: 'center' }} onPress={() => navigation.goBack()} >
           <AntDesign name="arrowleft" size={24} color="black" />
         </TouchableOpacity>
-        {isSearch ? <TextInput style={{ flex: 1, alignSelf: 'center', borderWidth: isSearch ? 1 : 0, borderRadius: 100, height: 26, paddingLeft: 10, paddingRight: 10 }} autoFocus ></TextInput> :
+        {isSearch ? <TextInput style={{ flex: 1, alignSelf: 'center', borderWidth: isSearch ? 1 : 0, borderRadius: 100, height: 26, paddingLeft: 10, paddingRight: 10 }} onChangeText={(text)=>{search(text)}} autoFocus ></TextInput> :
           <View style={{ flex: 1, flexDirection: 'row', alignContent: 'center' }}>
             <Text style={{ fontSize: 22, alignSelf: 'center' }}>{name}</Text>
           </View>
@@ -100,7 +164,13 @@ export default function SearchCategoryProblemScreen({ navigation }) {
             data={DATA}
             renderItem={({ item }) => <SearchCategoryProblemScreenRow
               navigation={navigation}
-              title={item.title}
+              SN={item.SN}
+              question={item.question}
+              answer={item.answer}
+              category={item.category}
+              hit={item.hit}
+              problemSet={problemSet}
+              visible={item.visible}
             />}
             keyExtractor={item => item.id}
           />

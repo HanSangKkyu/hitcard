@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
     },
 });
 
-export default function SearchCategoryScreenRow({ navigation, title }) {
+export default function SearchCategoryScreenRow({ navigation, SN, name, problemSet, category, visible }) {
     const [isSelected, setIsSelected] = React.useState(false); // 서버로 부터 받은 데이터를 저장하는 변수
 
     return (
@@ -57,23 +57,28 @@ export default function SearchCategoryScreenRow({ navigation, title }) {
                 setIsSelected(!isSelected);
  
             }}>
-            <View style={styles.container}>
+            <View style={visible ? styles.container : { height: 0 }}>
                 <View style={styles.photo}>
-                    {/* <SimpleLineIcons name="doc" size={30} color="black" /> */}
                     <Feather name="folder" size={30} color="black" />
                 </View>
                 <View style={styles.container_text}>
                     <View style={{ flex: 1, flexDirection: 'column' }}>
                         <Text style={styles.title}>
-                            {title}
-                        </Text>
-                        <Text style={styles.title}>
-                            <Text>수정일: </Text> {title}
+                            {name}
                         </Text>
                     </View>
                 </View>
              
-                <TouchableOpacity style={{ alignContent: 'center', justifyContent: 'center' }} onPress={() => { navigation.navigate('SearchCategoryProblemScreen') }}>
+                <TouchableOpacity style={{ alignContent: 'center', justifyContent: 'center' }}
+                    onPress={() => {
+                        navigation.navigate('SearchCategoryProblemScreen', {
+                            "categorySN": SN,
+                            "categoryName": name,
+                            "problemSet": problemSet,
+                            "category": category
+                        })
+                    }}>
+                    {/* <Feather name="edit" size={24} color="black" /> */}
                     <Foundation name="indent-more" size={24} color="black" />
                 </TouchableOpacity>
             </View>

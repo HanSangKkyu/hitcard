@@ -48,40 +48,42 @@ const styles = StyleSheet.create({
     },
 });
 
-export default function SearchScreenRow({ navigation, title }) {
+export default function SearchScreenRow({ navigation, SN, name, owner, tag, hit, visible }) {
     const [isSelected, setIsSelected] = React.useState(false); // 서버로 부터 받은 데이터를 저장하는 변수
 
     return (
-        <TouchableOpacity
-            onPress={() => {
-                setIsSelected(!isSelected);
-                if (isSelected == true) {
-                    const idx = PROBLEMSET_SELECTED.indexOf(title)
-                    if (idx > -1) PROBLEMSET_SELECTED.splice(idx, 1)
-                } else {
-                    PROBLEMSET_SELECTED.push(title);
-                }
-                console.log(PROBLEMSET_SELECTED);
-            }}>
-            <View style={styles.container}>
+        <TouchableOpacity>
+            <View style={visible?styles.container:{height:0}}>
                 <View style={styles.photo}>
-                    {/* <SimpleLineIcons name="doc" size={30} color="black" /> */}
                     <AntDesign name="inbox" size={30} color="black" />
                 </View>
                 <View style={styles.container_text}>
                     <View style={{ flex: 1, flexDirection: 'column' }}>
                         <Text style={styles.title}>
-                            {title}
+                            {name}
                         </Text>
                         <Text style={styles.title}>
-                            <Text>수정일: </Text> {title}
+                            <Text>만든이: </Text> {owner}
+                        </Text>
+                        <Text style={styles.title}>
+                            <Text>태그: </Text> {tag}
+                        </Text>
+                        <Text style={styles.title}>
+                            <Text>hit: </Text> {hit}
                         </Text>
                     </View>
                 </View>
                 <TouchableOpacity style={{ alignContent: 'center', justifyContent: 'center' }} onPress={() => { alert("내 문제set에 추가되었습니다") }}>
                     <Entypo name="download" size={20} color="black" />
                 </TouchableOpacity>
-                <TouchableOpacity style={{ alignContent: 'center', justifyContent: 'center', marginLeft:10 }} onPress={() => { navigation.navigate('SearchCategoryScreen') }}>
+                <TouchableOpacity style={{ alignContent: 'center', justifyContent: 'center', marginLeft: 10 }}
+                    onPress={() => {
+                        navigation.navigate('SearchCategoryScreen', {
+                            "problemSetSN": SN,
+                            "problemSetName": name,
+                            "problemSetHit": hit
+                        })
+                    }}>
                     <Foundation name="indent-more" size={24} color="black" />
                 </TouchableOpacity>
             </View>

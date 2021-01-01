@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, Image, TouchableWithoutFeedback, TouchableOpacity, Button } from 'react-native';
-import { Ionicons, Feather, MaterialCommunityIcons, Octicons, AntDesign, FontAwesome, SimpleLineIcons, Foundation,  } from '@expo/vector-icons';
+import { Ionicons, Feather, MaterialCommunityIcons, Octicons, AntDesign, FontAwesome, SimpleLineIcons, Foundation, } from '@expo/vector-icons';
 import { Checkbox, TouchableRipple } from 'react-native-paper';
 
 
@@ -48,26 +48,28 @@ const styles = StyleSheet.create({
     },
 });
 
-export default function SearchCategoryProblemScreenRow({ navigation, title }) {
+export default function SearchCategoryProblemScreenRow({ navigation, SN, question, answer, category, hit, toggleSelectedItem, problemSet, visible }) {
     const [isSelected, setIsSelected] = React.useState(false); // 서버로 부터 받은 데이터를 저장하는 변수
 
     return (
         <TouchableOpacity
             onPress={() => {
                 setIsSelected(!isSelected);
-
             }}>
-            <View style={styles.container}>
+            <View style={visible ? styles.container : { height: 0 }}>
                 <View style={styles.photo}>
                     <FontAwesome name="sticky-note-o" size={24} color="black" />
                 </View>
                 <View style={styles.container_text}>
                     <View style={{ flex: 1, flexDirection: 'column' }}>
                         <Text style={styles.title}>
-                            {title}
+                            Q. {question}
                         </Text>
                         <Text style={styles.title}>
-                            <Text>수정일: </Text> {title}
+                            A. {answer}
+                        </Text>
+                        <Text style={styles.title}>
+                            <Text>hit: </Text> {hit}
                         </Text>
                     </View>
                 </View>
