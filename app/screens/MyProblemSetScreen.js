@@ -9,8 +9,8 @@ import { WINDOW_WIDTH, WINDOW_HEIGHT, USER_SN, APIVO, jsonEscape, PROBLEMSET_SEL
 import { Modal, Portal, Provider } from "react-native-paper";
 
 export default function MyProblemSetScreen({ navigation }) {
-  const [DATA, setDATA] = React.useState('?'); // 서버로 부터 받은 데이터를 저장하는 변수
-  const [DATA_copy, setDATA_copy] = React.useState('?'); // 서버로 부터 받은 데이터를 저장하는 변수
+  const [DATA, setDATA] = React.useState([]); // 서버로 부터 받은 데이터를 저장하는 변수
+  const [DATA_copy, setDATA_copy] = React.useState([]); // 서버로 부터 받은 데이터를 저장하는 변수
   const [isSearch, setIsSearch] = React.useState(false);
   const [modalVisible, setModalVisible] = React.useState(false);
   const [name, setName] = React.useState("");

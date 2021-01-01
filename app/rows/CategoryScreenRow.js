@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
 
 export default function CategoryScreeRow({ navigation, SN, name, problemSet, toggleSelectedItem, category, visible, selectedItem }) {
     const [isSelected, setIsSelected] = React.useState(false); // 서버로 부터 받은 데이터를 저장하는 변수
-    const [slctdItm, setSlctdItm] = React.useState(selectedItem); // 서버로 부터 받은 데이터를 저장하는 변수
+    const [slctdItm, setSlctdItm] = React.useState(selectedItem);
 
     React.useEffect(() => {
         if(slctdItm.toString().indexOf(SN) != -1){
@@ -71,7 +71,7 @@ export default function CategoryScreeRow({ navigation, SN, name, problemSet, tog
                 selectThisItem();
             }}>
             {/* <View style={styles.container}> */}
-            <View style={visible ? styles.container : { height: 0 }}>
+            <View style={visible||visible==undefined ? styles.container : { height: 0 }}>
                 <View style={styles.photo}>
                     <Feather name="folder" size={30} color="black" />
                 </View>

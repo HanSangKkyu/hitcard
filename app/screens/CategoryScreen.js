@@ -47,6 +47,10 @@ export default function CategoryScreen({ route, navigation }) {
 
   }, [navigation, createName]);
 
+  // React.useEffect(() => {
+  //   console.log('DATA changed!');
+  // }, [DATA]);
+
   React.useEffect(() => {
     if(!isSearch){
       let res = [];
@@ -86,7 +90,7 @@ export default function CategoryScreen({ route, navigation }) {
       console.log(JSON.stringify(JSON.parse(jsonEscape(responseJson)), undefined, 4));
       var res = JSON.parse(jsonEscape(responseJson)).array;
       if(res.length > 0){
-        res.unshift({"SN": -1, "name":"모든 문제", "problemSet":problemSetSN});
+        res.unshift({"SN": '-1', "name":"모든 문제", "problemSet":problemSetSN});
       }
       setDATA(res);
       // DATA.unshift({"SN":-1, "name":"모든 문제", "problemSet":problemSetSN});
@@ -138,8 +142,8 @@ export default function CategoryScreen({ route, navigation }) {
             res[j].visible = true;
           }
 
-          setDATA(res);
           console.log('fffff '+JSON.stringify(res, undefined, 4));
+          setDATA(res);
           setDATA_copy(res);
         }
       })
@@ -328,7 +332,7 @@ export default function CategoryScreen({ route, navigation }) {
                 visible={item.visible}
                 selectedItem={selectedItem}
               />}
-              keyExtractor={item => item.SN.toString()}
+              keyExtractor={item => item.SN}
             />
           </ScrollView>
         </KeyboardAwareScrollView>

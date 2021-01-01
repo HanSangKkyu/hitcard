@@ -57,7 +57,7 @@ export default function SearchCategoryScreenRow({ navigation, SN, name, problemS
                 setIsSelected(!isSelected);
  
             }}>
-            <View style={visible ? styles.container : { height: 0 }}>
+            <View style={visible || visible==undefined ? styles.container : { height: 0 }}>
                 <View style={styles.photo}>
                     <Feather name="folder" size={30} color="black" />
                 </View>

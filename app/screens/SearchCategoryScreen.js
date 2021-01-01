@@ -74,7 +74,7 @@ export default function SearchCategoryScreen({ navigation, route }) {
       console.log(JSON.stringify(JSON.parse(jsonEscape(responseJson)), undefined, 4));
       var res = JSON.parse(jsonEscape(responseJson)).array;
       if(res.length > 0){
-        res.unshift({"SN": -1, "name":"모든 문제", "problemSet":problemSetSN});
+        res.unshift({"SN": '-1', "name":"모든 문제", "problemSet":problemSetSN});
       }
       setDATA(res);
       // DATA.unshift({"SN":-1, "name":"모든 문제", "problemSet":problemSetSN});
