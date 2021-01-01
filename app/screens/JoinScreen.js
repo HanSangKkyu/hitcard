@@ -126,8 +126,11 @@ export default function JoinScreen({ navigation }) {
         <TextInput style={{ width: 300, borderBottomColor: pwerr ? 'red' : 'black', borderBottomWidth: 1, fontSize: 40, textAlign: "center", }} placeholder="비밀번호" secureTextEntry={true} value={pw} onChangeText={(text) => { setPw(text); }}></TextInput>
         <TextInput style={{ width: 300, borderBottomColor: pwerr ? 'red' : 'black', borderBottomWidth: 1, fontSize: 40, textAlign: "center", }} placeholder="비밀번호 확인" secureTextEntry={true} value={pwc} onChangeText={(text) => { setPwc(text); }}></TextInput>
         <View style={{ flexDirection: 'row' }}>
+          <TouchableOpacity onPress={() => {navigation.goBack();}} style={{ width: 150, marginTop: 10, textAlign: "center", alignItems: "center" }}>
+            <Text style={{color:'black'}}>뒤로</Text>
+          </TouchableOpacity>
           <TouchableOpacity onPress={() => {createUser();}} style={{ width: 150, marginTop: 10, textAlign: "center", alignItems: "center" }}>
-            <Text style={{color:createEnable?'black':'gray'}}>확인</Text>
+            <Text style={{color:createEnable?'black':'gray'}}>가입</Text>
           </TouchableOpacity>
           {/* <TouchableOpacity style={{ width: 150, marginTop: 10, textAlign:"center", alignItems:"center" }}>
               <Text>join</Text>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, Image, TouchableWithoutFeedback, TouchableOpacity, Button, TextInput, Alert } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableWithoutFeedback, TouchableOpacity, Button, TextInput, Alert, Platform } from 'react-native';
 import { Ionicons, Feather, MaterialCommunityIcons, Octicons, AntDesign, FontAwesome, SimpleLineIcons, MaterialIcons, FontAwesome5, Foundation, Entypo } from '@expo/vector-icons';
 import { Checkbox, Modal, Portal, Provider } from 'react-native-paper';
 import { WINDOW_WIDTH, WINDOW_HEIGHT, USER_SN, APIVO, jsonEscape, PROBLEMSET_SELECTED } from "../Common";
@@ -63,8 +63,8 @@ export default function MyProblemSetScreenRow({ navigation, SN, name, tag, hit, 
   const [tagInModal, setTagInModal] = React.useState(tag);
 
   React.useEffect(() => {
-    console.log(nameInModal);
-    console.log(modifyEnable);
+    // console.log(nameInModal);
+    // console.log(modifyEnable);
     if (nameInModal) {
       setModifyEnable(true);
     } else {
@@ -73,7 +73,7 @@ export default function MyProblemSetScreenRow({ navigation, SN, name, tag, hit, 
   }, [nameInModal]);
 
   function editProblemSet() {
-    console.log(APIVO + '/problem-set/' + SN);
+    // console.log(APIVO + '/problem-set/' + SN);
     fetch(APIVO + '/problem-set/' + SN, {
       method: 'PUT',
       headers: {
@@ -99,7 +99,7 @@ export default function MyProblemSetScreenRow({ navigation, SN, name, tag, hit, 
   }
 
   function deleteItem(){
-    console.log(APIVO + '/problem-set/' + SN);
+    // console.log(APIVO + '/problem-set/' + SN);
     fetch(APIVO + '/problem-set/' + SN, {
       method: 'DELETE',
       headers: {
@@ -136,19 +136,28 @@ export default function MyProblemSetScreenRow({ navigation, SN, name, tag, hit, 
           <View style={{ marginTop: 10, flexDirection: 'row' }}>
             <TouchableOpacity style={{ flex: 1 }}
               onPress={() => {
-                Alert.alert(
-                  "카테고리 삭제",
-                  name+"를 삭제하시겠습니까?",
-                  [
-                    {
-                      text: "Cancel",
-                      onPress: () => console.log("Cancel Pressed"),
-                      style: "cancel"
-                    },
-                    { text: "OK", onPress: () => deleteItem() }
-                  ],
-                  { cancelable: false }
-                );
+
+                if (Platform.OS === 'ios' || Platform.OS === 'android') {
+                  Alert.alert(
+                    "문제SET 삭제",
+                    name+"를 삭제하시겠습니까?",
+                    [
+                      {
+                        text: "Cancel",
+                        onPress: () => console.log("Cancel Pressed"),
+                        style: "cancel"
+                      },
+                      { text: "OK", onPress: () => deleteItem() }
+                    ],
+                    { cancelable: false }
+                  );
+                } else {
+                  if (confirm(name+"를 삭제하시겠습니까?")) {
+                    deleteItem();
+                  } else {
+                    // 취소 버튼 클릭 시 동작
+                  }
+                }
                 setModalVisible(!modalVisible);
               }}
             >

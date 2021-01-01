@@ -35,6 +35,12 @@ export default function MyProblemSetScreen({ navigation }) {
     }
   }, [navigation, name]);
 
+  React.useEffect(() => {
+    if(!isSearch){
+      setDATA(DATA_copy);
+    }
+  }, [isSearch]);
+
   function getDATA() {
     fetch(APIVO+'/problem-set/owner/'+USER_SN[0], {
       method: 'GET'
@@ -43,7 +49,7 @@ export default function MyProblemSetScreen({ navigation }) {
     .then((responseJson) => {
       console.log(JSON.stringify(JSON.parse(jsonEscape(responseJson)), undefined, 4));
       setDATA(JSON.parse(jsonEscape(responseJson)).array);
-      setDATA_copy(JSON.stringify(JSON.parse(jsonEscape(responseJson)).array));
+      setDATA_copy(JSON.parse(jsonEscape(responseJson)).array);
       // setSpinner(false);
     })
     .catch((error) => {
@@ -52,7 +58,7 @@ export default function MyProblemSetScreen({ navigation }) {
   }
 
   function createProblemSet() {
-    console.log(APIVO + '/problem-set');
+    // console.log(APIVO + '/problem-set');
     fetch(APIVO + '/problem-set', {
       method: 'POST',
       headers: {
@@ -72,6 +78,23 @@ export default function MyProblemSetScreen({ navigation }) {
       .catch((error) => {
         console.error(error);
       });
+  }
+
+  function search(_text){
+    let res = [];
+    for (let i = 0; i < DATA_copy.length; i++) {
+      const element = DATA_copy[i];
+      // console.log(JSON.stringify(element));
+      if(element.name.indexOf(_text) != -1 ||
+      element.tag.indexOf(_text) != -1||
+      element.hit.indexOf(_text) != -1||
+      element.created_data.indexOf(_text) != -1||
+      element.modified_data.indexOf(_text) != -1){
+        res.push(element);
+      }
+    }
+
+    setDATA(res);
   }
 
   return (
@@ -107,7 +130,7 @@ export default function MyProblemSetScreen({ navigation }) {
           <TouchableOpacity style={{ marginRight: 20, alignSelf: 'center' }} onPress={() => navigation.goBack()} >
             <MaterialIcons name="menu" size={24} color="black" />
           </TouchableOpacity>
-          {isSearch ? <TextInput style={{ flex: 1, alignSelf: 'center', borderWidth: isSearch ? 1 : 0, borderRadius: 100, height: 26, paddingLeft: 10, paddingRight: 10 }} autoFocus ></TextInput> : <Text style={{ flex: 1, fontSize: 22, alignSelf: 'center' }}>내 문제 SET</Text>}
+          {isSearch ? <TextInput style={{ flex: 1, alignSelf: 'center', borderWidth: isSearch ? 1 : 0, borderRadius: 100, height: 26, paddingLeft: 10, paddingRight: 10 }} onChangeText={(text) => {search(text);}} autoFocus ></TextInput> : <Text style={{ flex: 1, fontSize: 22, alignSelf: 'center' }}>내 문제 SET</Text>}
           <TouchableOpacity style={{ alignSelf: 'flex-end', alignSelf: 'center', marginLeft: 20 }} onPress={() => setIsSearch(!isSearch)}>
             {isSearch ? <Feather name="x" size={24} color="black" /> : <Octicons name="search" size={24} color="black" />}
           </TouchableOpacity>
@@ -119,37 +142,6 @@ export default function MyProblemSetScreen({ navigation }) {
           <TouchableOpacity onPress={() => { setModalVisible(!modalVisible) }} style={{ flex: 1, alignSelf: 'center', }} >
             <Ionicons style={{ alignSelf: 'center' }} name="add" size={24} color="black" />
           </TouchableOpacity>
-          {/* {Platform.OS === 'ios' || Platform.OS === 'android' ?
-            <TouchableOpacity style={{ flex: 1, alignSelf: 'center', }}
-              onPress={() => {
-                Alert.alert(
-                  "카테고리 삭제",
-                  "선택한 카테고리를 삭제하시겠습니까?",
-                  [
-                    {
-                      text: "Cancel",
-                      onPress: () => console.log("Cancel Pressed"),
-                      style: "cancel"
-                    },
-                    { text: "OK", onPress: () => console.log("OK Pressed") }
-                  ],
-                  { cancelable: false }
-                );
-              }}>
-              <Entypo style={{ alignSelf: 'center' }} name="trash" size={24} color="black" />
-            </TouchableOpacity>
-            :
-            <TouchableOpacity style={{ flex: 1, alignSelf: 'center', }}
-              onPress={() => {
-                if (confirm("선택한 카테고리를 삭제하시겠습니까?")) {
-                  // 확인 버튼 클릭 시 동작
-                } else {
-                  // 취소 버튼 클릭 시 동작
-                }
-              }}>
-              <Entypo style={{ alignSelf: 'center' }} name="trash" size={24} color="black" />
-            </TouchableOpacity>
-          } */}
         </View>
         <KeyboardAwareScrollView>
           <ScrollView style={{ height: WINDOW_HEIGHT - 100 }}>

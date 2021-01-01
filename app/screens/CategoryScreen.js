@@ -46,6 +46,12 @@ export default function CategoryScreen({ route, navigation }) {
 
   }, [navigation, createName]);
 
+  React.useEffect(() => {
+    if(!isSearch){
+      setDATA(DATA_copy);
+    }
+  }, [isSearch]);
+
   function toggleSelectedItem(_SN){
     const idx = selectedItem.indexOf(_SN)
     if (idx > -1) {
@@ -78,7 +84,6 @@ export default function CategoryScreen({ route, navigation }) {
       }
       setDATA(res);
       // DATA.unshift({"SN":-1, "name":"모든 문제", "problemSet":problemSetSN});
-      setDATA_copy(JSON.stringify(JSON.parse(jsonEscape(responseJson)).array));
       setName(problemSetName+"의 카테고리");
       
       getProblem(res);
@@ -109,18 +114,8 @@ export default function CategoryScreen({ route, navigation }) {
           tmp_data.push(element);
         });
 
-        // console.log('fffff '+_DATA[i].SN+' '+cnt+' ffff ');
-        // console.log(datalength);
         if (cnt == datalength - 1) {
           setProblemDATA(tmp_data);
-          // console.log('all problem '+JSON.stringify(tmp_data));
-
-          // const hitset = new Set();
-          // for (let j = 0; j < tmp_data.length; j++) {
-          //   console.log(parseInt(tmp_data[j].hit));
-          //   hitset.add(parseInt(tmp_data[j].hit));
-            
-          // }
           let tmp_hitset = [];
           for (let j = 0; j < tmp_data.length; j++) {
             tmp_hitset.push(parseInt(tmp_data[j].hit));
@@ -130,13 +125,11 @@ export default function CategoryScreen({ route, navigation }) {
 
           var res = _DATA;
           for (const item of hitset) {
-            // console.log('flag1 '+('@'+item));
             res.push({"SN":('@'+item), "name":"hit "+item, "problemSet":problemSetSN})
           }
 
           setDATA(res);
-          
-          // res.unshift({"SN":-1, "name":"모든 문제", "problemSet":problemSetSN});
+          setDATA_copy(res);
         }
       })
       .catch((error) => {
@@ -205,6 +198,19 @@ export default function CategoryScreen({ route, navigation }) {
     }
   }
 
+  function search(_text){
+    let res = [];
+    for (let i = 0; i < DATA_copy.length; i++) {
+      const element = DATA_copy[i];
+      // console.log(JSON.stringify(element));
+      if(element.name.indexOf(_text) != -1){
+        res.push(element);
+      }
+    }
+
+    setDATA(res);
+  }
+
   return (
     <Provider>
       <SafeAreaView style={{}}>
@@ -232,7 +238,7 @@ export default function CategoryScreen({ route, navigation }) {
           <TouchableOpacity style={{ marginRight: 20, alignSelf: 'center' }} onPress={()=>{navigation.goBack();}} >
             <AntDesign name="arrowleft" size={24} color="black" />
           </TouchableOpacity>
-          {isSearch ? <TextInput style={{ flex: 1, alignSelf: 'center', borderWidth: isSearch ? 1 : 0, borderRadius: 100, height: 30, paddingLeft: 10, paddingRight: 10 }} autoFocus ></TextInput> :
+          {isSearch ? <TextInput style={{ flex: 1, alignSelf: 'center', borderWidth: isSearch ? 1 : 0, borderRadius: 100, height: 30, paddingLeft: 10, paddingRight: 10 }} onChangeText={(text)=>{search(text);}} autoFocus ></TextInput> :
             <View style={{ flex: 1, flexDirection: 'row', alignContent: 'center' }}>
               <Text style={{ fontSize: 22, alignSelf: 'center' }}>{name}</Text>
               {/* {isEdit ? <TextInput style={{ fontSize: 22, alignSelf: 'center' }} value={name} onChangeText={(text) => { setName(text) }} autoFocus></TextInput> : <Text style={{ fontSize: 22, alignSelf: 'center' }}>{name}</Text>}
@@ -262,7 +268,7 @@ export default function CategoryScreen({ route, navigation }) {
                 }
                 Alert.alert(
                   "카테고리 삭제",
-                  "선택한 카테고리를 삭제하시겠습니까?",
+                  "❗주의❗\n선택한 카테고리에 들어있는 모든 문제가 함께 삭제됩니다.\n정말로 삭제하시겠습니까?",
                   [
                     {
                       text: "Cancel",
@@ -283,7 +289,7 @@ export default function CategoryScreen({ route, navigation }) {
                   return
                 }
 
-                if (confirm("선택한 카테고리를 삭제하시겠습니까?")) {
+                if (confirm("❗주의❗\n선택한 카테고리에 들어있는 모든 문제가 함께 삭제됩니다.\n정말로 삭제하시겠습니까?")) {
                   delete_category();console.log("OK Pressed");
                 } else {
                   console.log("Cancel Pressed")

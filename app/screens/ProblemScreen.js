@@ -54,6 +54,12 @@ export default function ProblemScreen({ route, navigation }) {
     }
   }, [navigation, name]);
 
+  React.useEffect(() => {
+    if(!isSearch){
+      setDATA(DATA_copy);
+    }
+  }, [isSearch]);
+
   function getDATA() {
     let tmp_data = [];
     console.log('categorySN '+categorySN);
@@ -110,7 +116,7 @@ export default function ProblemScreen({ route, navigation }) {
       .then((responseJson) => {
         console.log(JSON.stringify(JSON.parse(jsonEscape(responseJson)), undefined, 4));
         setDATA(JSON.parse(jsonEscape(responseJson)).array);
-        setDATA_copy(JSON.stringify(JSON.parse(jsonEscape(responseJson)).array));
+        setDATA_copy(JSON.parse(jsonEscape(responseJson)).array);
         // setSpinner(false);
       })
       .catch((error) => {
@@ -232,6 +238,21 @@ export default function ProblemScreen({ route, navigation }) {
     }
   }
 
+  function search(_text){
+    let res = [];
+    for (let i = 0; i < DATA_copy.length; i++) {
+      const element = DATA_copy[i];
+      console.log(JSON.stringify(element));
+      if(element.question.indexOf(_text) != -1||
+      element.answer.indexOf(_text) != -1||
+      element.hit.indexOf(_text) != -1){
+        res.push(element);
+      }
+    }
+
+    setDATA(res);
+  }
+
   return (
     <Provider>
       <SafeAreaView style={{}}>
@@ -251,7 +272,7 @@ export default function ProblemScreen({ route, navigation }) {
           <TouchableOpacity style={{ marginRight: 20, alignSelf: 'center' }} onPress={() => navigation.goBack()} >
             <AntDesign name="arrowleft" size={24} color="black" />
           </TouchableOpacity>
-          {isSearch ? <TextInput style={{ flex: 1, alignSelf: 'center', borderWidth: isSearch ? 1 : 0, borderRadius: 100, height: 26, paddingLeft: 10, paddingRight: 10 }} autoFocus ></TextInput> :
+          {isSearch ? <TextInput style={{ flex: 1, alignSelf: 'center', borderWidth: isSearch ? 1 : 0, borderRadius: 100, height: 26, paddingLeft: 10, paddingRight: 10 }} onChangeText={(text)=>{search(text);}} autoFocus ></TextInput> :
             <View style={{ flex: 1, flexDirection: 'row', alignContent: 'center' }}>
               {isEdit ? <TextInput style={{ fontSize: 22, alignSelf: 'center' }} value={name} onChangeText={(text) => { setName(text) }} autoFocus></TextInput> : <Text style={{ fontSize: 22, alignSelf: 'center' }}>{name}</Text>}
               <TouchableOpacity style={{ marginLeft: 10, alignContent: 'center', justifyContent: 'center' }} onPress={() => { editCategoryName(); }}>
