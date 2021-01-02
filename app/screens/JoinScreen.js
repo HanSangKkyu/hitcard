@@ -110,7 +110,8 @@ export default function JoinScreen({ navigation }) {
         .then((response) => response.text())
         .then((responseJson) => {
           console.log(JSON.stringify(JSON.parse(jsonEscape(responseJson)), undefined, 4));
-          navigation.navigate('MyProblemSetScreen');
+          alert("가입 성공! 로그인 해주세요.");
+          navigation.goBack();
         })
         .catch((error) => {
           console.error(error);
