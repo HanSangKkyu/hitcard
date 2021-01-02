@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, Image, TouchableWithoutFeedback, TouchableOpacity, Button } from 'react-native';
 import { Ionicons, Feather, MaterialCommunityIcons, Octicons, AntDesign, FontAwesome, SimpleLineIcons, Entypo, Foundation } from '@expo/vector-icons';
 import { Checkbox, TouchableRipple } from 'react-native-paper';
-import { WINDOW_WIDTH, WINDOW_HEIGHT, USER_SN, APIVO, jsonEscape, PROBLEMSET_SELECTED } from "../Common";
+import { WINDOW_WIDTH, WINDOW_HEIGHT, USER_SN, APIVO, jsonEscape, PROBLEMSET_SELECTED, USER_ID } from "../Common";
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -52,21 +52,27 @@ export default function SearchScreenRow({ navigation, SN, name, owner, tag, hit,
     const [isSelected, setIsSelected] = React.useState(false); // 서버로 부터 받은 데이터를 저장하는 변수
 
     async function copyProblemSet(_name, _tag) {
-        await createNewProblemSet(_name, _tag); // 문제SET만들기
-        const newProblemSetSN = await getNewProblemSetSN(); // 새로 만들어진 문제SET SN값 얻기
-        const category = await getCategory();// 카테고리 정보 얻기
-
-        for (let i = 0; i < category.length; i++) {
-            await createNewCategory(category[i].name, newProblemSetSN); // 카테고리 만들기
-            var newCategorySN = await getNewCategorySN(newProblemSetSN)// 새로 만들어진 카테고리 SN값 얻기
-            var problem = await getProblem(category[i].SN); // 문제 정보 얻기
-            for (let j = 0; j < problem.length; j++) {
-                await createNewProblem(problem[j].question, problem[j].answer, newCategorySN, problem[j].hit);// 새로 만들어진 카테고리에 문제 정보 넣기
+        console.log('flag11 '+owner, USER_SN[0]);
+        if(owner.toString() != USER_SN[0].toString()){
+            await hitup();
+            await createNewProblemSet(_name, _tag); // 문제SET만들기
+            const newProblemSetSN = await getNewProblemSetSN(); // 새로 만들어진 문제SET SN값 얻기
+            const category = await getCategory();// 카테고리 정보 얻기
+    
+            for (let i = 0; i < category.length; i++) {
+                await createNewCategory(category[i].name, newProblemSetSN); // 카테고리 만들기
+                var newCategorySN = await getNewCategorySN(newProblemSetSN)// 새로 만들어진 카테고리 SN값 얻기
+                var problem = await getProblem(category[i].SN); // 문제 정보 얻기
+                for (let j = 0; j < problem.length; j++) {
+                    await createNewProblem(problem[j].question, problem[j].answer, newCategorySN, problem[j].hit);// 새로 만들어진 카테고리에 문제 정보 넣기
+                }
             }
+    
+    
+            alert("내 문제set에 추가되었습니다");
+        }else{
+            alert("자신의 문제SET은 다운로드 할 수 없습니다.");
         }
-
-
-        alert("내 문제set에 추가되었습니다");
     }
 
     function createNewProblemSet(_name, _tag) {
@@ -220,6 +226,25 @@ export default function SearchScreenRow({ navigation, SN, name, owner, tag, hit,
         });
     }
 
+    function hitup() {
+        return new Promise(function (resolve, reject) {
+        fetch(APIVO + '/problem-set/' + SN + '/hitup', {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({})
+          })
+            .then((response) => response.text())
+            .then((responseJson) => {
+              console.log('hitup 성공!');
+              resolve(responseJson);
+            })
+            .catch((error) => {
+              console.error(error);
+            });
+        });
+    }
     return (
         <TouchableOpacity>
             <View style={visible ? styles.container : { height: 0 }}>
@@ -238,7 +263,7 @@ export default function SearchScreenRow({ navigation, SN, name, owner, tag, hit,
                             <Text>태그: </Text> {tag}
                         </Text>
                         <Text style={styles.title}>
-                            <Text>hit: </Text> {hit}
+                            <Text>다운로드 횟수: </Text> {hit}
                         </Text>
                     </View>
                 </View>
