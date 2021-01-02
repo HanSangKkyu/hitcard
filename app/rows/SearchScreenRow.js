@@ -52,7 +52,6 @@ export default function SearchScreenRow({ navigation, SN, name, owner, tag, hit,
     const [isSelected, setIsSelected] = React.useState(false); // 서버로 부터 받은 데이터를 저장하는 변수
 
     async function copyProblemSet(_name, _tag) {
-        console.log('flag11 '+owner, USER_SN[0]);
         if(owner.toString() != USER_SN[0].toString()){
             await hitup();
             await createNewProblemSet(_name, _tag); // 문제SET만들기
