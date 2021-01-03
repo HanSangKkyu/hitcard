@@ -80,21 +80,27 @@ export default function SolveScreen({ navigation, route }) {
     let cnt = 1;
     let categorylength = category.length;
     let allProblem = [];
-    for (let i = 0; i < category.length; i++) {
+    for (let i = 1; i < categorylength; i++) {
       fetch(APIVO + '/category/' + category[i].SN + '/problem', {
         method: 'GET'
       })
         .then((response) => response.text())
         .then((responseJson) => {
-          console.log(JSON.stringify(JSON.parse(jsonEscape(responseJson)).array, undefined, 4));
+          // console.log(JSON.stringify(JSON.parse(jsonEscape(responseJson)).array, undefined, 4));
           cnt++;
           
           var tt = JSON.parse(jsonEscape(responseJson)).array;
-          tt.forEach(element => {
-            allProblem.push(element)
-          });
+          for (let j = 0; j < tt.length; j++) {
+            // const element = tt[j];
+            console.log(JSON.stringify(tt[j], undefined, 4));
+            allProblem.push(tt[j]);
+          }
+          // tt.forEach(element => {
+          //   allProblem.push(element)
+          // });
 
-          if (cnt == categorylength - 1) {
+          // console.log('flag111 ',cnt,categorylength);
+          if (cnt == categorylength) {
             console.log('abser' + allProblem);
             if(selectedItem.toString().indexOf('-1') != -1){
               // 모든 문제를 골랐을 시

@@ -84,7 +84,7 @@ export default function ProblemScreen({ navigation, route }) {
             tt.forEach(element => {
               tmp_data.push(element);
             });
-            if (cnt == categorylength - 1) {
+            if (cnt == categorylength) {
               for (let i = 0; i < tmp_data.length; i++) {
                 tmp_data[i].visible = true;
               }
