@@ -26,6 +26,8 @@ public class Util{
 		// reponse 반복작업
 		_res.setContentType("text/plain"); // 순수 Text로 응답을 해주겠다
 		_res.setCharacterEncoding("UTF-8"); // 응답하는 Text의 Encoding을 설정한다
+		_res.setHeader("Access-Control-Allow-Origin", "*"); // CORS 설정
+		_res.setHeader("Access-Control-Allow-Credentials", "true"); // CORS 설정
 		PrintWriter writer = _res.getWriter(); // Response Body에 응답을 싣기 위해서 Writer객체를 하나 가져온다
 		writer.write(_json); // 가져온 Write 객체에 응답할 Text를 작성한다.
 		writer.flush(); // 응답을 보낸다.
