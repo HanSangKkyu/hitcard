@@ -71,7 +71,7 @@ export default function CategoryScreeRow({ navigation, SN, name, problemSet, tog
                 selectThisItem();
             }}>
             {/* <View style={styles.container}> */}
-            <View style={visible||visible==undefined ? styles.container : { height: 0 }}>
+            <View style={visible||visible==undefined ? styles.container : { display:'none' }}>
                 <View style={styles.photo}>
                     <Feather name="folder" size={30} color="black" />
                 </View>

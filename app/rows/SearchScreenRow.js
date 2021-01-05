@@ -246,7 +246,7 @@ export default function SearchScreenRow({ navigation, SN, name, owner, tag, hit,
     }
     return (
         <TouchableOpacity>
-            <View style={visible ? styles.container : { height: 0 }}>
+            <View style={visible ? styles.container : { display:'none' }}>
                 <View style={styles.photo}>
                     <AntDesign name="inbox" size={30} color="black" />
                 </View>

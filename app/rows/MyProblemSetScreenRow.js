@@ -182,7 +182,7 @@ export default function MyProblemSetScreenRow({ navigation, SN, name, tag, hit, 
           </View>
         </Modal>
       </Portal>
-      <View style={visible?styles.container:{height:0}}>
+      <View style={visible?styles.container:{display:'none'}}>
         <View style={styles.photo}>
           <AntDesign name="inbox" size={30} color="black" />
         </View>

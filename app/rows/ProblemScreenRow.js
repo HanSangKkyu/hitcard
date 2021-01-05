@@ -62,7 +62,7 @@ export default function ProblemScreenRow({ navigation, SN, question, answer, cat
             onPress={() => {
                 selectProblem();
             }}>
-            <View style={visible?styles.container:{height:0}}>
+            <View style={visible?styles.container:{display:'none'}}>
                 <View style={styles.photo}>
                     <FontAwesome name="sticky-note-o" size={24} color="black" />
                 </View>
