@@ -1,6 +1,7 @@
 # hitcard
 암기카드 프로젝트   
 URL : [http://hitcard.tk](http://hitcard.tk)   
+Play Store: [https://play.google.com/store/apps/details?id=com.han.hitcard](https://play.google.com/store/apps/details?id=com.han.hitcard)     
 ## Description
 
 문제를 만들고 풀수 있는 가장 단순한 암기카드를 제공합니다.
