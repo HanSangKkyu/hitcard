@@ -90,12 +90,6 @@ export default function ProblemScreenRow({ navigation, SN, question, answer, cat
                 </View>
                 <TouchableOpacity style={{ alignContent: 'center', justifyContent: 'center' }}
                     onPress={() => {
-                        console.log('-- '+SN);
-                        console.log('-- '+question);
-                        console.log('-- '+answer);
-                        console.log('-- '+category);
-                        console.log('-- '+hit);
-                        console.log('-- '+problemSet);
                         navigation.navigate("EditProblemScreen", {
                             "SN": SN,
                             "question": question,

@@ -249,6 +249,17 @@ export default function SolveScreen({ navigation, route }) {
       });
   }
 
+  function goEditProblemScreen(){
+    navigation.navigate("EditProblemScreen", {
+      "SN": DATA[nowIdex].SN,
+      "question": question,
+      "answer": answer,
+      "category": DATA[nowIdex].category,
+      "hit": hit,
+      "problemSet": problemSetSN
+  });
+  }
+
   return (
     <Provider>
       <SafeAreaView style={{ flexDirection: 'column', height: WINDOW_HEIGHT }}>
@@ -257,14 +268,18 @@ export default function SolveScreen({ navigation, route }) {
             {/* <Text>hi</Text> */}
             <TouchableOpacity style={{ marginTop: 10 }} onPress={() => { setIsCategory(!isCategory); setIsMenu(!isMenu); }}>
               <View style={{ flexDirection: 'row', alignContent: 'center' }}>
-                {/* <FontAwesome5 name="file-import" size={24} color="black" /> */}
                 <MaterialCommunityIcons style={{ alignSelf: 'center' }} name="file-move-outline" size={24} color="black" />
                 <Text style={{ marginLeft: 10, alignSelf: 'center', fontSize: 18 }}>다른 카테고리로 이동</Text>
               </View>
             </TouchableOpacity>
+            <TouchableOpacity style={{ marginTop: 20 }} onPress={() => { setIsMenu(!isMenu); goEditProblemScreen();}}>
+              <View style={{ flexDirection: 'row', alignContent: 'center' }}>
+                <Feather name="edit" size={24} color="black" />
+                <Text style={{ marginLeft: 12, alignSelf: 'center', fontSize: 18 }}>이 문제 수정</Text>
+              </View>
+            </TouchableOpacity>
             <TouchableOpacity style={{ marginTop: 20 }} onPress={() => { setIsMenu(!isMenu); delete_problem_Q(); }}>
               <View style={{ flexDirection: 'row', alignContent: 'center' }}>
-                {/* <Foundation name="page-remove" size={30} color="black" /> */}
                 <Entypo style={{ alignSelf: 'center' }} name="trash" size={24} color="black" />
                 <Text style={{ marginLeft: 12, alignSelf: 'center', fontSize: 18 }}>이 문제 삭제</Text>
               </View>
