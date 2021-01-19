@@ -20,6 +20,10 @@ export default function SolveScreen({ navigation, route }) {
   const [hit, setHit] = React.useState('');
   const [isQuestTurn, setIsQuestTurn] = React.useState(true);
 
+  let nowIdex_c = 0;
+  let isQuestTurn_c = true;
+  let hit_c=0;
+
   let categoryList = category.map((element, i) => {
     return (
       <TouchableOpacity style={{ marginTop: 10 }} onPress={() => { edit_problem_category(element.SN); setIsCategory(!isCategory); }}>
@@ -29,25 +33,6 @@ export default function SolveScreen({ navigation, route }) {
         </View>
       </TouchableOpacity>)
   });
-
-  function edit_problem_category(_category) {
-    fetch(APIVO + '/problem/' + DATA[nowIdex].SN + '/category', {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        'category': _category,
-      })
-    })
-      .then((response) => response.text())
-      .then((responseJson) => {
-        console.log(responseJson);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  }
 
   React.useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
@@ -64,14 +49,28 @@ export default function SolveScreen({ navigation, route }) {
       setQuestion(DATA[nowIdex].question);
       setAnswer(DATA[nowIdex].answer);
       setHit(DATA[nowIdex].hit);
+      hit_c=DATA[nowIdex].hit;
+      console.log('hit_c '+hit_c);
     }
   }, [nowIdex, isQuestTurn]);
 
   React.useEffect(() => {
+    console.log('hit changed!');
+  }, [hit]);
+
+  React.useEffect(() => {
+    console.log('==DATA.length '+DATA.length);
     if (DATA.length > 0) {
+      window.addEventListener('keydown', handleKeyDown);
+
       setQuestion(DATA[0].question);
       setAnswer(DATA[0].answer);
       setHit(DATA[0].hit);
+      
+      // cleanup this component
+      return () => {
+        window.removeEventListener('keydown', handleKeyDown);
+      };
     }
   }, [DATA]);
 
@@ -140,6 +139,25 @@ export default function SolveScreen({ navigation, route }) {
     }
   }
 
+  function edit_problem_category(_category) {
+    fetch(APIVO + '/problem/' + DATA[nowIdex].SN + '/category', {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        'category': _category,
+      })
+    })
+      .then((response) => response.text())
+      .then((responseJson) => {
+        console.log(responseJson);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }
+
   function shuffle(a) {
     for (let i = a.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
@@ -149,9 +167,6 @@ export default function SolveScreen({ navigation, route }) {
   }
 
   function showNextProblem() {
-    // console.log(nowIdex)
-    // console.log(isQuestTurn)
-    // console.log(DATA[nowIdex])
     if (!isQuestTurn && DATA.length - 1 > nowIdex) {
       setNowIdex(nowIdex + 1);
     }
@@ -159,10 +174,6 @@ export default function SolveScreen({ navigation, route }) {
   }
 
   function showPreviousProblem() {
-    // console.log(nowIdex)
-    // console.log(isQuestTurn)
-    // console.log(DATA[nowIdex])
-
     if (isQuestTurn && nowIdex > 0) {
       setNowIdex(nowIdex - 1);
     }
@@ -170,7 +181,6 @@ export default function SolveScreen({ navigation, route }) {
   }
 
   function hitup() {
-
     fetch(APIVO + '/problem/' + DATA[nowIdex].SN + '/hitup', {
       method: 'PUT',
       headers: {
@@ -260,6 +270,29 @@ export default function SolveScreen({ navigation, route }) {
   });
   }
 
+  function handleKeyDown(event){
+    console.log("A key was pressed", event.key);
+    if (event.key == "ArrowRight") {
+      if (!isQuestTurn_c && DATA.length - 1 > nowIdex_c) {
+        nowIdex_c=nowIdex_c+1;
+        setNowIdex(nowIdex_c);
+      }
+      isQuestTurn_c=!isQuestTurn_c;
+      setIsQuestTurn(isQuestTurn_c);
+    } else if (event.key == "ArrowLeft") {
+      if (isQuestTurn_c && nowIdex_c > 0) {
+        nowIdex_c=nowIdex_c-1;
+        setNowIdex(nowIdex_c);
+      }
+      isQuestTurn_c=!isQuestTurn_c;
+      setIsQuestTurn(isQuestTurn_c);
+    } else if (event.key == "ArrowUp") {
+      hitup();
+    } else if (event.key == "ArrowDown") {
+      hitdown();
+    }
+  };
+
   return (
     <Provider>
       <SafeAreaView style={{ flexDirection: 'column', height: WINDOW_HEIGHT }}>
@@ -331,7 +364,7 @@ export default function SolveScreen({ navigation, route }) {
                 H!T
             </Text>
               <Text style={{ alignSelf: 'center' }}>
-                {DATA.length > 0 ? DATA[nowIdex].hit : null}
+                {DATA.length > 0 ? hit : null}
               </Text>
             </View>
             <TouchableOpacity style={{ marginTop: 10, alignContent: 'center', justifyContent: 'flex-start' }} onPress={() => { hitdown() }}>
@@ -339,7 +372,7 @@ export default function SolveScreen({ navigation, route }) {
             </TouchableOpacity>
           </View>
           <View style={{ flex: 2, flexDirection: 'row' }}>
-            <TouchableOpacity style={{ flex: 1, }} onPressOut={() => { showPreviousProblem() }}>
+            <TouchableOpacity style={{ flex: 1, }} onPressOut={() => { showPreviousProblem() }} >
               <AntDesign name="caretleft" size={40} color="gray" style={{ alignSelf: 'center', justifyContent: 'center' }} />
             </TouchableOpacity>
             <TouchableOpacity style={{ flex: 1, }} onPressOut={() => { showNextProblem() }}>
