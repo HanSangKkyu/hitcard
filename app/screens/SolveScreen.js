@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, StatusBar, TextInput, TouchableOpacity, SafeAreaView, FlatList, Alert } from 'react-native';
+import { StyleSheet, Text, View, StatusBar, TextInput, TouchableOpacity, SafeAreaView, FlatList, Alert, Platform } from 'react-native';
 import { Ionicons, Feather, MaterialCommunityIcons, Octicons, AntDesign, FontAwesome, SimpleLineIcons, MaterialIcons, FontAwesome5, Foundation, Entypo } from '@expo/vector-icons';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { NavigationContainer } from '@react-navigation/native';
@@ -61,16 +61,19 @@ export default function SolveScreen({ navigation, route }) {
   React.useEffect(() => {
     console.log('==DATA.length '+DATA.length);
     if (DATA.length > 0) {
-      window.addEventListener('keydown', handleKeyDown);
 
       setQuestion(DATA[0].question);
       setAnswer(DATA[0].answer);
       setHit(DATA[0].hit);
       
-      // cleanup this component
-      return () => {
-        window.removeEventListener('keydown', handleKeyDown);
-      };
+      if (!(Platform.OS === 'ios' || Platform.OS === 'android')) {
+        window.addEventListener('keydown', handleKeyDown);
+        // cleanup this component
+        return () => {
+          window.removeEventListener('keydown', handleKeyDown);
+        };
+      }
+
     }
   }, [DATA]);
 
