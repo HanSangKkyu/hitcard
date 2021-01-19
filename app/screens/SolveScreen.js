@@ -85,23 +85,29 @@ export default function SolveScreen({ navigation, route }) {
       })
         .then((response) => response.text())
         .then((responseJson) => {
-          // console.log(JSON.stringify(JSON.parse(jsonEscape(responseJson)).array, undefined, 4));
           cnt++;
           
           var tt = JSON.parse(jsonEscape(responseJson)).array;
           for (let j = 0; j < tt.length; j++) {
-            // const element = tt[j];
             console.log(JSON.stringify(tt[j], undefined, 4));
             allProblem.push(tt[j]);
           }
-          // tt.forEach(element => {
-          //   allProblem.push(element)
-          // });
 
-          // console.log('flag111 ',cnt,categorylength);
           if (cnt == categorylength) {
             console.log('abser' + allProblem);
-            if(selectedItem.toString().indexOf('-1') != -1){
+            console.log('selectedItem.toString() '+selectedItem.toString());
+            
+            // 모든 문제 골랐는지 확인하기
+            var slctAllFlag = false;
+            for (let j = 0; j < selectedItem.length; j++) {
+              const element = selectedItem[j];
+              if(element == '-1'){
+                slctAllFlag = true;
+                break;
+              }
+            }
+
+            if(slctAllFlag){
               // 모든 문제를 골랐을 시
               setDATA(shuffle(allProblem));        
               return;
@@ -298,7 +304,6 @@ export default function SolveScreen({ navigation, route }) {
       <SafeAreaView style={{ flexDirection: 'column', height: WINDOW_HEIGHT }}>
         <Portal>
           <Modal visible={isMenu} contentContainerStyle={{ backgroundColor: 'white', padding: 20, margin: 20, flexDirection: 'column' }}>
-            {/* <Text>hi</Text> */}
             <TouchableOpacity style={{ marginTop: 10 }} onPress={() => { setIsCategory(!isCategory); setIsMenu(!isMenu); }}>
               <View style={{ flexDirection: 'row', alignContent: 'center' }}>
                 <MaterialCommunityIcons style={{ alignSelf: 'center' }} name="file-move-outline" size={24} color="black" />
@@ -340,7 +345,7 @@ export default function SolveScreen({ navigation, route }) {
           <TouchableOpacity style={{ marginRight: 20, alignSelf: 'center' }} onPress={() => navigation.goBack()} >
             <AntDesign name="arrowleft" size={24} color="black" />
           </TouchableOpacity>
-          <Text style={{ flex: 1, fontSize: 22, alignSelf: 'center' }}>문제이름 - 카테고리</Text>
+          <Text style={{ flex: 1, fontSize: 22, alignSelf: 'center' }}>문제풀기</Text>
         </View>
 
         <View style={{ flex: 1, flexDirection: 'column', margin: 20 }}>
