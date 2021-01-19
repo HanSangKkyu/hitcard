@@ -154,20 +154,18 @@ export default function SearchCategoryScreen({ navigation, route }) {
       </View>
       
       <KeyboardAwareScrollView>
-        <ScrollView style={{}}>
-          <FlatList
-            data={DATA}
-            renderItem={({ item }) => <SearchCategoryScreenRow
-              navigation={navigation}
-              SN={item.SN}
-              name={item.name}
-              problemSet={item.problemSet}
-              category={DATA}
-              visible={item.visible}
-            />}
-            keyExtractor={item => item.SN}
-          />
-        </ScrollView>
+        <FlatList style={{ height: WINDOW_HEIGHT - 140 }}
+          data={DATA}
+          renderItem={({ item }) => <SearchCategoryScreenRow
+            navigation={navigation}
+            SN={item.SN}
+            name={item.name}
+            problemSet={item.problemSet}
+            category={DATA}
+            visible={item.visible}
+          />}
+          keyExtractor={item => item.SN}
+        />
       </KeyboardAwareScrollView>
     </SafeAreaView>
   );

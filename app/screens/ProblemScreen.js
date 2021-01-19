@@ -359,23 +359,23 @@ export default function ProblemScreen({ navigation, route }) {
           }
         </View>
         <KeyboardAwareScrollView>
-            <FlatList style={{ height: WINDOW_HEIGHT - 140 }}
-              data={DATA}
-              renderItem={({ item }) => <ProblemScreenRow
-                navigation={navigation}
-                SN={item.SN}
-                question={item.question}
-                answer={item.answer}
-                category={item.category}
-                hit={item.hit}
-                toggleSelectedItem={toggleSelectedItem}
-                problemSet={problemSet}
-                visible={item.visible}
-              />}
-              onEndReachedThreshold={1}
-              onEndReached={()=>{loadMore()}}
-              keyExtractor={item => item.SN}
-            />
+          <FlatList style={{ height: WINDOW_HEIGHT - 140 }}
+            data={DATA}
+            renderItem={({ item }) => <ProblemScreenRow
+              navigation={navigation}
+              SN={item.SN}
+              question={item.question}
+              answer={item.answer}
+              category={item.category}
+              hit={item.hit}
+              toggleSelectedItem={toggleSelectedItem}
+              problemSet={problemSet}
+              visible={item.visible}
+            />}
+            onEndReachedThreshold={1}
+            onEndReached={()=>{loadMore()}}
+            keyExtractor={item => item.SN}
+          />
         </KeyboardAwareScrollView>
       </SafeAreaView>
     </Provider>

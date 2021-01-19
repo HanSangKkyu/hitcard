@@ -155,22 +155,19 @@ export default function MyProblemSetScreen({ navigation }) {
           </TouchableOpacity>
         </View>
         <KeyboardAwareScrollView>
-          <ScrollView style={{ height: WINDOW_HEIGHT - 100 }}>
-            <FlatList data={DATA}
-              renderItem={({ item }) => <MyProblemSetScreenRow
-                navigation={navigation}
-                SN={item.SN}
-                name={item.name}
-                tag={item.tag}
-                hit={item.hit}
-                created_data={item.created_data}
-                modified_data={item.modified_data}
-                getDATA={getDATA}
-                visible={item.visible}
-              />}
-              keyExtractor={item => item.SN}
-            />
-          </ScrollView>
+          <FlatList  style={{ height: WINDOW_HEIGHT - 140 }}
+            data={DATA}
+            renderItem={({ item }) => <MyProblemSetScreenRow
+              navigation={navigation}
+              SN={item.SN}
+              name={item.name}
+              tag={item.tag}
+              hit={item.hit}
+              created_data={item.created_data}
+              modified_data={item.modified_data}
+              getDATA={getDATA}
+              visible={item.visible} />}
+            keyExtractor={item => item.SN} />
         </KeyboardAwareScrollView>
         <View>
 

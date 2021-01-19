@@ -98,20 +98,19 @@ export default function SearchScreen({ navigation }) {
       </View>
 
       <KeyboardAwareScrollView>
-        <ScrollView style={{}}>
-          <FlatList data={DATA}
-            renderItem={({ item }) => <SearchScreenRow
-              navigation={navigation}
-              SN={item.SN}
-              name={item.name}
-              owner={item.owner}
-              tag={item.tag}
-              hit={item.hit}
-              visible={item.visible}
-            />}
-            keyExtractor={item => item.SN}
-          />
-        </ScrollView>
+        <FlatList style={{ height: WINDOW_HEIGHT - 140 }} 
+          data={DATA}
+          renderItem={({ item }) => <SearchScreenRow
+            navigation={navigation}
+            SN={item.SN}
+            name={item.name}
+            owner={item.owner}
+            tag={item.tag}
+            hit={item.hit}
+            visible={item.visible}
+          />}
+          keyExtractor={item => item.SN}
+        />
       </KeyboardAwareScrollView>
       <View>
 

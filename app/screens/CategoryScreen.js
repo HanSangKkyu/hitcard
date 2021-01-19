@@ -319,22 +319,18 @@ export default function CategoryScreen({ route, navigation }) {
           }
         </View>
         <KeyboardAwareScrollView>
-          <ScrollView style={{}}>
-            <FlatList
-              data={DATA}
-              renderItem={({ item }) => <CategoryScreenRow
-                navigation={navigation}
-                SN={item.SN}
-                name={item.name}
-                problemSet={item.problemSet}
-                toggleSelectedItem = {toggleSelectedItem}
-                category={DATA}
-                visible={item.visible}
-                selectedItem={selectedItem}
-              />}
-              keyExtractor={item => item.SN}
-            />
-          </ScrollView>
+          <FlatList style={{ height: WINDOW_HEIGHT - 140 }}
+            data={DATA}
+            renderItem={({ item }) => <CategoryScreenRow
+              navigation={navigation}
+              SN={item.SN}
+              name={item.name}
+              problemSet={item.problemSet}
+              toggleSelectedItem = {toggleSelectedItem}
+              category={DATA}
+              visible={item.visible}
+              selectedItem={selectedItem} />}
+            keyExtractor={item => item.SN} />
         </KeyboardAwareScrollView>
       </SafeAreaView>
     </Provider>

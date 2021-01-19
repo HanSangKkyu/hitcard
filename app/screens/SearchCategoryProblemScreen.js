@@ -159,22 +159,20 @@ export default function SearchCategoryProblemScreen({ navigation, route }) {
       </View>
       
       <KeyboardAwareScrollView>
-        <ScrollView style={{}}>
-          <FlatList
-            data={DATA}
-            renderItem={({ item }) => <SearchCategoryProblemScreenRow
-              navigation={navigation}
-              SN={item.SN}
-              question={item.question}
-              answer={item.answer}
-              category={item.category}
-              hit={item.hit}
-              problemSet={problemSet}
-              visible={item.visible}
-            />}
-            keyExtractor={item => item.id}
-          />
-        </ScrollView>
+        <FlatList style={{ height: WINDOW_HEIGHT - 140 }}
+          data={DATA}
+          renderItem={({ item }) => <SearchCategoryProblemScreenRow
+            navigation={navigation}
+            SN={item.SN}
+            question={item.question}
+            answer={item.answer}
+            category={item.category}
+            hit={item.hit}
+            problemSet={problemSet}
+            visible={item.visible}
+          />}
+          keyExtractor={item => item.id}
+        />
       </KeyboardAwareScrollView>
     </SafeAreaView>
   );
