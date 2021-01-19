@@ -293,9 +293,41 @@ export default function SolveScreen({ navigation, route }) {
       isQuestTurn_c=!isQuestTurn_c;
       setIsQuestTurn(isQuestTurn_c);
     } else if (event.key == "ArrowUp") {
-      hitup();
+      // hitup();
+      fetch(APIVO + '/problem/' + DATA[nowIdex_c].SN + '/hitup', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({})
+      })
+        .then((response) => response.text())
+        .then((responseJson) => {
+          console.log(JSON.stringify(JSON.parse(jsonEscape(responseJson)).array, undefined, 4));
+          DATA[nowIdex_c].hit = parseInt(DATA[nowIdex_c].hit) + 1;
+          setHit(DATA[nowIdex_c].hit);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
     } else if (event.key == "ArrowDown") {
-      hitdown();
+      // hitdown();
+      fetch(APIVO + '/problem/' + DATA[nowIdex_c].SN + '/hitdown', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({})
+      })
+        .then((response) => response.text())
+        .then((responseJson) => {
+          console.log(JSON.stringify(JSON.parse(jsonEscape(responseJson)).array, undefined, 4));
+          DATA[nowIdex_c].hit = parseInt(DATA[nowIdex_c].hit) - 1;
+          setHit(DATA[nowIdex_c].hit);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
     }
   };
 
