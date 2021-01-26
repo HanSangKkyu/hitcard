@@ -10,13 +10,15 @@ import { WINDOW_WIDTH, WINDOW_HEIGHT, USER_SN, APIVO, jsonEscape } from "../Comm
 
 export default function SearchCategoryProblemScreen({ navigation, route }) {
   const { categorySN, categoryName, problemSet, category } = route.params;
-  const [DATA, setDATA] = React.useState([]); // 서버로 부터 받은 데이터를 저장하는 변수
-  const [categoryDATA, setCategoryDATA] = React.useState([]);
-  const [DATA_copy, setDATA_copy] = React.useState([]);
+  const [DATA, setDATA] = React.useState([]); // 실제 render 되고 있는 item들
+  const [DATA_result, setDATA_result] = React.useState('?'); // 검색된 결과 item들, render를 대기중인 item들
+  const [DATA_all, setDATA_all] = React.useState('?'); // 모든 item 데이터들
   const [isSearch, setIsSearch] = React.useState(false);
-  const [isEdit, setIsEdit] = React.useState(false);
   const [name, setName] = React.useState(categoryName);
+  const [PAGE, setPAGE] = React.useState(1);
 
+  let timeoutID; // 검색결과를 보여주는 settimeout함수가 담기는 곳
+  const ITEMS_PER_PAGE = 20; // 한번에 가져올 페이지당 item 수
 
   React.useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
@@ -37,35 +39,44 @@ export default function SearchCategoryProblemScreen({ navigation, route }) {
       }
       setDATA(res);
     }
-    // try {
-    //   if(!isSearch){
-    //     let res = [];
-    //     for (let i = 0; i < DATA.length; i++) {
-    //       DATA[i].visible = true;
-    //       res.push(DATA[i]);
-    //     }
-    //     setDATA(res);
-    //   }
-    // } catch (error) {
-    //   console.log(error);
-    // }
   }, [isSearch]);
 
-  
-  function search(_text){
-    let res = [];
-    for (let i = 0; i < DATA.length; i++) {
-      const element = DATA[i];
-      if(element.question.indexOf(_text) != -1 ||
-      element.answer.indexOf(_text) != -1||
-      element.hit.indexOf(_text) != -1){
-        DATA[i].visible = true;
-      }else{
-        DATA[i].visible = false;
-      }
-      res.push(DATA[i]);
+  React.useEffect(() => {
+    if(!isSearch){
+      setDATA_result(DATA_all);
     }
-    setDATA(res);
+  }, [isSearch]);
+
+  React.useEffect(() => {
+    setPAGE(1);
+    setDATA(DATA_result.slice(0, ITEMS_PER_PAGE));
+  }, [DATA_result]); // 검색이 완료되면
+  
+  function loadMore(){
+    console.log('this is end!'+DATA.length);
+    console.log('PAGE', PAGE);
+    const end = (PAGE+1)*ITEMS_PER_PAGE;
+    const newData = DATA_result.slice(0, end);
+    console.log(newData.length);
+    setPAGE(PAGE+1);
+    setDATA(newData);
+  }
+
+  function search(_text){
+    window.clearTimeout(timeoutID);
+    timeoutID = window.setTimeout(function(){
+      console.log("search real called!");
+      let res = [];
+      for (let i = 0; i < DATA_all.length; i++) {
+        const element = DATA_all[i];
+        if(element.question.indexOf(_text) != -1||
+        element.answer.indexOf(_text) != -1||
+        element.hit.indexOf(_text) != -1){
+          res.push(DATA_all[i]);
+        }
+      }
+      setDATA_result(res);
+    }, 500);
   }
 
   function getDATA() {
@@ -81,7 +92,7 @@ export default function SearchCategoryProblemScreen({ navigation, route }) {
         })
           .then((response) => response.text())
           .then((responseJson) => {
-            console.log(JSON.stringify(JSON.parse(jsonEscape(responseJson)).array, undefined, 4));
+            // console.log(JSON.stringify(JSON.parse(jsonEscape(responseJson)).array, undefined, 4));
             cnt++;
             var tt = JSON.parse(jsonEscape(responseJson)).array;
             tt.forEach(element => {
@@ -96,17 +107,17 @@ export default function SearchCategoryProblemScreen({ navigation, route }) {
                 // hit 별로 보기로 들어온 경우
                 let hit_data = [];
                 for (let j = 0; j < tmp_data.length; j++) {
-                  console.log(tmp_data[j].hit+' '+parseInt(categorySN.substring(1)));
+                  // console.log(tmp_data[j].hit+' '+parseInt(categorySN.substring(1)));
                   if(tmp_data[j].hit.toString() == categorySN.substring(1).toString()){
                     hit_data.push(tmp_data[j]);
                   }
                 }
-                setDATA(hit_data);
-                setDATA_copy(hit_data);
+                setDATA_result(hit_data);
+                setDATA_all(hit_data);
               }else{
                 // 모든 문제 보기로 들어온 경우
-                setDATA(tmp_data);
-                setDATA_copy(tmp_data);
+                setDATA_result(tmp_data)
+                setDATA_all(tmp_data);
               }
         
             }
@@ -126,15 +137,15 @@ export default function SearchCategoryProblemScreen({ navigation, route }) {
     })
       .then((response) => response.text())
       .then((responseJson) => {
-        console.log(JSON.stringify(JSON.parse(jsonEscape(responseJson)), undefined, 4));
+        // console.log(JSON.stringify(JSON.parse(jsonEscape(responseJson)), undefined, 4));
 
         let res = JSON.parse(jsonEscape(responseJson)).array;
         for (let i = 0; i < res.length; i++) {
           res[i].visible = true;
         }
 
-        setDATA(res);
-        setDATA_copy(res);
+        setDATA_result(res);
+        setDATA_all(res);
         // setSpinner(false);
       })
       .catch((error) => {
@@ -171,7 +182,9 @@ export default function SearchCategoryProblemScreen({ navigation, route }) {
             problemSet={problemSet}
             visible={item.visible}
           />}
-          keyExtractor={item => item.id}
+          onEndReachedThreshold={1}
+          onEndReached={()=>{loadMore()}}
+          keyExtractor={item => item.SN}
         />
       </KeyboardAwareScrollView>
     </SafeAreaView>
