@@ -50,7 +50,7 @@ export default function SolveScreen({ navigation, route }) {
       setAnswer(DATA[nowIdex].answer);
       setHit(DATA[nowIdex].hit);
       hit_c=DATA[nowIdex].hit;
-      console.log('hit_c '+hit_c);
+      // console.log('hit_c '+hit_c);
     }
   }, [nowIdex, isQuestTurn]);
 
@@ -92,7 +92,7 @@ export default function SolveScreen({ navigation, route }) {
           
           var tt = JSON.parse(jsonEscape(responseJson)).array;
           for (let j = 0; j < tt.length; j++) {
-            console.log(JSON.stringify(tt[j], undefined, 4));
+            // console.log(JSON.stringify(tt[j], undefined, 4));
             allProblem.push(tt[j]);
           }
 
@@ -280,7 +280,7 @@ export default function SolveScreen({ navigation, route }) {
   }
 
   function handleKeyDown(event){
-    console.log("A key was pressed", event.key);
+    // console.log("A key was pressed", event.key);
     if (event.key == "ArrowRight") {
       if (!isQuestTurn_c && DATA.length - 1 > nowIdex_c) {
         nowIdex_c=nowIdex_c+1;
