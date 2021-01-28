@@ -367,7 +367,9 @@ export default function SolveScreen({ navigation, route }) {
 
           <Modal visible={isCategory} contentContainerStyle={{ backgroundColor: 'white', padding: 20, margin: 20, flexDirection: 'column' }}>
             <Text style={{ fontSize: 20, fontWeight: 'bold', marginBottom: 10 }}>다른 카테고리로 이동</Text>
-            {categoryList}
+            <ScrollView style={{height:WINDOW_HEIGHT/2}}>
+              {categoryList}
+            </ScrollView>
             <TouchableOpacity style={{ marginTop: 60 }} onPress={() => { setIsCategory(!isCategory) }}>
               <View style={{ flexDirection: 'row', alignContent: 'center' }}>
                 <AntDesign name="close" size={24} color="black" />
