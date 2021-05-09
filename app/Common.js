@@ -1,6 +1,6 @@
 import { Button, View, SafeAreaView, Dimensions, Image, Text, TouchableOpacity, TextInput, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, ScrollView, Animated, FlatList } from 'react-native';
 
-export let APIVO = "http://api.hitcard.tk:8080";
+export let APIVO = "http://api.hitcard.kr:8080";
 export let PATH = "D:/was/apache-tomcat-9.0.21_M2BINFRA/webapps/m2binfra_api/";
 export let RPATH = "resources/upload/";
 

@@ -1,6 +1,6 @@
 # hitcard
 암기카드 프로젝트   
-URL : [http://hitcard.tk](http://hitcard.tk)   
+URL : [http://hitcard.kr](http://hitcard.kr)   
 Play Store: [https://play.google.com/store/apps/details?id=com.han.hitcard](https://play.google.com/store/apps/details?id=com.han.hitcard)     
 ## Description
 
