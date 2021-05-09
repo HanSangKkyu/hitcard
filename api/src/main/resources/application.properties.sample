@@ -1,0 +1,8 @@
+spring.datasource.driverClassName=net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+spring.datasource.url=jdbc:log4jdbc:mariadb://db.hitcard.kr:3306:3306/HITCARD
+spring.datasource.username={ID}
+spring.datasource.password={PW}
+
+spring.http.encoding.charset=UTF-8
+spring.http.encoding.enabled=true
+spring.http.encoding.force=true
