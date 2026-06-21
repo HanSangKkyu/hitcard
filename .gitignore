@@ -1,1 +1,5 @@
 ﻿api/src/main/resources/application.properties
+api-go/hitcard-api
+app/web-build/
+.playwright-mcp/
+web-build/
