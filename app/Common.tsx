@@ -1,10 +1,10 @@
 import { Dimensions } from 'react-native';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Constants from 'expo-constants';
 
-export let APIVO = "http://192.168.0.3:8080";
-export let PATH = "D:/was/apache-tomcat-9.0.21_M2BINFRA/webapps/m2binfra_api/";
-export let RPATH = "resources/upload/";
+const extra = Constants.manifest?.extra || (Constants as any).expoConfig?.extra || {};
+export let APIVO = process.env.EXPO_PUBLIC_API_URL || extra.apiUrl || "https://localhost:8443";
 
 export function jsonEscape(str: string): string {
     return str.trim().replace(/\n/g, "\\n").replace(/\r/g, "\\r").replace(/\t/g, "\\t");

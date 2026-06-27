@@ -11,12 +11,14 @@ import (
 var db *sql.DB
 
 func initDB() error {
+	user := envOr("DB_USER", "hitcard")
+	pass := envOr("DB_PASSWORD", "hitcard")
+	host := envOr("DB_HOST", "localhost")
+	port := envOr("DB_PORT", "3306")
+	name := envOr("DB_NAME", "HITCARD")
+
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=true",
-		getEnv("DB_USER", "hitcard"),
-		getEnv("DB_PASSWORD", "hitcard"),
-		getEnv("DB_HOST", "localhost"),
-		getEnv("DB_PORT", "3306"),
-		getEnv("DB_NAME", "HITCARD"),
+		user, pass, host, port, name,
 	)
 
 	var err error
@@ -27,7 +29,7 @@ func initDB() error {
 	return db.Ping()
 }
 
-func getEnv(key, fallback string) string {
+func envOr(key, fallback string) string {
 	if v := os.Getenv(key); v != "" {
 		return v
 	}

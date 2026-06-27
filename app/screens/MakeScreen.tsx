@@ -5,7 +5,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../types';
 import { WINDOW_HEIGHT } from '../Common';
-import { Picker } from '@react-native-community/picker';
+import { Picker } from '@react-native-picker/picker';
 
 type MakeScreenNavigationProp = StackNavigationProp<RootStackParamList, 'MakeScreen'>;
 
@@ -38,7 +38,7 @@ export default function MakeScreen({ navigation }: Props) {
     <SafeAreaView style={{ flexDirection:'column',margin: 20, }}>
       <View style={{ borderBottomWidth: 1, flexDirection: 'row', paddingBottom: 10, }}>
         <TouchableOpacity style={{ marginRight: 20, alignSelf: 'center' }} onPress={() => navigation.goBack()} >
-          <AntDesign name="arrowleft" size={24} color="black" />
+          <AntDesign name="arrow-left" size={24} color="black" />
         </TouchableOpacity>
         <Text style={{ flex: 1, fontSize: 22, alignSelf: 'center' }}>~에 문제만들기</Text>
       </View>

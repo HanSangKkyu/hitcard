@@ -309,7 +309,7 @@ export default function SolveScreen({ navigation, route }: Props) {
         </Portal>
         <View style={{ borderBottomWidth: 1, flexDirection: 'row', paddingBottom: 10, margin: 20 }}>
           <TouchableOpacity style={{ marginRight: 20, alignSelf: 'center' }} onPress={() => navigation.goBack()} >
-            <AntDesign name="arrowleft" size={24} color="black" />
+            <AntDesign name="arrow-left" size={24} color="black" />
           </TouchableOpacity>
           <Text style={{ flex: 1, fontSize: 22, alignSelf: 'center' }}>문제풀기</Text>
         </View>
@@ -328,7 +328,7 @@ export default function SolveScreen({ navigation, route }: Props) {
           </View>
           <View style={{ flex: 1, flexDirection: 'row', alignContent: 'center', justifyContent: 'center' }}>
             <TouchableOpacity style={{ marginTop: 10, alignContent: 'center', justifyContent: 'flex-start' }} onPress={() => { hitup() }}>
-              <AntDesign name="caretup" size={24} color="gray" />
+              <AntDesign name="caret-up" size={24} color="gray" />
             </TouchableOpacity>
             <View style={{ flexDirection: 'column', marginLeft: 10, marginRight: 10, alignContent: 'center', justifyContent: 'flex-start' }}>
               <Text>H!T</Text>
@@ -337,15 +337,15 @@ export default function SolveScreen({ navigation, route }: Props) {
               </Text>
             </View>
             <TouchableOpacity style={{ marginTop: 10, alignContent: 'center', justifyContent: 'flex-start' }} onPress={() => { hitdown() }}>
-              <AntDesign name="caretdown" size={24} color="gray" />
+              <AntDesign name="caret-down" size={24} color="gray" />
             </TouchableOpacity>
           </View>
           <View style={{ flex: 2, flexDirection: 'row' }}>
             <TouchableOpacity style={{ flex: 1, }} onPressOut={() => { showPreviousProblem() }} >
-              <AntDesign name="caretleft" size={40} color="gray" style={{ alignSelf: 'center', justifyContent: 'center' }} />
+              <AntDesign name="caret-left" size={40} color="gray" style={{ alignSelf: 'center', justifyContent: 'center' }} />
             </TouchableOpacity>
             <TouchableOpacity style={{ flex: 1, }} onPressOut={() => { showNextProblem() }}>
-              <AntDesign name="caretright" size={40} color="gray" style={{ alignSelf: 'center', justifyContent: 'center' }} />
+              <AntDesign name="caret-right" size={40} color="gray" style={{ alignSelf: 'center', justifyContent: 'center' }} />
             </TouchableOpacity>
           </View>
         </View>

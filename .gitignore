@@ -1,5 +1,11 @@
 ﻿api/src/main/resources/application.properties
 api-go/hitcard-api
+api-go/.env
 app/web-build/
+app/.env
 .playwright-mcp/
 web-build/
+hitcard
+cli/hitcard
+certs/
+

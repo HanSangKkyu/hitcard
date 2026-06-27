@@ -246,7 +246,7 @@ export default function ProblemScreen({ navigation, route }: Props) {
         </Portal>
         <View style={{ margin: 20, borderBottomWidth: 1, flexDirection: 'row', paddingBottom: 10, marginBottom: 0 }}>
           <TouchableOpacity style={{ marginRight: 20, alignSelf: 'center' }} onPress={() => navigation.goBack()} >
-            <AntDesign name="arrowleft" size={24} color="black" />
+            <AntDesign name="arrow-left" size={24} color="black" />
           </TouchableOpacity>
           {isSearch ? <TextInput style={{ flex: 1, alignSelf: 'center', borderWidth: isSearch ? 1 : 0, borderRadius: 100, height: 26, paddingLeft: 10, paddingRight: 10 }} onChangeText={(text)=>{search(text);}} autoFocus ></TextInput> :
             <View style={{ flex: 1, flexDirection: 'row', alignContent: 'center' }}>

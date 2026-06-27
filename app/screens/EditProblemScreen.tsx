@@ -6,7 +6,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { RouteProp } from '@react-navigation/native';
 import { RootStackParamList, CategoryData } from '../types';
 import { WINDOW_HEIGHT, jsonEscape, apiClient } from "../Common";
-import { Picker } from '@react-native-community/picker';
+import { Picker } from '@react-native-picker/picker';
 
 type EditProblemScreenNavigationProp = StackNavigationProp<RootStackParamList, 'EditProblemScreen'>;
 type EditProblemScreenRouteProp = RouteProp<RootStackParamList, 'EditProblemScreen'>;
@@ -78,7 +78,7 @@ export default function EditProblemScreen({ navigation, route }: Props) {
     <SafeAreaView style={{ flexDirection: 'column', margin: 20, }}>
       <View style={{ borderBottomWidth: 1, flexDirection: 'row', paddingBottom: 10, }}>
         <TouchableOpacity style={{ marginRight: 20, alignSelf: 'center' }} onPress={() => navigation.goBack()} >
-          <AntDesign name="arrowleft" size={24} color="black" />
+          <AntDesign name="arrow-left" size={24} color="black" />
         </TouchableOpacity>
         <Text style={{ flex: 1, fontSize: 22, alignSelf: 'center' }}>문제 수정하기</Text>
       </View>
@@ -106,14 +106,14 @@ export default function EditProblemScreen({ navigation, route }: Props) {
           </Picker>
           <View style={{ flexDirection: 'row', alignContent: 'center', justifyContent: 'center', paddingVertical: 10, backgroundColor: 'white', borderWidth: 1 }}>
             <TouchableOpacity style={{ marginTop: 10, alignContent: 'center', justifyContent: 'flex-start' }} onPress={() => { setHit_e(hit_e + 1) }}>
-              <AntDesign name="caretup" size={24} color="gray" />
+              <AntDesign name="caret-up" size={24} color="gray" />
             </TouchableOpacity>
             <View style={{ flexDirection: 'column', marginLeft: 10, marginRight: 10, alignContent: 'center', justifyContent: 'flex-start' }}>
               <Text>H!T</Text>
               <Text style={{ alignSelf: 'center' }}>{hit_e}</Text>
             </View>
             <TouchableOpacity style={{ marginTop: 10, alignContent: 'center', justifyContent: 'flex-start' }} onPress={() => { setHit_e(hit_e - 1) }}>
-              <AntDesign name="caretdown" size={24} color="gray" />
+              <AntDesign name="caret-down" size={24} color="gray" />
             </TouchableOpacity>
           </View>
           <TouchableOpacity style={{ flex: 1, justifyContent: 'center', alignContent: 'center', backgroundColor: 'white', borderWidth: 1 }} onPress={() => {edit_problem()}}>

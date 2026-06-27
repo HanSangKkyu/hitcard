@@ -21,6 +21,7 @@ export default function SearchCategoryScreen({ navigation, route }: Props) {
   const [DATA, setDATA] = React.useState<CategoryData[]>([]);
   const [problemDATA, setProblemDATA] = React.useState<ProblemData[]>([]);
   const [DATA_copy, setDATA_copy] = React.useState<CategoryData[]>([]);
+  const [categoryCounts, setCategoryCounts] = React.useState<{[key: string]: number}>({});
   const [isSearch, setIsSearch] = React.useState(false);
   const [name, setName] = React.useState("~의 카테고리");
 
@@ -77,18 +78,23 @@ export default function SearchCategoryScreen({ navigation, route }: Props) {
     let tmp_data: ProblemData[] = [];
     const datalength = _DATA.length;
     let cnt = 0;
+    let counts: {[key: string]: number} = {};
 
     for (let i = 1; i < _DATA.length; i++) {
-      apiClient.get('/category/' + _DATA[i].SN + '/problem')
+      const catSN = _DATA[i].SN;
+      apiClient.get('/category/' + catSN + '/problem')
       .then((response) => {
         const responseJson = response.data;
         cnt++;
         var tt: ProblemData[] = JSON.parse(jsonEscape(responseJson)).array;
+        counts[catSN] = tt.length;
         tt.forEach(element => {
           tmp_data.push(element);
         });
 
         if (cnt == datalength - 1) {
+          counts['-1'] = tmp_data.length;
+          setCategoryCounts(counts);
           setProblemDATA(tmp_data);
           let tmp_hitset: number[] = [];
           for (let j = 0; j < tmp_data.length; j++) {
@@ -120,7 +126,7 @@ export default function SearchCategoryScreen({ navigation, route }: Props) {
     <SafeAreaView style={{}}>
       <View style={{ margin: 20, marginBottom: 0, borderBottomWidth: 1, flexDirection: 'row', paddingBottom: 10, }}>
         <TouchableOpacity style={{ marginRight: 20, alignSelf: 'center' }} onPress={() => navigation.goBack()} >
-          <AntDesign name="arrowleft" size={24} color="black" />
+          <AntDesign name="arrow-left" size={24} color="black" />
         </TouchableOpacity>
         {isSearch ? <TextInput style={{ flex: 1, alignSelf: 'center', borderWidth: isSearch ? 1 : 0, borderRadius: 100, height: 26, paddingLeft: 10, paddingRight: 10 }} onChangeText={(text)=>{search(text);}} autoFocus ></TextInput> :
           <View style={{ flex: 1, flexDirection: 'row', alignContent: 'center' }}>
@@ -142,6 +148,7 @@ export default function SearchCategoryScreen({ navigation, route }: Props) {
             problemSet={item.problemSet}
             category={DATA}
             visible={item.visible}
+            count={categoryCounts[item.SN]}
           />}
           keyExtractor={item => item.SN}
         />

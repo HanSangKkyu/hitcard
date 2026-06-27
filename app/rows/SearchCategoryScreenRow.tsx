@@ -13,9 +13,10 @@ type Props = {
   problemSet: string;
   category: CategoryData[];
   visible?: boolean;
+  count?: number;
 };
 
-export default function SearchCategoryScreenRow({ navigation, SN, name, problemSet, category, visible }: Props) {
+export default function SearchCategoryScreenRow({ navigation, SN, name, problemSet, category, visible, count }: Props) {
   const [isSelected, setIsSelected] = React.useState(false);
 
   return (
@@ -27,6 +28,7 @@ export default function SearchCategoryScreenRow({ navigation, SN, name, problemS
         <View style={styles.container_text}>
           <View style={{ flex: 1, flexDirection: 'column' }}>
             <Text style={styles.title}>{name}</Text>
+            {count !== undefined && <Text style={styles.countText}>{count}개</Text>}
           </View>
         </View>
         <TouchableOpacity style={{ alignContent: 'center', justifyContent: 'center' }}
@@ -74,6 +76,11 @@ const styles = StyleSheet.create({
         color: '#3f3f3f',
         marginTop: 20,
         marginBottom: 20,
+    },
+    countText: {
+        fontSize: 11,
+        color: '#888',
+        marginTop: 2,
     },
     photo: {
         width: 50,

@@ -3,6 +3,8 @@ package main
 import (
 	"log"
 	"net/http"
+	"os"
+	"path/filepath"
 
 	"github.com/gin-gonic/gin"
 )
@@ -56,7 +58,47 @@ func main() {
 	r.PUT("/problem/:SN/hitdown", problemHitDown)
 	r.DELETE("/problem/:SN", problemDelete)
 
-	port := getEnv("PORT", "8080")
+	// optional: serve web frontend static files
+	if webDir := envOr("WEB_DIR", ""); webDir != "" {
+		if info, err := os.Stat(webDir); err == nil && info.IsDir() {
+			log.Printf("serving web frontend from %s", webDir)
+			for _, dir := range []string{"static", "_expo", "assets"} {
+				path := filepath.Join(webDir, dir)
+				if info, err := os.Stat(path); err == nil && info.IsDir() {
+					r.Static("/"+dir, path)
+				}
+			}
+			for _, name := range []string{"favicon.ico", "apple-touch-icon.png", "logo192.png", "logo512.png", "robots.txt", "manifest.json"} {
+				path := filepath.Join(webDir, name)
+				if _, err := os.Stat(path); err == nil {
+					r.StaticFile("/"+name, path)
+				}
+			}
+			r.NoRoute(func(c *gin.Context) {
+				if c.Request.Method == http.MethodGet {
+					http.ServeFile(c.Writer, c.Request, filepath.Join(webDir, "index.html"))
+				}
+			})
+		} else {
+			log.Printf("warning: WEB_DIR %q not found, skipping static serving", webDir)
+		}
+	}
+
+	port := envOr("PORT", "8080")
+	tlsPort := envOr("TLS_PORT", "")
+	certFile := envOr("TLS_CERT", "")
+	keyFile := envOr("TLS_KEY", "")
+
+	if tlsPort != "" && certFile != "" && keyFile != "" {
+		go func() {
+			log.Printf("listening on https://0.0.0.0:%s", tlsPort)
+			if err := r.RunTLS(":"+tlsPort, certFile, keyFile); err != nil {
+				log.Fatalf("TLS server error: %v", err)
+			}
+		}()
+	}
+
+	log.Printf("listening on http://0.0.0.0:%s", port)
 	r.Run(":" + port)
 }
 

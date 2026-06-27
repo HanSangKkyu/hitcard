@@ -16,9 +16,10 @@ type Props = {
   category: CategoryData[];
   visible?: boolean;
   selectedItem: string[];
+  count?: number;
 };
 
-export default function CategoryScreenRow({ navigation, SN, name, problemSet, toggleSelectedItem, category, visible, selectedItem }: Props) {
+export default function CategoryScreenRow({ navigation, SN, name, problemSet, toggleSelectedItem, category, visible, selectedItem, count }: Props) {
   const [isSelected, setIsSelected] = React.useState(false);
 
   React.useEffect(() => {
@@ -43,6 +44,7 @@ export default function CategoryScreenRow({ navigation, SN, name, problemSet, to
         <View style={styles.container_text}>
           <View style={{ flex: 1, flexDirection: 'column' }}>
             <Text style={styles.title}>{name}</Text>
+            {count !== undefined && <Text style={styles.countText}>{count}개</Text>}
           </View>
         </View>
         <View style={{ alignContent: 'center', justifyContent: 'center' }}>
@@ -96,6 +98,11 @@ const styles = StyleSheet.create({
         color: '#3f3f3f',
         marginTop: 20,
         marginBottom: 20,
+    },
+    countText: {
+        fontSize: 11,
+        color: '#888',
+        marginTop: 2,
     },
     photo: {
         width: 50,
